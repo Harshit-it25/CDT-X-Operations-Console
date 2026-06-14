@@ -226,7 +226,7 @@ main h4 {
 }
 main .text-slate-300,
 main .text-slate-200,
-main .text-[#dae2fd],
+main .text-\[\#dae2fd\],
 main .text-indigo-200,
 main .text-zinc-200,
 main .text-white,
@@ -234,8 +234,8 @@ main .text-zinc-100 {
   color: var(--text-primary) !important;
 }
 main .text-slate-400,
-main .text-[#8c909f],
-main .text-[#adc6ff],
+main .text-\[\#8c909f\],
+main .text-\[\#adc6ff\],
 main .text-zinc-400 {
   color: var(--text-secondary) !important;
 }
@@ -404,7 +404,7 @@ span[class*="bg-blue-500/10"][class*="text-indigo-300"] {
   border: 1px solid #bfdbfe !important;
 }
 
-/* 8. Modern Stripe / Datadog Data Tables */
+/* 8. Modern Stripe / Datadog Data Tables — Enterprise Density */
 table {
   border-collapse: collapse !important;
 }
@@ -413,18 +413,26 @@ thead tr,
 table th {
   background-color: var(--surface-secondary) !important;
   color: var(--text-secondary) !important;
-  border-bottom: 2px solid var(--border) !important;
-  font-weight: 600 !important;
-  font-size: 11px !important;
+  border-bottom: 1px solid var(--border) !important;
+  font-weight: 700 !important;
+  font-size: 10px !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
+  letter-spacing: 0.06em !important;
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
 }
 tbody tr,
 table td {
   background-color: var(--surface) !important;
   border-bottom: 1px solid var(--surface-secondary) !important;
   color: var(--text-primary) !important;
-  font-size: 12px !important;
+  font-size: 11.5px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
 }
 tbody tr:hover {
   background-color: var(--surface-secondary) !important;
@@ -483,13 +491,13 @@ div.recharts-default-tooltip {
 /* 12. Miscellaneous borders and layouts */
 .border-slate-800,
 .border-zinc-800,
-.border-[#2b354a],
-.border-[#424754]/30,
-.border-[#2b354a]/60,
-.border-[#2a364f]/30,
-.border-[#2a364f]/20,
-.border-indigo-500/20,
-.border-indigo-500/30 {
+.border-\[\#2b354a\],
+.border-\[\#424754\]\/30,
+.border-\[\#2b354a\]\/60,
+.border-\[\#2a364f\]\/30,
+.border-\[\#2a364f\]\/20,
+.border-indigo-500\/20,
+.border-indigo-500\/30 {
   border-color: var(--border) !important;
 }
 

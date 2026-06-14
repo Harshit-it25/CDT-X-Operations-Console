@@ -15,7 +15,8 @@ import {
   AlertTriangle,
   Database,
   RefreshCw,
-  Server
+  Server,
+  Globe
 } from 'lucide-react';
 
 interface SettingsViewProps {
@@ -109,15 +110,15 @@ export default function SettingsView({
     <div className="h-full overflow-y-auto p-8 bg-[#F8FAFC] custom-scrollbar text-slate-800 pb-16">
       
       {/* Title segment */}
-      <div className="mb-6 flex items-center gap-3 select-none">
-        <div className="p-2 bg-blue-50 rounded-xl border border-blue-200">
-          <Settings className="w-5 h-5 text-[#2563EB]" />
+      <div className="mb-2.5 flex items-center gap-2 select-none">
+        <div className="p-1.5 bg-blue-50 rounded-lg border border-blue-200">
+          <Settings className="w-3.5 h-3.5 text-[#2563EB]" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#0F172A] font-sans">
+          <h1 className="text-[13px] font-black tracking-tight text-[#0F172A] font-sans uppercase leading-none">
             Security Configuration & Compliance Settings
           </h1>
-          <p className="text-[13px] text-[#475569] mt-0.5">
+          <p className="text-[10px] text-[#64748B] mt-0.5">
             Admin configurations workspace. Adjust sensitive security thresholds, clearance credentials, and regulatory connection handshakes.
           </p>
         </div>
@@ -343,6 +344,37 @@ export default function SettingsView({
             Handshake Error: {infraError}
           </div>
         )}
+      </div>
+
+      {/* Enterprise LMS Integrations Card */}
+      <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] mb-6 select-none">
+        <div className="pb-2 border-b border-[#F1F5F9] flex justify-between items-center mb-4">
+          <span className="text-[#0F172A] text-xs font-bold uppercase flex items-center gap-1.5 font-sans">
+            <Globe className="w-4 h-4 text-[#2563EB]" />
+            Enterprise LMS Deployment &amp; Integrations
+          </span>
+          <span className="text-[11px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md uppercase font-bold">
+            Connected SDKs
+          </span>
+        </div>
+
+        <p className="text-xs text-slate-500 leading-relaxed font-sans mb-4">
+          CDT-X integrates directly with institutional learning management systems to synchronize candidate enrollment rosters, scheduling boundaries, and compliance audits automatically.
+        </p>
+
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          {["Moodle", "Canvas", "Google Classroom", "ExamSoft", "Custom LMS APIs"].map((lms, lIdx) => (
+            <div key={lIdx} className="flex items-center gap-1.5 bg-slate-50 border border-[#E2E8F0] p-2.5 rounded-xl text-[11px] font-semibold text-slate-700 shadow-sm">
+              <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span>{lms}</span>
+            </div>
+          ))}
+        </div>
+        
+        <div className="mt-4 pt-4 border-t border-[#F1F5F9] flex justify-between items-center text-[11px] font-sans">
+          <span className="text-[#64748B] font-mono text-[11px] uppercase font-bold">LMS Core Deployment Lead Time:</span>
+          <span className="text-[#2563EB] font-bold font-mono text-[11px] bg-[#EFF6FF] px-2.5 py-0.5 rounded border border-[#BFDBFE]">&lt; 24 Hours</span>
+        </div>
       </div>
 
       {/* Structured Known Limitations & Edge-Case Guardrails */}

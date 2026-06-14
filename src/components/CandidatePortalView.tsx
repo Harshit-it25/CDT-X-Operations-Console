@@ -329,129 +329,111 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
 
   const activeCandidateName = candidateId === 'USR_89921_ROHAN' ? 'Rohan Patil' : candidateId;
 
+  // Dynamic metrics based on state
+  const currentRiskColor = enrollmentStatus === 'VERIFIED'
+    ? 'text-emerald-750 bg-emerald-50 border-emerald-250'
+    : 'text-amber-850 bg-amber-50 border-amber-200';
+
+  const currentAction = enrollmentStatus === 'VERIFIED'
+    ? 'Baseline Compiled - Awaiting Exam Start'
+    : 'Complete Baseline Calibration Modalities';
+
   return (
-    <div className="h-full overflow-y-auto p-8 bg-[#F8FAFC] custom-scrollbar text-slate-850 pb-16">
+    <div className="h-full overflow-y-auto px-3 py-2 bg-[#F8FAFC] custom-scrollbar text-slate-850 pb-12">
       
       {/* Page Title & Executive Summary */}
-      <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+      <div className="mb-2 flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#0F172A] font-sans">
+          <h1 className="text-[12.5px] font-black tracking-tight text-[#0F172A] font-sans uppercase leading-none">
             Candidate Identity & Calibration Portal
           </h1>
-          <p className="text-[13px] text-[#475569] mt-0.5">
+          <p className="text-[10px] text-[#64748B] mt-0.5">
             Cryptographic identity setup, physical enrollment, and continuous behavioral baseline calibration setup.
           </p>
         </div>
         
-        <div className="mt-4 md:mt-0 flex gap-2">
+        <div className="mt-1.5 md:mt-0 flex gap-2">
           <button 
             onClick={resetCalibration}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#E2E8F0] hover:border-[#CBD5E1] text-[#475569] hover:text-[#0F172A] rounded-lg transition-all text-xs font-medium font-sans shadow-sm cursor-pointer"
+            className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-white border border-[#E2E8F0] hover:border-[#CBD5E1] text-[#475569] hover:text-[#0F172A] rounded-lg transition-all text-[9.5px] font-semibold font-sans shadow-sm cursor-pointer"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-[#64748B]" />
-            Reset Session State
+            <RotateCcw className="w-2.5 h-2.5 text-[#64748B]" />
+            Reset State
           </button>
         </div>
       </div>
 
-      {/* Student -> CDT-X Visual Pipeline */}
-      <div className="mb-6 flex flex-wrap items-center gap-1.5 p-3.5 bg-slate-50 border border-slate-200/50 rounded-xl text-[10px] font-mono text-[#475569] justify-center select-none shadow-sm">
-        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Student Device</span>
-        <span>➔</span>
-        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Behavior Collection</span>
-        <span>➔</span>
-        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Feature Extraction</span>
-        <span>➔</span>
-        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Digital Twin</span>
-        <span>➔</span>
-        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-[#2563EB] font-bold">Trust Engine</span>
-        <span>➔</span>
-        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Investigation</span>
-        <span>➔</span>
-        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Decision</span>
-        <span>➔</span>
-        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-emerald-700 font-bold">Audit Record</span>
-      </div>
-
-      {/* Live Session Card */}
-      <div className="bg-slate-900 border border-slate-800 text-white p-4 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.15)] flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 relative overflow-hidden">
-        {/* Background glow */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none"></div>
-
-        <div className="flex items-center gap-3">
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></div>
-          <div>
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block font-bold">Operational Stream State</span>
-            <div className="flex items-center gap-2 mt-0.5">
-              <strong className="text-sm font-sans tracking-tight text-white">{activeCandidateName}</strong>
-              <span className="text-slate-500 font-mono text-xs">|</span>
-              <span className="text-[11px] font-mono text-[#60A5FA] bg-[#1E3A8A]/50 px-2 py-0.5 rounded border border-[#3B82F6]/30">{examId}</span>
-            </div>
+      {/* Standardized 4-Metric Header Strip - Compacted to 80px max height */}
+      <div className="grid grid-cols-4 gap-2 mb-2">
+        {/* Metric 1: Trust Score */}
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm h-[76px] flex flex-col justify-between">
+          <span className="text-[9.5px] font-mono font-black uppercase text-slate-400 tracking-wider block">Trust Score</span>
+          <div className="flex items-baseline gap-1 font-sans">
+            <span className="text-[15px] font-black text-[#0f172a] tracking-tight leading-none">{enrollmentStatus === 'VERIFIED' ? 99 : 94}%</span>
+            <span className={`text-[9.5px] font-extrabold ${enrollmentStatus === 'VERIFIED' ? 'text-emerald-600' : 'text-amber-600'}`}>
+              {enrollmentStatus === 'VERIFIED' ? '✓ READY' : '⚡ CALIBRATING'}
+            </span>
           </div>
+          <p className="text-[9.5px] text-slate-400 leading-none">Auto-calibrating telemetry</p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-8 font-mono text-xs">
-          <div>
-            <span className="text-[9px] text-slate-400 uppercase block font-bold">Connected Time</span>
-            <span className="text-[13px] font-bold text-white block mt-0.5">
-              {liveSessionStats.connectedMinutes}m {liveSessionStats.connectedSeconds}s
-            </span>
+        {/* Metric 2: Identity Confidence */}
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm h-[76px] flex flex-col justify-between">
+          <span className="text-[9.5px] font-mono font-black uppercase text-slate-400 tracking-wider block">Identity Confidence</span>
+          <div className="text-[15px] font-black text-[#2563EB] tracking-tight font-sans leading-none">
+            {enrollmentStatus === 'VERIFIED' ? '99.8%' : '94.0%'}
           </div>
-          <div>
-            <span className="text-[9px] text-slate-400 uppercase block font-bold">Telemetry Captured</span>
-            <span className="text-[13px] font-bold text-white block mt-0.5">
-              {liveSessionStats.eventsProcessed.toLocaleString()} events
-            </span>
+          <p className="text-[9.5px] text-slate-400 leading-none">Baseline correlation index</p>
+        </div>
+
+        {/* Metric 3: Risk Level */}
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm h-[76px] flex flex-col justify-between items-start">
+          <span className="text-[9.5px] font-mono font-black uppercase text-slate-400 tracking-wider block">Risk Level</span>
+          <span className={`px-1.5 py-0.2 rounded text-[9.5px] font-black uppercase border font-sans leading-none ${currentRiskColor}`}>
+            {enrollmentStatus === 'VERIFIED' ? 'LOW' : 'MEDIUM'}
+          </span>
+          <p className="text-[9.5px] text-slate-400 leading-none">Continuous verification</p>
+        </div>
+
+        {/* Metric 4: Recommended Action */}
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm h-[76px] flex flex-col justify-between">
+          <span className="text-[9.5px] font-mono font-black uppercase text-slate-400 tracking-wider block">Recommended Action</span>
+          <div className="text-[10px] font-bold text-slate-800 tracking-tight line-clamp-1 leading-tight">
+            {currentAction}
           </div>
-          <div>
-            <span className="text-[9px] text-slate-400 uppercase block font-bold">Trust Score</span>
-            <span className={`text-[13px] font-bold block mt-0.5 ${enrollmentStatus === 'VERIFIED' ? 'text-emerald-400' : 'text-amber-400'}`}>
-              {enrollmentStatus === 'VERIFIED' ? '99%' : '94%'} TST
-            </span>
-          </div>
-          <div>
-            <span className="text-[9px] text-slate-400 uppercase block font-bold">Status</span>
-            <span className="inline-flex items-center gap-1 mt-0.5 text-emerald-400 font-bold uppercase tracking-wider text-[11px]">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
-              {enrollmentStatus === 'VERIFIED' ? 'VERIFIED' : 'Monitoring'}
-            </span>
-          </div>
+          <p className="text-[9.5px] text-slate-400 leading-none">Real-time prescription</p>
         </div>
       </div>
 
-      {/* Banner disclaimer */}
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-3.5 mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <AlertTriangle className="w-4.5 h-4.5 text-amber-600 shrink-0" />
-          <p className="text-xs text-amber-800 font-sans">
-            <strong>PILOT SIMULATION ENROLLMENT:</strong> All candidate profiling parameters and baseline characteristics represent generated, privacy-safe mock assets calibrated through simulated CDT-X identity verification protocols.
-          </p>
-        </div>
+      {/* Banner disclaimer - compacted */}
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 mb-2 flex items-center gap-2">
+        <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+        <p className="text-[10.5px] text-amber-800 font-sans leading-tight">
+          <strong>PILOT SIMULATION:</strong> Telemetry baselines represent generated, privacy-safe mock assets calibrated through CDT-X protocols.
+        </p>
       </div>
 
-      {/* ENROLLMENT PROGRESS STEPS ROADMAP */}
-      <div className="bg-white border border-[#E2E8F0] rounded-2xl p-4 mb-6 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-        <div className="flex justify-between items-center mb-3 border-b border-[#F1F5F9] pb-2">
-          <span className="text-[10px] font-mono font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-1.5">
-            <Activity className="w-4 h-4 text-[#2563EB]" />
+      {/* ENROLLMENT PROGRESS STEPS ROADMAP - Compacter */}
+      <div className="bg-white border border-[#E2E8F0] rounded-xl p-2.5 mb-2.5 shadow-sm">
+        <div className="flex justify-between items-center mb-1.5 border-b border-[#F1F5F9] pb-1">
+          <span className="text-[9.5px] font-mono font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-1">
+            <Activity className="w-3.5 h-3.5 text-[#2563EB]" />
             Continuous Verification Lifecycle
           </span>
-          <span className="text-[9.5px] font-mono bg-[#EFF6FF] text-[#2563EB] px-2 py-0.5 rounded-md border border-[#BFDBFE]">
-            STATION SOL-18 • LIVE VERIFICATION ACTIVE
+          <span className="text-[9px] font-mono bg-[#EFF6FF] text-[#2563EB] px-1.5 py-0.2 rounded border border-[#BFDBFE]">
+            STATION SOL-18 • ENROLLING
           </span>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-2 text-center">
+        <div className="grid grid-cols-5 gap-1.5 text-center">
           {[
             { label: "1. Enroll Base", step: 0 },
-            { label: "2. Build profile", step: 1 },
+            { label: "2. Build Profile", step: 1 },
             { label: "3. Verify Readiness", step: 2 },
             { label: "4. Run Session", step: 3 },
             { label: "5. Monitor Trust", step: 4 }
           ].map((stepObj) => {
-            
-                        const isActive = stepObj.step === activeJourneyIdx;
+            const isActive = stepObj.step === activeJourneyIdx;
             const isCompleted = stepObj.step < activeJourneyIdx;
             
             let colorClasses = "bg-slate-50 border-[#E2E8F0] text-slate-400";
@@ -464,10 +446,10 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
             return (
               <div 
                 key={stepObj.step}
-                className={`flex items-center justify-center gap-1.5 px-2 py-2.5 rounded-lg border text-[11px] font-sans leading-none transition-all ${colorClasses}`}
+                className={`flex items-center justify-center gap-1 px-1.5 py-1.5 rounded-lg border text-[10px] font-sans leading-none transition-all ${colorClasses}`}
               >
                 {isCompleted ? (
-                  <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <CheckCircle className="w-3 h-3 text-emerald-600 shrink-0" />
                 ) : isActive ? (
                   <span className="relative flex h-1.5 w-1.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
@@ -481,60 +463,61 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+      {/* Main Two-Column Layout (above the fold) */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 items-start">
         
-        {/* COLUMN 1: REGISTRATION & MODULE CALIBRATIONS */}
-        <div className="xl:col-span-8 space-y-6">
+        {/* COLUMN 1: ENROLLMENT & CALIBRATION (7/12) */}
+        <div className="xl:col-span-7 space-y-3">
           
           {/* REGISTER CANDIDATE INPUTS CARD */}
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] relative overflow-hidden">
-            <h2 className="text-[13px] font-bold text-[#0F172A] font-sans uppercase tracking-wide mb-1 flex items-center gap-2">
-              <User className="w-4 h-4 text-[#2563EB]" />
+          <div className="bg-white border border-[#E2E8F0] rounded-xl p-3 shadow-sm relative overflow-hidden">
+            <h2 className="text-[11px] font-bold text-[#0F172A] font-sans uppercase tracking-wide mb-0.5 flex items-center gap-1.5">
+              <User className="w-3.5 h-3.5 text-[#2563EB]" />
               Examinee Secure Credentials
             </h2>
-            <p className="text-[11.5px] text-[#475569] mb-4 font-sans leading-normal">
-              Register active candidate credentials below to start calibrating typing Hold rhythms, cursor trajectories, and reading pacing profile.
+            <p className="text-[10px] text-[#475569] mb-2 font-sans">
+              Enter credentials below to initialize Hold rhythm, cursor trajectory, and cognitive baseline mapping.
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-mono text-[#64748B] font-bold uppercase tracking-wider block">Candidate Alpha ID</label>
+            <div className="grid grid-cols-3 gap-2.5">
+              <div className="space-y-1">
+                <label className="text-[8.5px] font-mono text-[#64748B] font-bold uppercase tracking-wider block">Candidate Alpha ID</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8] text-xs font-mono">ID:</span>
+                  <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#94A3B8] text-[10px] font-mono">ID:</span>
                   <input 
                     type="text" 
                     value={candidateId}
                     onChange={(e) => setCandidateId(e.target.value)}
-                    className="w-full bg-slate-50 border border-[#E2E8F0] rounded-lg pl-9 pr-3 py-1.5 font-mono text-xs text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-[#E2E8F0] rounded-lg pl-8 pr-2 py-1 font-mono text-[11px] text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-blue-500"
                     placeholder="Candidate Code"
                   />
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-mono text-[#64748B] font-bold uppercase tracking-wider block">Target Examination Key</label>
+              <div className="space-y-1">
+                <label className="text-[8.5px] font-mono text-[#64748B] font-bold uppercase tracking-wider block">Examination Key</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8] text-xs font-mono">KEY:</span>
+                  <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#94A3B8] text-[10px] font-mono">KEY:</span>
                   <input 
                     type="text" 
                     value={examId}
                     onChange={(e) => setExamId(e.target.value)}
-                    className="w-full bg-slate-50 border border-[#E2E8F0] rounded-lg pl-12 pr-3 py-1.5 font-mono text-xs text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-[#E2E8F0] rounded-lg pl-10 pr-2 py-1 font-mono text-[11px] text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-blue-500"
                     placeholder="Exam Specifier"
                   />
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-mono text-[#64748B] font-bold uppercase tracking-wider block">Active Enrollment Status</label>
-                <div className="h-[30px] flex items-center px-3 rounded-lg font-mono text-xs border font-bold transition-all" style={{
+              <div className="space-y-1">
+                <label className="text-[8.5px] font-mono text-[#64748B] font-bold uppercase tracking-wider block">Enrollment Status</label>
+                <div className="h-[25px] flex items-center px-2 rounded-lg font-mono text-[10px] border font-bold transition-all" style={{
                   backgroundColor: enrollmentStatus === 'VERIFIED' ? '#ECFDF5' : enrollmentStatus === 'CALIBRATING' ? '#FFFBEB' : '#F8FAFC',
                   borderColor: enrollmentStatus === 'VERIFIED' ? '#10B981' : enrollmentStatus === 'CALIBRATING' ? '#F59E0B' : '#E2E8F0',
                   color: enrollmentStatus === 'VERIFIED' ? '#047857' : enrollmentStatus === 'CALIBRATING' ? '#B45309' : '#475569'
                 }}>
-                  {enrollmentStatus === 'VERIFIED' && <CheckCircle className="w-3.5 h-3.5 text-emerald-600 mr-2 shrink-0" />}
-                  {enrollmentStatus === 'CALIBRATING' && <Activity className="w-3.5 h-3.5 text-amber-600 mr-2 shrink-0 animate-spin" />}
-                  {enrollmentStatus === 'UNENROLLED' && <Sliders className="w-3.5 h-3.5 text-slate-500 mr-2 shrink-0" />}
+                  {enrollmentStatus === 'VERIFIED' && <CheckCircle className="w-3 h-3 text-emerald-600 mr-1.5 shrink-0" />}
+                  {enrollmentStatus === 'CALIBRATING' && <Activity className="w-3 h-3 text-amber-600 mr-1.5 shrink-0 animate-spin" />}
+                  {enrollmentStatus === 'UNENROLLED' && <Sliders className="w-3 h-3 text-slate-500 mr-1.5 shrink-0" />}
                   {enrollmentStatus}
                 </div>
               </div>
@@ -542,27 +525,27 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
           </div>
 
           {/* BEHAVIORAL CALIBRATION SUITE */}
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] space-y-5">
-            <div className="flex justify-between items-center border-b border-[#F1F5F9] pb-3 mb-2">
-              <div className="flex items-center gap-2">
-                <Sliders className="w-4 h-4 text-[#2563EB]" />
-                <h2 className="text-[13px] font-bold text-[#0F172A] font-sans uppercase tracking-wide">
+          <div className="bg-white border border-[#E2E8F0] rounded-xl p-3 shadow-sm space-y-3">
+            <div className="flex justify-between items-center border-b border-[#F1F5F9] pb-1.5 mb-1">
+              <div className="flex items-center gap-1.5">
+                <Sliders className="w-3.5 h-3.5 text-[#2563EB]" />
+                <h2 className="text-[11px] font-bold text-[#0F172A] font-sans uppercase tracking-wide">
                   Behavioral Calibration Checkpoints Suite
                 </h2>
               </div>
               
-              <div className="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 rounded-lg border border-[#E2E8F0] text-[10.5px] font-mono text-[#64748B]">
-                <span>Calibration Progress:</span>
+              <div className="flex items-center gap-1 bg-slate-50 px-2 py-0.5 rounded border border-[#E2E8F0] text-[9.5px] font-mono text-[#64748B]">
+                <span>Progress:</span>
                 <span className="text-[#2563EB] font-bold">{completedModules}/4 Modules</span>
               </div>
             </div>
 
             {/* Stepper Grid selectors */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-4 gap-1.5">
               {[
                 { step: 'TYPING', label: 'Typing patterns', progress: typingProgress, icon: Sliders },
                 { step: 'MOUSE', label: 'Spline curvature', progress: mouseProgress, icon: MousePointer },
-                { step: 'READING', label: 'Lexical foveal', progress: readingProgress, icon: BookOpen },
+                { step: 'READING', label: 'Reading pacing', progress: readingProgress, icon: BookOpen },
                 { step: 'WRITING', label: 'Stylus dynamics', progress: writingProgress, icon: PenTool },
               ].map((item) => {
                 const Icon = item.icon;
@@ -571,23 +554,22 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
                   <button
                     key={item.step}
                     onClick={() => setCalibrationStep(item.step as any)}
-                    className={`flex flex-col items-start p-3 rounded-xl border text-left transition-all relative overflow-hidden cursor-pointer ${
+                    className={`flex flex-col items-start p-2 rounded-lg border text-left transition-all relative overflow-hidden cursor-pointer ${
                       isSelected 
                         ? 'bg-[#EFF6FF] border-[#2563EB] shadow-sm' 
                         : 'bg-white border-[#E2E8F0] hover:border-[#CBD5E1] hover:bg-slate-50'
                     }`}
                   >
-                    <div className="flex items-center justify-between w-full mb-1.5">
-                      <Icon className={`w-4 h-4 ${isSelected ? 'text-[#2563EB]' : 'text-slate-500'}`} />
-                      <span className={`text-[12px] font-mono font-bold ${item.progress >= 90 ? 'text-emerald-600' : 'text-slate-705'}`}>
+                    <div className="flex items-center justify-between w-full mb-1">
+                      <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-[#2563EB]' : 'text-slate-500'}`} />
+                      <span className={`text-[10.5px] font-mono font-bold ${item.progress >= 90 ? 'text-emerald-600' : 'text-slate-700'}`}>
                         {item.progress}%
                       </span>
                     </div>
-                    <span className="text-[11.5px] font-sans font-bold text-[#0F172A] block truncate">{item.step}</span>
-                    <span className="text-[9px] text-[#64748B] font-mono leading-none mt-0.5">{item.label}</span>
+                    <span className="text-[10.5px] font-sans font-bold text-[#0F172A] block truncate">{item.step}</span>
+                    <span className="text-[8px] text-[#64748B] font-mono leading-none mt-0.5">{item.label}</span>
                     
-                    {/* Linear progress microbar */}
-                    <div className="w-full bg-slate-100 h-1 mt-2.5 rounded-full overflow-hidden">
+                    <div className="w-full bg-slate-100 h-1 mt-1.5 rounded-full overflow-hidden">
                       <div className="h-full bg-[#2563EB]" style={{ width: `${item.progress}%` }}></div>
                     </div>
                   </button>
@@ -596,48 +578,46 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
             </div>
 
             {/* Active Workspace Container */}
-            <div className="bg-slate-50 rounded-2xl border border-[#E2E8F0] p-5 min-h-[200px] flex flex-col justify-between">
-              
+            <div className="bg-slate-50 rounded-xl border border-[#E2E8F0] p-3 min-h-[150px] flex flex-col justify-between">
               <AnimatePresence mode="wait">
                 {calibrationStep === 'TYPING' && (
                   <motion.div 
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="space-y-4 flex-grow flex flex-col justify-between"
+                    className="space-y-3 flex-grow flex flex-col justify-between"
                   >
-                    <div className="space-y-1.5">
+                    <div className="space-y-1">
                       <div className="flex justify-between items-center">
-                        <span className="text-[9.5px] font-mono text-[#64748B] uppercase font-bold tracking-wider">[ Baseline Target Phrase ]</span>
-                        <span className="text-[10px] font-mono text-[#2563EB]">Latency Precision: sub-millisecond</span>
+                        <span className="text-[8.5px] font-mono text-[#64748B] uppercase font-bold tracking-wider">[ Baseline Target Phrase ]</span>
+                        <span className="text-[9px] font-mono text-[#2563EB]">Latency Precision: sub-millisecond</span>
                       </div>
-                      <div className="p-3 bg-white rounded-xl border border-[#E2E8F0] font-mono text-xs text-[#0F172A] leading-relaxed select-all shadow-sm">
+                      <div className="p-2 bg-white rounded-lg border border-[#E2E8F0] font-mono text-[10.5px] text-[#0F172A] leading-relaxed select-all shadow-sm">
                         {targetSentence}
                       </div>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#475569] font-mono text-xs font-bold">TYPE HERE:</span>
+                        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#475569] font-mono text-[10.5px] font-bold">TYPE:</span>
                         <input
                           type="text"
                           value={typedText}
                           onChange={handleTypingInput}
-                          className="w-full bg-white border border-[#E2E8F0] rounded-xl pl-24 pr-3 py-2.5 font-mono text-xs text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+                          className="w-full bg-white border border-[#E2E8F0] rounded-lg pl-14 pr-2.5 py-1.5 font-mono text-[11px] text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm"
                           placeholder="Begin typing the target sentence exactly..."
                         />
                       </div>
                       
-                      {/* Live Keystroke Deltas */}
-                      <div className="space-y-1.5">
-                        <span className="text-[9.5px] font-mono text-[#64748B] uppercase tracking-wider block">Live keystroke flight series (tactile hold timing)</span>
-                        <div className="flex gap-1 bg-white p-2.5 rounded-xl border border-[#E2E8F0] overflow-x-auto min-h-[46px] custom-scrollbar shadow-sm">
+                      <div className="space-y-1">
+                        <span className="text-[8.5px] font-mono text-[#64748B] uppercase tracking-wider block">Live keystroke flight series (tactile hold timing)</span>
+                        <div className="flex gap-1 bg-white p-1.5 rounded-lg border border-[#E2E8F0] overflow-x-auto min-h-[38px] custom-scrollbar shadow-sm">
                           {keystrokeLog.length === 0 ? (
-                            <span className="text-[#94A3B8] font-mono text-[10px] self-center pl-2">Awaiting inputs...</span>
+                            <span className="text-[#94A3B8] font-mono text-[9px] self-center pl-1">Awaiting inputs...</span>
                           ) : (
                             keystrokeLog.map((log, idx) => (
-                              <div key={idx} className="bg-slate-50 text-[#2563EB] px-2.5 py-1 rounded-lg text-[10.5px] font-mono border border-[#E2E8F0] text-center shrink-0 shadow-sm">
+                              <div key={idx} className="bg-slate-50 text-[#2563EB] px-2 py-0.5 rounded text-[9.5px] font-mono border border-[#E2E8F0] text-center shrink-0 shadow-sm">
                                 <span className="block font-bold text-[#0F172A]">"{log.key}"</span>
-                                <span className="text-[8.5px] text-[#64748B]">{log.delay}ms</span>
+                                <span className="text-[8px] text-[#64748B]">{log.delay}ms</span>
                               </div>
                             ))
                           )}
@@ -651,42 +631,42 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
                   <motion.div 
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="space-y-3 flex-grow flex flex-col justify-between"
+                    className="space-y-2 flex-grow flex flex-col justify-between"
                   >
                     <div className="flex justify-between items-center">
-                      <span className="text-[9.5px] font-mono text-[#64748B] uppercase font-bold tracking-wider">[ Spline Curvature Canvas ]</span>
-                      <span className="text-[11px] font-sans text-[#475569]">Hold mouse and trace curvy trajectories below</span>
+                      <span className="text-[8.5px] font-mono text-[#64748B] uppercase font-bold tracking-wider">[ Spline Curvature Canvas ]</span>
+                      <span className="text-[10px] text-[#475569]">Hold mouse and trace curvy trajectories below</span>
                     </div>
 
                     <div 
                       onMouseMove={handleMouseMove}
                       onMouseDown={() => { setIsTracing(true); setMouseTrajectory([]); }}
                       onMouseUp={() => setIsTracing(false)}
-                      className="border-2 border-dashed border-[#CBD5E1] h-28 rounded-xl relative overflow-hidden bg-white flex items-center justify-center cursor-crosshair select-none shadow-inner"
+                      className="border border-dashed border-[#CBD5E1] h-20 rounded-lg relative overflow-hidden bg-white flex items-center justify-center cursor-crosshair select-none shadow-inner"
                     >
                       {mouseProgress === 100 ? (
-                        <div className="text-center font-mono space-y-1 z-10 bg-white p-3 rounded-xl border border-emerald-200 shadow-sm">
-                          <CheckCircle className="w-5 h-5 text-emerald-600 mx-auto" />
-                          <span className="text-emerald-800 text-xs font-bold block">Bezier Velocity Profile Compiled</span>
+                        <div className="text-center font-mono space-y-0.5 z-10 bg-white px-2.5 py-1.5 rounded-lg border border-emerald-250 shadow-sm">
+                          <CheckCircle className="w-4.5 h-4.5 text-emerald-600 mx-auto" />
+                          <span className="text-emerald-800 text-[10px] font-bold block">Bezier Profile Compiled</span>
                         </div>
                       ) : (
-                        <span className="text-[#94A3B8] font-mono text-xs select-none pointer-events-none">[ Drag dynamic path shapes here ]</span>
+                        <span className="text-[#94A3B8] font-mono text-[10px] select-none pointer-events-none">[ Drag dynamic path shapes here ]</span>
                       )}
 
                       <svg className="absolute inset-0 pointer-events-none w-full h-full">
                         <polyline
                           fill="none"
                           stroke="#2563EB"
-                          strokeWidth="2.5"
+                          strokeWidth="2"
                           points={mouseTrajectory.map(p => `${p.x},${p.y}`).join(' ')}
                         />
                         {mouseTrajectory.map((p, i) => (
-                          <circle key={i} cx={p.x} cy={p.y} r="1.5" fill="#10B981" />
+                          <circle key={i} cx={p.x} cy={p.y} r="1" fill="#10B981" />
                         ))}
                       </svg>
                     </div>
 
-                    <div className="bg-white p-2 rounded-xl border border-[#E2E8F0] flex justify-between font-mono text-[10px] text-[#64748B] shadow-sm">
+                    <div className="bg-white px-2 py-1 rounded-lg border border-[#E2E8F0] flex justify-between font-mono text-[9px] text-[#64748B] shadow-sm">
                       <span>Coordinates: <strong className="text-[#0F172A]">{mouseTrajectory.length} points</strong></span>
                       <span>Target Spline Velocity: <strong className="text-[#0F172A]">Consistent</strong></span>
                     </div>
@@ -697,26 +677,26 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
                   <motion.div 
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="space-y-4 flex-grow flex flex-col justify-between"
+                    className="space-y-3 flex-grow flex flex-col justify-between"
                   >
                     <div className="flex justify-between items-center">
-                      <span className="text-[9.5px] font-mono text-[#64748B] uppercase font-bold tracking-wider">[ Lexical Gaze Calibration ]</span>
-                      <span className="text-[11px] font-mono text-amber-600 font-bold">Simulating human reading cadence</span>
+                      <span className="text-[8.5px] font-mono text-[#64748B] uppercase font-bold tracking-wider">[ Lexical Reading Pacing Calibration ]</span>
+                      <span className="text-[10px] font-mono text-amber-600 font-bold">Simulating human reading cadence</span>
                     </div>
 
-                    <p className="p-3 bg-white rounded-xl border border-[#E2E8F0] leading-relaxed text-xs text-[#475569] shadow-sm">
-                      The Digital Behavior Profile calibration maps relative solver hesitation margins. While analyzing high-stakes prompts, candidates show distinct page progression and text-retention delays containing specific micro-hesitations.
+                    <p className="p-2 bg-white rounded-lg border border-[#E2E8F0] leading-relaxed text-[11px] text-[#475569] shadow-sm">
+                      The Digital Behavior Profile calibration maps relative solver hesitation margins. While analyzing prompts, candidates show distinct page progression and text-retention delays.
                     </p>
 
-                    <div className="flex gap-4 items-center">
+                    <div className="flex gap-3 items-center">
                       <button 
                         onClick={() => { setIsReadingActive(true); setReadingProgress(0); }}
                         disabled={isReadingActive || readingProgress === 100}
-                        className="px-4 py-2 bg-[#2563EB] hover:bg-blue-700 text-white font-bold rounded-lg text-xs disabled:opacity-40 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+                        className="px-3 py-1.5 bg-[#2563EB] hover:bg-blue-700 text-white font-bold rounded-lg text-[10px] disabled:opacity-40 transition-all flex items-center gap-1 cursor-pointer shadow-sm"
                       >
-                        {isReadingActive ? "Capturing focus timers..." : "Start capture window"}
+                        {isReadingActive ? "Capturing focus..." : "Start capture window"}
                       </button>
-                      <div className="font-mono text-xs text-[#475569]">
+                      <div className="font-mono text-[10.5px] text-[#475569]">
                         Reading Window: <strong className="text-[#0F172A]">{(readingTimer / 10).toFixed(1)}s elapsed</strong>
                       </div>
                     </div>
@@ -727,11 +707,11 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
                   <motion.div 
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="space-y-4 flex-grow flex flex-col justify-between"
+                    className="space-y-3 flex-grow flex flex-col justify-between"
                   >
                     <div className="flex justify-between items-center">
-                      <span className="text-[9.5px] font-mono text-[#64748B] uppercase font-bold tracking-wider">[ Stylus & Writing Entropy Calibrator ]</span>
-                      <span className="text-[11px] font-sans text-[#475569]">Type a quick sentence below</span>
+                      <span className="text-[8.5px] font-mono text-[#64748B] uppercase font-bold tracking-wider">[ Stylus & Writing Entropy Calibrator ]</span>
+                      <span className="text-[10px] text-[#475569]">Type a quick sentence below</span>
                     </div>
 
                     <textarea
@@ -740,502 +720,221 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
                         setSampleWriting(e.target.value);
                         if (writingProgress < 100) startWritingCalibration();
                       }}
-                      className="w-full bg-white border border-[#E2E8F0] rounded-xl p-3 text-xs font-mono text-[#0F172A] placeholder-[#94A3B8] h-20 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+                      className="w-full bg-white border border-[#E2E8F0] rounded-lg p-2 text-[11px] font-mono text-[#0F172A] placeholder-[#94A3B8] h-14 focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm"
                       placeholder="Type a sentence describing your analytical background. We compile linguistic variety profiles..."
                     />
 
-                    <div className="bg-white p-2 rounded-xl border border-[#E2E8F0] flex justify-between font-mono text-[10px] text-[#64748B] shadow-sm">
-                      <span>Linguistic Type-Token score: <strong className="text-emerald-600">0.78 Match</strong></span>
-                      <span>Stylus Variety: <strong className="text-emerald-600">Secure</strong></span>
+                    <div className="bg-white px-2 py-1 rounded-lg border border-[#E2E8F0] flex justify-between font-mono text-[9px] text-[#64748B] shadow-sm">
+                      <span>Linguistic score: <strong className="text-emerald-605 text-emerald-600">0.78 Match</strong></span>
+                      <span>Stylus Variety: <strong className="text-emerald-605 text-emerald-600">Secure</strong></span>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
-
             </div>
 
             {/* Verification trigger actions */}
-            <div className="pt-3 border-t border-[#F1F5F9] flex justify-between items-center">
+            <div className="pt-2 border-t border-[#F1F5F9] flex justify-between items-center">
               <div className="space-y-0.5">
-                <span className="text-xs text-[#0F172A] font-bold block">Consolidate Behavioral Baseline</span>
-                <span className="text-[10px] text-[#64748B] font-sans block">Generate continuous digital twin token</span>
+                <span className="text-[11px] text-[#0F172A] font-bold block leading-tight">Consolidate Behavioral Baseline</span>
+                <span className="text-[9px] text-[#64748B] block leading-none">Generate continuous digital twin token</span>
               </div>
               <button 
                 onClick={triggerEnrollmentVerification}
                 disabled={enrollmentStatus === 'VERIFIED' || isVerifyingTwin}
-                className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl text-xs hover:from-blue-500 hover:to-indigo-500 transition-all shadow-md flex items-center gap-1.5 disabled:opacity-40 cursor-pointer"
+                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-lg text-[10.5px] hover:from-blue-500 hover:to-indigo-500 transition-all shadow flex items-center gap-1 disabled:opacity-40 cursor-pointer"
               >
                 {isVerifyingTwin ? (
                   <>
-                    <Activity className="w-4 h-4 animate-spin" /> COMPILING BEHAVIORAL TWIN...
+                    <Activity className="w-3.5 h-3.5 animate-spin" /> COMPILING...
                   </>
                 ) : (
                   <>
-                    <ShieldCheck className="w-4 h-4" /> COMPLETELY VERIFY BASES
+                    <ShieldCheck className="w-3.5 h-3.5" /> VERIFY BASES
                   </>
                 )}
               </button>
             </div>
           </div>
 
-          {/* LIVE BEHAVIOR EVIDENCE PANEL */}
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] space-y-4">
-            <div className="flex justify-between items-center border-b border-[#F1F5F9] pb-2.5">
-              <span className="text-xs font-mono font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-1.5">
-                <Radio className="w-4 h-4 text-[#2563EB] animate-pulse" />
-                Live Behavior Evidence Panel
-              </span>
-              <span className="flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-250 px-2 py-0.5 rounded text-[10px] font-mono font-bold">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                Collecting Telemetry Securely
-              </span>
-            </div>
+        </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        {/* COLUMN 2: CONNECTED DEVICE & TELEMETRY (5/12) */}
+        <div className="xl:col-span-5 space-y-3">
+          
+          {/* Connected Candidate Device Card - Primary Component */}
+          <div className="bg-white border border-[#E2E8F0] p-3 rounded-xl shadow-sm">
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-[11px] font-black text-[#0F172A] font-sans tracking-wide uppercase flex items-center gap-1">
+                <Laptop className="w-3.5 h-3.5 text-[#2563EB]" />
+                Connected Candidate Device
+              </h4>
+              <span className="text-[9.5px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded font-bold">SDK LIVE</span>
+            </div>
+            <div className="grid grid-cols-2 gap-1 text-[10px] font-mono mb-2">
               {[
-                { name: "Keyboard Events Captured", icon: Keyboard, val: evidenceCounts.keyboardEvents.toLocaleString(), detail: "Sub-millisecond flight sequence" },
-                { name: "Mouse Events Captured", icon: MousePointer, val: evidenceCounts.mouseEvents.toLocaleString(), detail: "Bezier coordinate velocity vectors" },
-                { name: "Focus Events", icon: Eye, val: `${evidenceCounts.focusChanges}`, detail: "Active viewport focus lock" },
-                { name: "Tab Switches", icon: Compass, val: `${evidenceCounts.tabSwitches}`, detail: "Context change detection" },
-                { name: "Copy/Paste Attempts", icon: Lock, val: `${evidenceCounts.copyAttempts}`, detail: "System clipboard blocker active" },
-                { name: "Question Interactions", icon: FileText, val: `${evidenceCounts.questionInteractions}`, detail: "Logical comprehension hesitation pace" }
-              ].map((item, idx) => {
-                const Icon = item.icon;
-                return (
-                  <div key={idx} className="bg-slate-50 border border-[#E2E8F0] p-3 rounded-xl shadow-inner flex items-start gap-2.5">
-                    <Icon className="w-4 h-4 text-[#2563EB] mt-0.5 shrink-0" />
-                    <div>
-                      <span className="text-[10px] font-mono text-[#64748B] uppercase font-bold block">{item.name}</span>
-                      <span className="text-xs font-bold text-[#0F172A] block mt-0.5 font-mono">{item.val}</span>
-                      <span className="text-[9.5px] text-[#475569] block mt-0.5 font-sans">{item.detail}</span>
-                    </div>
-                  </div>
-                );
-              })}
+                { label: "Keyboard SDK", status: "Active", ok: true },
+                { label: "Mouse SDK", status: "Active", ok: true },
+                { label: "Focus Monitor", status: "Active", ok: true },
+                { label: "Clipboard Monitor", status: "Active", ok: true },
+              ].map((item, i) => (
+                <div key={i} className="flex justify-between items-center bg-slate-50 px-2 py-0.5 rounded border border-[#E2E8F0]">
+                  <span className="text-slate-500">{item.label}</span>
+                  <span className={item.ok ? 'text-emerald-600 font-bold' : 'text-red-650 font-bold'}>{item.status}</span>
+                </div>
+              ))}
             </div>
-
-            {/* Behavior Collection Visualization */}
-            <div className="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3">
-              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold flex items-center gap-1.5">
-                <Activity className="w-3.5 h-3.5 text-emerald-400" /> Live Signal Visualization Stream
-              </span>
-              
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-white">
-                {[
-                  { name: "Keyboard Activity", color: "bg-emerald-500", scale: Math.max(15, (evidenceCounts.keyboardEvents % 10) * 10) },
-                  { name: "Mouse Activity", color: "bg-blue-500", scale: Math.max(20, (evidenceCounts.mouseEvents % 8) * 12) },
-                  { name: "Navigation Activity", color: "bg-amber-500", scale: evidenceCounts.tabSwitches > 0 ? 40 : 10 },
-                  { name: "Reading Activity", color: "bg-purple-500", scale: Math.max(15, (evidenceCounts.questionInteractions % 5) * 20) },
-                  { name: "Trust Signal", color: "bg-emerald-400", scale: 94 }
-                ].map((sig, sIdx) => (
-                  <div key={sIdx} className="space-y-1.5">
-                    <span className="text-[9px] font-mono text-slate-400 block truncate">{sig.name}</span>
-                    <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden relative">
-                      <div 
-                        className={`h-full rounded-full transition-all duration-300 ${sig.color}`} 
-                        style={{ width: `${sig.scale}%` }}
-                      ></div>
-                    </div>
-                    <div className="flex justify-between items-center text-[9px] font-mono">
-                      <span className="text-slate-500">Active</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="flex justify-between items-center text-[10px] font-mono bg-slate-50 px-2 py-1 rounded border border-[#E2E8F0]">
+              <span className="text-slate-400">Events Processed</span>
+              <span className="font-black text-[#0F172A]">{(evidenceCounts.keyboardEvents + evidenceCounts.mouseEvents).toLocaleString()}</span>
             </div>
           </div>
 
-          {/* DIGITAL TWIN PREVIEW SECTION */}
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] space-y-4">
-            <div className="flex justify-between items-center border-b border-[#F1F5F9] pb-2.5">
-              <span className="text-xs font-mono font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-1.5">
-                <Award className="w-4 h-4 text-[#2563EB]" />
-                Enrollment Manifest Output
+          {/* LIVE SDK TELEMETRY PANEL & EVIDENCE COUNTS */}
+          <div className="bg-white border border-[#E2E8F0] rounded-xl p-3 shadow-sm space-y-3">
+            <div className="flex justify-between items-center border-b border-[#F1F5F9] pb-1.5">
+              <span className="text-[9.5px] font-mono font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-1">
+                <Radio className="w-3.5 h-3.5 text-[#2563EB] animate-pulse" />
+                Live Behavior Evidence
               </span>
-              <span className="text-[10px] font-mono text-emerald-600">DASHBOARD CONNECTED</span>
+              <span className="flex items-center gap-1 bg-red-50 text-red-750 border border-red-150 px-1.5 py-0.2 rounded text-[8.5px] font-mono font-bold animate-pulse">
+                <span className="w-1 h-1 rounded-full bg-red-500"></span>
+                STREAM ACTIVE
+              </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2 text-xs font-sans">
-                                {enrollmentStatus === 'VERIFIED' ? (
-                  <div className="bg-emerald-50 border border-emerald-250 rounded-xl p-3.5 space-y-3">
-                    <div className="flex items-center gap-2 text-emerald-800 font-bold">
-                      <CheckCircle className="w-4.5 h-4.5 text-emerald-600" />
-                      <span>Behavior Collection Complete</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 text-[10.5px] font-mono text-slate-700">
-                      <div>Typing Samples: <strong className="text-emerald-700">1,248</strong></div>
-                      <div>Mouse Events: <strong className="text-emerald-700">12,421</strong></div>
-                      <div>Navigation Events: <strong className="text-emerald-700">382</strong></div>
-                      <div>Reading Interactions: <strong className="text-emerald-700">91</strong></div>
-                      <div className="col-span-2 mt-1 pt-1.5 border-t border-emerald-200">
-                        Behavior Features Extracted: <strong className="text-emerald-700">512</strong>
-                      </div>
-                    </div>
-                    <div className="inline-flex items-center gap-1.5 bg-blue-50 text-[#2563EB] px-2 py-0.5 rounded text-[9.5px] font-bold uppercase border border-[#BFDBFE]">
-                      <Fingerprint className="w-3.5 h-3.5" /> Digital Twin Generated
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <p className="text-[#475569] text-[11.5px] leading-relaxed font-sans">
-                      Upon finishing calibration, CDT-X outputs a hardened, cryptographic suite of behavioral properties utilized during authentication.
-                    </p>
-
-                    <div className="space-y-1.5 font-mono">
-                      {[
-                        "Digital Twin Profile Generated",
-                        "Identity Confidence Index Calibrated",
-                        "Behavioral Baseline Solidified",
-                        "Continuous Trust Timeline Set",
-                        "Examination Readiness Certified"
-                      ].map((output, idx) => {
-                        const isFitted = enrollmentStatus === 'VERIFIED';
-                        return (
-                          <div key={idx} className="flex items-center gap-2">
-                            {isFitted ? (
-                              <Check className="w-3.5 h-3.5 text-emerald-600" />
-                            ) : (
-                              <span className="w-1.5 h-1.5 bg-slate-300 rounded-full"></span>
-                            )}
-                            <span className={isFitted ? "text-[#0F172A] font-bold" : "text-[#94A3B8]"}>
-                              {output}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </>
-                )}
+            <div className="grid grid-cols-3 gap-1.5 text-[10px] font-mono">
+              <div className="bg-slate-50 p-1.5 rounded border border-[#E2E8F0]">
+                <span className="text-slate-400 block truncate">Keys</span>
+                <span className="font-bold text-[#0F172A] block">{evidenceCounts.keyboardEvents.toLocaleString()}</span>
               </div>
-
-              <div className="flex flex-col justify-center items-center p-4 bg-slate-50 rounded-xl border border-[#E2E8F0] text-center space-y-3 shadow-inner">
-                <div className="space-y-1">
-                  <span className="text-[10px] font-mono text-[#64748B] uppercase block">Calibration Confidence</span>
-                  <div className="text-2xl font-black font-mono text-emerald-600">
-                    {enrollmentStatus === 'VERIFIED' ? '99.64%' : '0.00%'}
-                  </div>
-                  <span className="text-[10px] font-sans text-[#475569] block px-4 leading-normal">
-                    {enrollmentStatus === 'VERIFIED' 
-                      ? 'Secure behavioral baseline verified' 
-                      : 'Awaiting 4/4 completed modules'}
-                  </span>
-                </div>
-
-                <AnimatePresence>
-                  {enrollmentStatus === 'VERIFIED' && (
-                    <motion.button
-                      initial={{ scale: 0.9, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      onClick={() => setActiveTab?.(ActiveTab.DIGITAL_TWIN)}
-                      className="px-4 py-2 bg-[#2563EB] hover:bg-blue-700 text-white font-bold text-[11px] uppercase tracking-wider rounded-lg shadow-sm flex items-center gap-1.5 cursor-pointer w-full justify-center transition-all"
-                    >
-                      <Eye className="w-3.5 h-3.5" /> Explore Twin Baseline
-                    </motion.button>
-                  )}
-                </AnimatePresence>
+              <div className="bg-slate-50 p-1.5 rounded border border-[#E2E8F0]">
+                <span className="text-slate-400 block truncate">Mouse</span>
+                <span className="font-bold text-[#0F172A] block truncate">{evidenceCounts.mouseEvents.toLocaleString()}</span>
               </div>
+              <div className="bg-slate-50 p-1.5 rounded border border-[#E2E8F0]">
+                <span className="text-slate-400 block truncate">Focus</span>
+                <span className="font-bold text-[#0F172A] block">{evidenceCounts.focusChanges + evidenceCounts.tabSwitches}</span>
+              </div>
+            </div>
+
+            {/* Simulated Live Console Output */}
+            <div className="bg-slate-50 p-2 rounded-lg border border-[#E2E8F0] font-mono text-[9px] text-slate-600 space-y-0.5">
+              <span className="text-slate-400 block uppercase tracking-wider text-[8px] border-b border-[#E2E8F0] pb-0.5 mb-1 font-bold">Raw telemetry frames</span>
+              {telemetryLog.map((log, lIdx) => (
+                <div key={lIdx} className="truncate text-slate-700">{log}</div>
+              ))}
             </div>
           </div>
 
         </div>
 
-        {/* COLUMN 2: WALKTHROUGH ASSIST & VALUE */}
-        <div className="xl:col-span-4 space-y-6">
+      </div>
 
-          {/* LIVE SDK TELEMETRY PANEL */}
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] space-y-4">
-            <div className="flex justify-between items-center border-b border-[#F1F5F9] pb-2.5">
-              <span className="text-xs font-mono font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-1.5">
-                <Activity className="w-4 h-4 text-[#2563EB] animate-pulse" />
-                Live SDK Telemetry Panel
-              </span>
-              <span className="flex items-center gap-1 bg-red-50 text-red-700 border border-red-150 px-2 py-0.5 rounded text-[9px] font-mono font-bold animate-pulse">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                STREAM ACTIVE
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 text-xs font-sans">
-              <div className="bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase block font-bold">Keyboard Events Captured</span>
-                <span className="text-sm font-bold text-[#0F172A] font-mono block mt-0.5">{evidenceCounts.keyboardEvents.toLocaleString()}</span>
-              </div>
-              <div className="bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase block font-bold">Mouse Events Captured</span>
-                <span className="text-sm font-bold text-[#0F172A] font-mono block mt-0.5">{evidenceCounts.mouseEvents.toLocaleString()}</span>
-              </div>
-              <div className="bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase block font-bold">Focus Events</span>
-                <span className="text-sm font-bold text-[#0F172A] font-mono block mt-0.5">{evidenceCounts.focusChanges + evidenceCounts.tabSwitches}</span>
-              </div>
-              <div className="bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase block font-bold">Copy/Paste Attempts</span>
-                <span className="text-sm font-bold text-[#0F172A] font-mono block mt-0.5">{evidenceCounts.copyAttempts}</span>
-              </div>
-              <div className="bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0] col-span-2">
-                <span className="text-[9px] font-mono text-slate-400 uppercase block font-bold">Question Interactions</span>
-                <span className="text-sm font-bold text-[#0F172A] font-mono block mt-0.5">{evidenceCounts.questionInteractions}</span>
-              </div>
-            </div>
-
-            {/* Simulated Live Console Output */}
-            <div className="bg-slate-950 p-3 rounded-xl border border-slate-900 font-mono text-[9px] text-emerald-400 space-y-1">
-              <span className="text-slate-500 block uppercase tracking-wider text-[8px] border-b border-slate-800 pb-1 mb-1">Raw telemetry frames</span>
-              {telemetryLog.map((log, lIdx) => (
-                <div key={lIdx} className="truncate">{log}</div>
-              ))}
-            </div>
+      {/* Lower Secondary Grid - Compacter */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mt-3">
+        
+        {/* Digital Twin Preview Section */}
+        <div className="md:col-span-4 bg-white border border-[#E2E8F0] rounded-xl p-3 shadow-sm flex flex-col justify-between">
+          <div className="flex justify-between items-center border-b border-[#F1F5F9] pb-1.5 mb-2">
+            <span className="text-[9.5px] font-mono font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-1">
+              <Award className="w-3.5 h-3.5 text-[#2563EB]" />
+              Twin Profile Manifest
+            </span>
+            <span className="text-[9px] font-mono text-emerald-600 font-bold">CONNECTED</span>
           </div>
-          
-          {/* JUDGE DEMO ASSIST CARD */}
-          <div className="bg-white border-2 border-blue-200 rounded-2xl shadow-sm overflow-hidden">
-            <button 
-              onClick={() => setIsWalkthroughCollapsed(prev => !prev)}
-              className="w-full flex justify-between items-center bg-blue-50 px-5 py-3 border-b border-blue-200 text-left cursor-pointer"
-            >
-              <div className="flex items-center gap-2">
-                <Zap className="w-4 h-4 text-[#2563EB]" />
-                <h3 className="text-xs font-black text-[#2563EB] font-sans tracking-wide uppercase">
-                  Judge Walkthrough Assist
-                </h3>
-              </div>
-              <span className="text-[10px] font-mono text-[#2563EB] underline font-extrabold pb-0.5">
-                {isWalkthroughCollapsed ? 'EXPAND' : 'COLLAPSE'}
-              </span>
-            </button>
 
-            {!isWalkthroughCollapsed && (
-              <div className="p-4 space-y-3.5 font-sans text-xs">
-                <p className="text-[#475569] leading-snug">
-                  Follow this sequence to showcase the entire CDT-X proctoring lifecycle in <strong className="text-[#2563EB]">60 seconds</strong> during judging:
-                </p>
-
-                <div className="space-y-3 font-mono text-[10.5px]">
-                  {/* Step 1 */}
-                  <div className="flex items-start gap-2.5 p-2 bg-slate-50 rounded-xl border border-[#E2E8F0]">
-                    <span className="bg-blue-100 text-[#2563EB] px-1.5 py-0.5 rounded text-[9.5px] font-bold">1</span>
-                    <div className="flex-grow space-y-1">
-                      <span className="text-[#0F172A] block font-bold">Enter Operator Credentials</span>
-                      <button 
-                        onClick={demoAutofill}
-                        className="px-2 py-1 bg-[#2563EB] hover:bg-blue-700 text-white font-bold text-[9px] uppercase rounded-md transition-all cursor-pointer font-sans"
-                      >
-                        Load Test Candidate
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Step 2 */}
-                  <div className="flex items-start gap-2.5 p-2 bg-slate-50 rounded-xl border border-[#E2E8F0]">
-                    <span className="bg-blue-100 text-[#2563EB] px-1.5 py-0.5 rounded text-[9.5px] font-bold">2</span>
-                    <div className="flex-grow space-y-1">
-                      <span className="text-[#0F172A] block font-bold">Simulate Multi-modal Calibration</span>
-                      <button 
-                        onClick={demoAutoCalibrate}
-                        className="px-2 py-1 bg-[#2563EB] hover:bg-blue-700 text-white font-bold text-[9px] uppercase rounded-md transition-all cursor-pointer font-sans"
-                      >
-                        Auto-Calibrate (100%)
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Step 3 */}
-                  <div className="flex items-start gap-2.5 p-2 bg-slate-50 rounded-xl border border-[#E2E8F0]">
-                    <span className="bg-blue-100 text-[#2563EB] px-1.5 py-0.5 rounded text-[9.5px] font-bold">3</span>
-                    <div className="flex-grow space-y-1">
-                      <span className="text-[#0F172A] block font-bold">Register & Lock Baseline</span>
-                      <button 
-                        onClick={demoLaunchExam}
-                        className="px-2 py-1 bg-[#10B981] hover:bg-emerald-600 text-white font-bold text-[9px] uppercase rounded-md transition-all cursor-pointer font-sans"
-                      >
-                        Commit Baseline Check
-                      </button>
-                    </div>
-                  </div>
+          <div className="text-[11px] font-sans">
+            {enrollmentStatus === 'VERIFIED' ? (
+              <div className="bg-emerald-50 border border-emerald-250 rounded-lg p-2.5 space-y-1.5 text-emerald-800">
+                <div className="flex items-center gap-1.5 font-bold">
+                  <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Twin Baseline Verified</span>
                 </div>
-
-                <div className="pt-2 border-t border-[#F1F5F9] flex justify-between items-center text-[10px] font-mono text-[#64748B]">
-                  <span>Demo Flow</span>
-                  <span className="text-blue-600 font-bold">YC Demo Ready</span>
+                <div className="grid grid-cols-2 gap-1 text-[9.5px] font-mono text-slate-700">
+                  <div>Keys: <strong className="text-emerald-700">1,248</strong></div>
+                  <div>Mouse: <strong className="text-emerald-700">12,421</strong></div>
+                  <div>Focus: <strong className="text-emerald-700">382</strong></div>
+                  <div>Read: <strong className="text-emerald-700">91</strong></div>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                <p className="text-slate-500 leading-tight">
+                  Upon finishing calibration, CDT-X outputs a cryptographic digital twin used for verification.
+                </p>
+                <div className="space-y-0.5 font-mono text-[9.5px] text-slate-400">
+                  <div>○ Digital Twin Profile</div>
+                  <div>○ Identity Confidence Index</div>
+                  <div>○ Behavioral Baseline</div>
                 </div>
               </div>
             )}
           </div>
+        </div>
 
-          {/* Privacy-First Verification */}
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] space-y-3">
-            <h3 className="text-xs font-black text-emerald-800 font-sans tracking-wide uppercase flex items-center gap-2">
-              <Lock className="w-4 h-4 text-emerald-600" />
-              Privacy-First Architecture
-            </h3>
-            
-            <p className="text-[11.5px] text-[#475569] font-sans leading-relaxed">
-              CDT-X is designed with a strict data minimization philosophy. We protect candidate rights while ensuring optimal academic outcome fidelity:
+        {/* Judge Demo Assist Card */}
+        <div className="md:col-span-4 bg-white border-2 border-blue-200 rounded-xl shadow-sm overflow-hidden flex flex-col">
+          <button 
+            onClick={() => setIsWalkthroughCollapsed(prev => !prev)}
+            className="w-full flex justify-between items-center bg-blue-50 px-3 py-1.5 border-b border-blue-200 text-left cursor-pointer"
+          >
+            <div className="flex items-center gap-1">
+              <Zap className="w-3.5 h-3.5 text-[#2563EB]" />
+              <h3 className="text-[10.5px] font-black text-[#2563EB] font-sans tracking-wide uppercase">
+                Judge Walkthrough Assist
+              </h3>
+            </div>
+            <span className="text-[9px] font-mono text-[#2563EB] underline font-extrabold">
+              {isWalkthroughCollapsed ? 'EXPAND' : 'COLLAPSE'}
+            </span>
+          </button>
+
+          {!isWalkthroughCollapsed && (
+            <div className="p-2.5 flex-grow flex flex-col justify-between font-sans text-[11px] gap-1.5">
+              <div className="flex gap-1">
+                <button 
+                  onClick={demoAutofill}
+                  className="flex-1 py-1 bg-[#2563EB] hover:bg-blue-700 text-white font-bold text-[9px] uppercase rounded transition-all cursor-pointer font-sans"
+                >
+                  1. Load Candidate
+                </button>
+                <button 
+                  onClick={demoAutoCalibrate}
+                  className="flex-1 py-1 bg-[#2563EB] hover:bg-blue-700 text-white font-bold text-[9px] uppercase rounded transition-all cursor-pointer font-sans"
+                >
+                  2. Calibrate
+                </button>
+                <button 
+                  onClick={demoLaunchExam}
+                  className="flex-1 py-1 bg-[#10B981] hover:bg-emerald-600 text-white font-bold text-[9px] uppercase rounded transition-all cursor-pointer font-sans"
+                >
+                  3. Commit Base
+                </button>
+              </div>
+              <div className="flex justify-between items-center text-[9px] font-mono text-[#64748B] border-t border-[#F1F5F9] pt-1">
+                <span>Verification State</span>
+                <span className="text-blue-600 font-bold">YC Demo Ready</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Privacy-First & LMS Integrations */}
+        <div className="md:col-span-4 bg-white border border-[#E2E8F0] rounded-xl p-3 shadow-sm flex flex-col justify-between text-[11px]">
+          <div>
+            <h4 className="text-[10px] font-black text-[#0F172A] font-sans tracking-wide uppercase flex items-center gap-1.5 mb-1">
+              <Lock className="w-3.5 h-3.5 text-emerald-600" />
+              Privacy-First & LMS Deployment
+            </h4>
+            <p className="text-slate-500 leading-snug">
+              Stores mathematical behavior tokens rather than webcam feeds or biometric raw data. Seamless Moodle, Canvas, &amp; custom LMS API integration.
             </p>
-
-            <div className="space-y-2.5 text-xs text-[#475569]">
-              {[
-                "No live webcam video feeds compiled, cached or transmitted",
-                "No physical biometric fingerprint/retina biological imagery stored",
-                "Frictionless identity tracking operates 100% locally on edge devices",
-                "Zero risk of personally identifiable data breaches or cloud database leaks"
-              ].map((rule, idx) => (
-                <div key={idx} className="flex items-start gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>{rule}</span>
-                </div>
-              ))}
-            </div>
           </div>
-
-          {/* Digital Twin generation pipeline */}
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-            <h3 className="text-xs font-black text-[#0F172A] font-sans tracking-wide uppercase mb-3.5 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-[#2563EB]" />
-              Digital Twin Creation Flow
-            </h3>
-
-            <div className="relative pl-6 space-y-4 text-xs text-[#475569]">
-              {/* Vertical timeline line */}
-              <div className="absolute top-2 bottom-2 left-2.5 w-0.5 bg-slate-100"></div>
-
-              {[
-                { name: "Student Device", desc: "Local workstation capturing hardware interrupts", icon: Laptop },
-                { name: "Behavior Collection", desc: "Continuous signal capture of mouse & key sequences", icon: Radio },
-                { name: "Feature Extraction", desc: "Transforms raw coordinate streams into vector matrices", icon: Sliders },
-                { name: "Behavior Embedding", desc: "Integrates spatial/temporal parameters to 512D profile", icon: Cpu },
-                { name: "Digital Twin Creation", desc: "Compiles a verified, hardened behavioral model", icon: Fingerprint },
-                { name: "Trust Intelligence", desc: "Continuous behavior profile threat verification check", icon: Brain },
-                { name: "Continuous Verification", desc: "Cross-checks live streams against verified twin", icon: ShieldCheck }
-              ].map((step, idx) => {
-                const Icon = step.icon;
-                // Highlight active stages based on enrollment status
-                const isCompleted = enrollmentStatus === 'VERIFIED';
-                const isActive = enrollmentStatus === 'CALIBRATING' ? idx < 4 : isCompleted;
-                const dotColor = isCompleted ? 'bg-emerald-500 text-white border-emerald-600' : isActive ? 'bg-blue-500 text-white animate-pulse border-blue-600' : 'bg-slate-100 text-slate-400 border-slate-200';
-                
-                return (
-                  <div key={idx} className="relative flex items-start gap-3">
-                    <span className={`absolute -left-[23px] top-0.5 w-5 h-5 rounded-full flex items-center justify-center font-mono text-[9px] font-bold border shadow-sm transition-all ${dotColor}`}>
-                      {idx + 1}
-                    </span>
-                    <div className="flex-grow">
-                      <div className="flex items-center gap-1.5">
-                        <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#2563EB]' : 'text-slate-400'}`} />
-                        <strong className={`font-sans font-bold block ${isActive ? 'text-[#0F172A]' : 'text-slate-400'}`}>{step.name}</strong>
-                      </div>
-                      <p className={`text-[10px] ${isActive ? 'text-[#64748B]' : 'text-slate-350'} mt-0.5`}>{step.desc}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+          <div className="flex justify-between items-center text-[9.5px] font-mono bg-slate-50 px-2 py-0.5 rounded border border-[#E2E8F0] mt-1.5">
+            <span>Install SDK:</span>
+            <span className="text-[#2563EB] font-bold">&lt;script src="cdtx.sdk.js"&gt;</span>
           </div>
-
-
-          {/* CDT-X BROWSER SDK CARD */}
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] space-y-3">
-            <h3 className="text-xs font-black text-[#0F172A] font-sans tracking-wide uppercase flex items-center gap-2">
-              <Laptop className="w-4 h-4 text-[#2563EB]" />
-              Behavior Collection SDK
-            </h3>
-            
-            <p className="text-[11px] text-[#475569] leading-normal font-sans">
-              CDT-X integrates directly with institutional infrastructure to enable rapid campus-wide deployment:
-            </p>
-
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono text-slate-700">
-              <div className="bg-slate-50 border border-[#E2E8F0] p-1.5 rounded-lg flex flex-col">
-                <span className="text-[8.5px] text-[#64748B] uppercase font-bold">SDK Size</span>
-                <span className="font-bold text-[#0F172A] mt-0.5">180 KB</span>
-              </div>
-              <div className="bg-slate-50 border border-[#E2E8F0] p-1.5 rounded-lg flex flex-col">
-                <span className="text-[8.5px] text-[#64748B] uppercase font-bold">Collection Rate</span>
-                <span className="font-bold text-[#0F172A] mt-0.5">Real-Time</span>
-              </div>
-              <div className="bg-slate-50 border border-[#E2E8F0] p-1.5 rounded-lg flex flex-col">
-                <span className="text-[8.5px] text-[#64748B] uppercase font-bold">Webcam Required</span>
-                <span className="font-bold text-red-650 mt-0.5">No</span>
-              </div>
-              <div className="bg-slate-50 border border-[#E2E8F0] p-1.5 rounded-lg flex flex-col">
-                <span className="text-[8.5px] text-[#64748B] uppercase font-bold">Microphone Required</span>
-                <span className="font-bold text-red-650 mt-0.5">No</span>
-              </div>
-            </div>
-
-            <div className="p-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-[10px] font-mono text-[#475569] flex justify-between items-center">
-              <span>Installation:</span>
-              <span className="text-[#2563EB] bg-[#EFF6FF] px-2 py-0.5 border border-[#BFDBFE] rounded font-bold">&lt;script src="cdtx.sdk.js"&gt;&lt;/script&gt;</span>
-            </div>
-
-            <div className="pt-2 border-t border-[#F1F5F9] flex flex-wrap gap-2 text-[10px] font-mono text-[#475569]">
-              <span className="font-sans font-bold">Supported:</span>
-              {["Chrome", "Edge", "Firefox", "Safari"].map((browser) => (
-                <span key={browser} className="flex items-center gap-0.5 bg-emerald-50 text-emerald-800 border border-emerald-250 px-1.5 py-0.5 rounded font-bold">
-                  ✓ {browser}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] space-y-3">
-            <h3 className="text-xs font-black text-[#0F172A] font-sans tracking-wide uppercase flex items-center gap-2">
-              <Globe className="w-4 h-4 text-[#2563EB]" />
-              LMS Deployment & Integrations
-            </h3>
-            
-            <p className="text-[11px] text-slate-500 leading-normal font-sans">
-              CDT-X integrates seamlessly into existing enterprise exam software via API and standard LMS protocols:
-            </p>
-
-            <div className="grid grid-cols-2 gap-2 text-xs font-semibold text-slate-700">
-              {["Moodle", "Canvas", "Google Classroom", "ExamSoft", "Custom LMS"].map((lms, lIdx) => (
-                <div key={lIdx} className="flex items-center gap-1.5 bg-slate-50 border border-[#E2E8F0] p-1.5 rounded-lg">
-                  <Check className="w-3.5 h-3.5 text-emerald-600 font-extrabold shrink-0" />
-                  <span>{lms}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="pt-2 border-t border-[#F1F5F9] flex justify-between items-center text-xs">
-              <span className="text-[#64748B] font-mono text-[10px]">Deployment Time:</span>
-              <span className="text-[#2563EB] font-bold font-mono bg-[#EFF6FF] px-2 py-0.5 rounded border border-[#BFDBFE]">&lt; 1 Day</span>
-            </div>
-          </div>
-
-          {/* Pre-Exam Device Telemetry check */}
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-            <h3 className="text-xs font-black text-[#0F172A] font-sans tracking-wide uppercase mb-3 flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-emerald-600" />
-              Pre-Exam Device Logs
-            </h3>
-            
-            <div className="space-y-2 font-mono text-[10px] text-[#475569]">
-              <div className="flex justify-between items-center p-2 bg-slate-50 rounded-lg border border-[#E2E8F0]">
-                <span>Biometric Baseline:</span>
-                <span className={`font-bold ${enrollmentStatus === 'VERIFIED' ? 'text-emerald-600' : 'text-amber-600'}`}>
-                  {enrollmentStatus === 'VERIFIED' ? 'READY (100%)' : 'AWAITING CALIBRATION'}
-                </span>
-              </div>
-
-              <div className="flex justify-between items-center p-2 bg-slate-50 rounded-lg border border-[#E2E8F0]">
-                <span>Verification Confidence Token:</span>
-                <span className="font-bold text-[#0F172A]">
-                  {twinVerificationConfidence > 0 ? `${twinVerificationConfidence}%` : 'N/A'}
-                </span>
-              </div>
-
-              <div className="flex justify-between items-center p-2 bg-slate-50 rounded-lg border border-[#E2E8F0]">
-                <span>Device Compatibility:</span>
-                <span className="font-bold text-[#2563EB]">
-                  {deviceCheckOk ? 'VALID (Secure Agent)' : 'AWAITING COGNITIVE CHECK'}
-                </span>
-              </div>
-            </div>
-          </div>
-
         </div>
 
       </div>

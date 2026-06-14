@@ -109,30 +109,30 @@ export default function CenterManagementView({
     <div className="h-full overflow-y-auto p-8 bg-[#F8FAFC] custom-scrollbar text-slate-800 pb-16">
       
       {/* Overview Head */}
-      <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="mb-2.5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#0F172A] font-sans">
+          <h1 className="text-[13px] font-black tracking-tight text-[#0F172A] font-sans uppercase leading-none">
             Live Host Examination Monitor
           </h1>
-          <p className="text-[13px] text-[#475569] mt-0.5">
+          <p className="text-[10px] text-[#64748B] mt-0.5">
             Monitor active exam seats, response telemetry curves, and client system health parameters in real time.
           </p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 shrink-0">
           <button
             onClick={triggerGlobalCalibration}
-            className="bg-[#2563EB] hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer shadow-md"
+            className="bg-[#2563EB] hover:bg-blue-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all cursor-pointer shadow-sm"
           >
-            <Zap className="w-4 h-4" />
+            <Zap className="w-3.5 h-3.5" />
             Recalibrate Sensors
           </button>
           
           <button
             onClick={() => alert('Student biometric manifest report compiled successfully.')}
-            className="bg-white border border-[#E2E8F0] hover:bg-slate-50 text-slate-705 text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+            className="bg-white border border-[#E2E8F0] hover:bg-slate-50 text-slate-700 text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 transition-all cursor-pointer shadow-sm"
           >
-            <Download className="w-4 h-4" />
+            <Download className="w-3.5 h-3.5" />
             Export Live Sheets
           </button>
         </div>

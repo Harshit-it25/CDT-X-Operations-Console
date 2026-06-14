@@ -118,12 +118,12 @@ export default function BehaviorReplayView() {
     <div className="h-full overflow-y-auto p-8 bg-[#F8FAFC] custom-scrollbar text-slate-800 pb-16">
       
       {/* Header Block */}
-      <div className="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="mb-2.5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#0F172A] font-sans">
+          <h1 className="text-[13px] font-black tracking-tight text-[#0F172A] font-sans uppercase leading-none">
             Forensic Behavior Replay Deck
           </h1>
-          <p className="text-[13px] text-[#475569] mt-0.5">
+          <p className="text-[10px] text-[#64748B] mt-0.5">
             Coordinate-accurate replay of proctored sessions. Inspect spline paths, clipboard triggers, and viewport focal shifts.
           </p>
         </div>

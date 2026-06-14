@@ -120,44 +120,42 @@ export default function AuditLedgerView({ entries, searchQuery }: AuditLedgerVie
   };
 
   return (
-    <div className="h-full overflow-y-auto p-8 bg-[#F8FAFC] custom-scrollbar text-slate-800 pb-16">
+    <div className="h-full overflow-y-auto px-4 py-2.5 bg-[#F8FAFC] custom-scrollbar text-slate-800 pb-10">
       
-      {/* Header Block */}
-      <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      {/* Header Block — compact */}
+      <div className="mb-2.5 flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#0F172A] font-sans flex items-center gap-2">
-            <ShieldCheck className="w-6 h-6 text-[#2563EB]" />
-            Audit & Compliance Ledger
+          <h1 className="text-[13px] font-black tracking-tight text-[#0F172A] font-sans flex items-center gap-1.5 uppercase leading-none">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#2563EB]" />
+            Audit &amp; Compliance Ledger
           </h1>
-          <p className="text-[13px] text-[#475569] mt-0.5">
-            Verified cryptographic compliance logs and secure audit records tracked continuously in real time.
-          </p>
+          <p className="text-[11px] text-[#64748B] mt-0.5">Cryptographic log entries · verified in real time</p>
         </div>
 
         <div className="flex gap-2 shrink-0">
           <button 
             type="button" 
             onClick={() => setSelectedType('ALL_EVENTS')}
-            className="flex items-center gap-1.5 px-3 py-2 bg-white border border-[#E2E8F0] text-[#64748B] hover:text-[#0F172A] hover:bg-slate-50 text-xs font-bold rounded-xl transition-all shadow-sm cursor-pointer"
+            className="flex items-center gap-1.5 px-2 py-1 bg-white border border-[#E2E8F0] text-[#64748B] hover:text-[#0F172A] hover:bg-slate-50 text-[11.5px] font-bold rounded-lg transition-all shadow-sm cursor-pointer"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
-            Reset Filter
+            <RotateCcw className="w-3 h-3" />
+            Reset
           </button>
           
           <button 
             type="button"
             onClick={handleTriggerExport}
             disabled={isExporting}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#2563EB] hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all disabled:opacity-50 shadow-md cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1 bg-[#2563EB] hover:bg-blue-700 text-white text-[11.5px] font-bold rounded-lg transition-all disabled:opacity-50 shadow-sm cursor-pointer"
           >
             {isExporting ? (
               <>
-                <RotateCcw className="w-3.5 h-3.5 animate-spin" />
+                <RotateCcw className="w-3 h-3 animate-spin" />
                 Signing...
               </>
             ) : (
               <>
-                <Download className="w-4 h-4" />
+                <Download className="w-3 h-3" />
                 Export Ledger
               </>
             )}
@@ -165,64 +163,88 @@ export default function AuditLedgerView({ entries, searchQuery }: AuditLedgerVie
         </div>
       </div>
 
-      {/* KPI Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 select-none">
-        
-        {/* 1. Ledger Integrity */}
-        <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-          <span className="text-slate-400 text-[9.5px] font-mono tracking-widest uppercase block mb-1">
-            Ledger Safe Integrity
+      {/* Standardized 4-Metric Header Strip */}
+      <div className="grid grid-cols-4 gap-2 mb-2">
+        {/* Metric 1: Trust Score */}
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm h-[76px] flex flex-col justify-between">
+          <span className="text-[9.5px] font-mono font-black uppercase text-slate-400 tracking-wider block">Trust Score</span>
+          <div className="flex items-baseline gap-1 font-sans">
+            <span className="text-[15px] font-black text-[#0f172a] tracking-tight leading-none">99.8%</span>
+            <span className="text-[9.5px] font-extrabold text-emerald-600">✓ COMPLIANT</span>
+          </div>
+          <p className="text-[9.5px] text-slate-400 leading-none">System consensus score</p>
+        </div>
+
+        {/* Metric 2: Identity Confidence */}
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm h-[76px] flex flex-col justify-between">
+          <span className="text-[9.5px] font-mono font-black uppercase text-slate-400 tracking-wider block">Identity Confidence</span>
+          <div className="text-[15px] font-black text-[#2563EB] tracking-tight font-sans leading-none">
+            99.2%
+          </div>
+          <p className="text-[9.5px] text-slate-400 leading-none">Average profile match</p>
+        </div>
+
+        {/* Metric 3: Risk Level */}
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm h-[76px] flex flex-col justify-between items-start">
+          <span className="text-[9.5px] font-mono font-black uppercase text-slate-400 tracking-wider block">Risk Level</span>
+          <span className="px-1.5 py-0.2 rounded text-[9.5px] font-black uppercase border font-sans leading-none text-emerald-700 bg-emerald-50 border-emerald-200">
+            LOW
           </span>
-          <div className="flex items-center gap-2 mt-1.5">
-            <div className="w-3.5 h-3.5 bg-emerald-500 rounded-full animate-pulse border border-white" />
-            <span className="text-lg font-black font-sans text-emerald-700">VERIFIED SAFE</span>
+          <p className="text-[9.5px] text-slate-400 leading-none">Continuous verification</p>
+        </div>
+
+        {/* Metric 4: Recommended Action */}
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm h-[76px] flex flex-col justify-between">
+          <span className="text-[9.5px] font-mono font-black uppercase text-slate-400 tracking-wider block">Recommended Action</span>
+          <div className="text-[10px] font-bold text-slate-800 tracking-tight line-clamp-1 leading-tight uppercase">
+            COMMIT RECORDS
+          </div>
+          <p className="text-[9.5px] text-slate-400 leading-none">Real-time prescription</p>
+        </div>
+      </div>
+
+      {/* Secondary Ledger Metrics */}
+      <div className="grid grid-cols-4 gap-2 mb-2.5 select-none">
+        {/* 1. Ledger Integrity */}
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm">
+          <span className="text-slate-400 text-[9.5px] font-mono tracking-widest uppercase block leading-none mb-1">Ledger Integrity</span>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse border border-white" />
+            <span className="text-[11px] font-black font-sans text-emerald-700 leading-none">VERIFIED</span>
           </div>
         </div>
 
         {/* 2. Total Logs */}
-        <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-          <span className="text-slate-400 text-[9.5px] font-mono tracking-widest uppercase block mb-1">
-            Cryptographic Checkpoints
-          </span>
-          <div className="text-lg font-mono font-extrabold text-[#0F172A] mt-1">
-            1,402,982
-          </div>
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm">
+          <span className="text-slate-400 text-[9.5px] font-mono tracking-widest uppercase block leading-none mb-1">Crypto Checkpoints</span>
+          <div className="text-[12px] font-mono font-extrabold text-[#0F172A] leading-none">1,402,982</div>
         </div>
 
         {/* 3. Daily Records */}
-        <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-          <span className="text-slate-400 text-[9.5px] font-mono tracking-widest uppercase block mb-1">
-            Compliance Operations Today
-          </span>
-          <div className="text-lg font-mono font-extrabold text-[#0F172A] mt-1">
-            42,810
-          </div>
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm">
+          <span className="text-slate-400 text-[9.5px] font-mono tracking-widest uppercase block leading-none mb-1">Compliance Today</span>
+          <div className="text-[12px] font-mono font-extrabold text-[#0F172A] leading-none">42,810</div>
         </div>
 
         {/* 4. Chain Sync */}
-        <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-          <span className="text-slate-400 text-[9.5px] font-mono tracking-widest uppercase block mb-1">
-            Audit Replication
-          </span>
-          <div className="text-lg font-mono font-extrabold text-[#2563EB] mt-1">
-            0.002s AGO
-          </div>
+        <div className="bg-[#FFFFFF] border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm">
+          <span className="text-slate-400 text-[9.5px] font-mono tracking-widest uppercase block leading-none mb-1">Last Sync</span>
+          <div className="text-[12px] font-mono font-extrabold text-[#2563EB] leading-none">0.002s AGO</div>
         </div>
-
       </div>
 
-      {/* Main Table Card (Stripe-like SaaS UI) */}
-      <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] space-y-4 mb-6">
+      {/* Main Table Card */}
+      <div className="bg-white border border-[#E2E8F0] rounded-xl p-3 shadow-sm space-y-2 mb-2.5">
         
         {/* Table Filters Top Strip */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0]">
+        <div className="flex items-center justify-between gap-3 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-[#E2E8F0]">
           <div className="flex gap-2">
-            <div className="flex items-center gap-1.5 px-3 py-1 bg-white border border-[#E2E8F0] rounded-lg">
+            <div className="flex items-center gap-1.5 px-2 py-0.5 bg-white border border-[#E2E8F0] rounded-lg">
               <span className="text-[10px] font-mono text-[#64748B] font-bold uppercase">FAMILY:</span>
               <select 
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
-                className="bg-transparent border-none text-[11px] font-mono text-[#2563EB] p-0 focus:ring-0 cursor-pointer"
+                className="bg-transparent border-none text-[10px] font-mono text-[#2563EB] p-0 focus:ring-0 cursor-pointer"
               >
                 <option value="ALL_EVENTS">ALL_EVENTS</option>
                 <option value="USER_ACTION">USER_ACTION</option>
@@ -232,28 +254,27 @@ export default function AuditLedgerView({ entries, searchQuery }: AuditLedgerVie
               </select>
             </div>
 
-            <div className="flex items-center gap-1 px-3 py-1 bg-white border border-[#E2E8F0] rounded-lg text-[11px] text-[#64748B] font-sans font-bold">
+            <div className="flex items-center gap-1 px-2 py-0.5 bg-white border border-[#E2E8F0] rounded-lg text-[10px] text-[#64748B] font-sans font-bold">
               <span>TIME WINDOW:</span>
               <span className="text-slate-705">LAST 24h</span>
             </div>
           </div>
 
-          <div className="text-[11px] font-mono text-slate-500 font-bold">
-            ENTRIES VERIFIED: <span className="text-[#2563EB]">{filteredEntries.length}</span>
+          <div className="text-[10px] font-mono text-slate-500 font-bold">
+            VERIFIED: <span className="text-[#2563EB]">{filteredEntries.length}</span>
           </div>
         </div>
 
-        {/* Ledger Table */}
-        <div className="overflow-x-auto border border-[#E2E8F0] rounded-xl">
-          <table className="w-full text-left text-[11.5px] border-collapse bg-white">
-            <thead className="bg-[#F8FAFC] text-slate-500 font-mono text-[9px] uppercase border-b border-[#E2E8F0] select-none">
+        <div className="overflow-x-auto border border-[#E2E8F0] rounded-lg">
+          <table className="w-full text-left text-[11px] border-collapse bg-white">
+            <thead className="bg-[#F8FAFC] text-slate-500 font-mono text-[11px] uppercase border-b border-[#E2E8F0] select-none">
               <tr>
-                <th className="px-6 py-3 font-bold w-16">STATUS</th>
-                <th className="px-6 py-3 font-bold w-48">TIMESTAMP (UTC)</th>
-                <th className="px-6 py-3 font-bold w-40">EVENT FAMILY</th>
-                <th className="px-6 py-3 font-bold">DESCRIPTION</th>
-                <th className="px-6 py-3 font-bold w-48">OPERATOR</th>
-                <th className="px-6 py-3 font-bold text-right w-44">SHA256 CHECKSUM</th>
+                <th className="px-2 py-1 font-bold w-10">ST</th>
+                <th className="px-2 py-1 font-bold w-40">TIMESTAMP (UTC)</th>
+                <th className="px-2 py-1 font-bold w-36">TYPE</th>
+                <th className="px-2 py-1 font-bold">DESCRIPTION</th>
+                <th className="px-2 py-1 font-bold w-40">OPERATOR</th>
+                <th className="px-2 py-1 font-bold text-right w-36">CHECKSUM</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E2E8F0]">
@@ -264,18 +285,18 @@ export default function AuditLedgerView({ entries, searchQuery }: AuditLedgerVie
                     key={entry.id}
                     className={`hover:bg-slate-50/40 transition-colors ${isAlert ? 'bg-red-50/10' : ''}`}
                   >
-                    <td className="px-6 py-3 text-center">
+                    <td className="px-2 py-1 text-center">
                       {isAlert ? (
-                        <AlertTriangle className="w-4 h-4 text-red-650 inline" />
+                        <AlertTriangle className="w-3.5 h-3.5 text-red-655 inline" />
                       ) : (
-                        <Lock className="w-3.5 h-3.5 text-slate-400 inline" />
+                        <Lock className="w-3 h-3 text-slate-400 inline" />
                       )}
                     </td>
-                    <td className="px-6 py-3 font-mono text-[11.5px] text-[#0F172A] font-medium">
+                    <td className="px-2 py-1 font-mono text-[11px] text-[#0F172A] font-medium">
                       {entry.timestamp}
                     </td>
-                    <td className="px-6 py-3">
-                      <span className={`px-2 py-0.5 font-mono text-[9px] font-bold rounded-lg uppercase border ${
+                    <td className="px-2 py-1">
+                      <span className={`px-1.5 py-0.2 font-mono text-[11px] font-bold rounded uppercase border ${
                         entry.type === 'DATA_EXPORT' 
                           ? 'bg-blue-50 text-blue-700 border-blue-200'
                           : entry.type === 'USER_ACTION'
@@ -287,23 +308,23 @@ export default function AuditLedgerView({ entries, searchQuery }: AuditLedgerVie
                         {entry.type.replace('_', ' ')}
                       </span>
                     </td>
-                    <td className="px-6 py-3 font-sans text-xs text-[#0D172A]">
+                    <td className="px-2 py-1 font-sans text-[11px] text-[#0D172A]">
                       {entry.description}
                     </td>
-                    <td className="px-6 py-3 font-mono text-[11px] text-[#0F172A] font-bold">
+                    <td className="px-2 py-1 font-mono text-[11px] text-[#0F172A] font-bold">
                       {entry.operator}
                     </td>
-                    <td className="px-6 py-3 text-right">
+                    <td className="px-2 py-1 text-right">
                       <button
                         onClick={() => handleCopyHash(entry.hash, entry.id)}
-                        className="font-mono text-[10px] text-slate-400 hover:text-[#2563EB] transition-colors inline-flex items-center gap-1 justify-end ml-auto cursor-pointer"
-                        title="Copy cryptographic signature"
+                        className="font-mono text-[11px] text-slate-400 hover:text-[#2563EB] transition-colors inline-flex items-center gap-1 justify-end ml-auto cursor-pointer"
+                        title="Copy signature"
                       >
                         <span className="truncate max-w-[80px]">{entry.hash}</span>
                         {copiedId === entry.id ? (
-                          <Check className="w-3.5 h-3.5 text-emerald-600 font-bold" />
+                          <Check className="w-3 h-3 text-emerald-600 font-bold" />
                         ) : (
-                          <Copy className="w-3 h-3 text-slate-400" />
+                          <Copy className="w-2.5 h-2.5 text-slate-400" />
                         )}
                       </button>
                     </td>
@@ -316,75 +337,60 @@ export default function AuditLedgerView({ entries, searchQuery }: AuditLedgerVie
 
       </div>
 
-      {/* Terminal logs emulation and compliances quota cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        
-        {/* Terminal Emulation (8/12) */}
-        <div className="lg:col-span-8 bg-white border border-[#E2E8F0] p-5 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-sans font-bold text-slate-800 text-[13px] uppercase tracking-wide flex items-center gap-1.5">
-                <Terminal className="w-4 h-4 text-[#2563EB]" />
-                Live Checksum verification terminal
-              </h3>
-              <span className="text-[9.5px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md uppercase font-bold">
-                REPLICA_STABLE
-              </span>
-            </div>
+      {/* Compact Audit Integrity Status Strip (replaces decorative terminal) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
 
-            <div className="font-mono text-[11.5px] bg-[#0F172A] p-4 rounded-xl text-emerald-400 border border-slate-900 leading-relaxed mb-4 h-32 overflow-y-auto custom-scrollbar">
-              {logMessages.map((msg, idx) => (
-                <p key={idx}>{msg}</p>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-            <div className="bg-[#F8FAFC] p-3 rounded-xl border border-[#E2E8F0]">
-              <span className="text-[8.5px] font-mono text-slate-400 block uppercase font-bold mb-1">Cryptographic Seed Target</span>
-              <span className="text-[11.5px] font-mono text-slate-700 truncate block">
-                9a7c8e9b21d3f4a56b7c8d9e0f1a2b3c
-              </span>
-            </div>
-            <div className="bg-[#F8FAFC] p-3 rounded-xl border border-[#E2E8F0]">
-              <span className="text-[8.5px] font-mono text-slate-400 block uppercase font-bold mb-1">Audit Consensus Status</span>
-              <span className="text-[11.5px] font-mono text-emerald-800 block font-bold">
-                12/12 ACTIVE DEPLOYED REPLICAS RUNNING
-              </span>
-            </div>
+        {/* Integrity Status */}
+        <div className="bg-white border border-[#E2E8F0] p-3 rounded-lg shadow-sm">
+          <h3 className="font-sans font-bold text-[#0F172A] text-[11px] uppercase tracking-wide flex items-center gap-1.5 mb-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            Audit Chain Status
+          </h3>
+          <div className="space-y-1 text-[11px] font-mono">
+            <div className="flex justify-between"><span className="text-slate-500">Replica Count</span><span className="font-bold text-[#0F172A]">12/12 ACTIVE</span></div>
+            <div className="flex justify-between"><span className="text-slate-500">Integrity Check</span><span className="font-bold text-emerald-700">SHA-256 VERIFIED</span></div>
+            <div className="flex justify-between"><span className="text-slate-500">Last Sync</span><span className="font-bold text-[#2563EB]">0.002s ago</span></div>
+            <div className="flex justify-between"><span className="text-slate-500">Index Alignment</span><span className="font-bold text-emerald-700">CONSISTENT</span></div>
           </div>
         </div>
 
-        {/* Submit Compliance (4/12) */}
-        <div className="lg:col-span-4 bg-white border border-[#E2E8F0] p-5 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] flex flex-col justify-between select-none">
+        {/* Crypto Seed */}
+        <div className="bg-white border border-[#E2E8F0] p-3 rounded-lg shadow-sm">
+          <h3 className="font-sans font-bold text-[#0F172A] text-[11px] uppercase tracking-wide flex items-center gap-1.5 mb-1.5">
+            <Lock className="w-3.5 h-3.5 text-[#2563EB]" />
+            Cryptographic Parameters
+          </h3>
+          <div className="space-y-1 text-[11px] font-mono">
+            <div className="flex justify-between"><span className="text-slate-500">Seed Target</span><span className="font-bold text-[#0F172A] truncate ml-2">9a7c8e9b21d3f4a5</span></div>
+            <div className="flex justify-between"><span className="text-slate-500">Algorithm</span><span className="font-bold text-[#0F172A]">SHA-256</span></div>
+            <div className="flex justify-between"><span className="text-slate-500">Key Rotation</span><span className="font-bold text-emerald-700">24h CYCLE</span></div>
+            <div className="flex justify-between"><span className="text-slate-500">Entries Verified</span><span className="font-bold text-[#2563EB]">{filteredEntries.length}</span></div>
+          </div>
+        </div>
+
+        {/* National Compliance Dispatch */}
+        <div className="bg-white border border-[#E2E8F0] p-3 rounded-lg shadow-sm flex flex-col justify-between">
           <div>
-            <h3 className="font-sans font-extrabold text-[#0F172A] text-[13.5px] uppercase tracking-wide mb-2">
+            <h3 className="font-sans font-extrabold text-[#0F172A] text-[11px] uppercase tracking-wide mb-1 leading-tight">
               National Compliance Dispatch
             </h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Dispatches authenticated examination telemetry databases to national-level registries for forensic compliance logs audits.
+            <p className="text-[11px] text-slate-500 leading-tight mb-2">
+              Dispatches authenticated telemetry to national registries for compliance audit.
             </p>
-          </div>
-
-          <div className="my-4">
-            <div className="flex justify-between font-mono text-[9.5px] font-bold mb-2">
-              <span className="text-slate-400">SYNC QUOTA COMPLETION RATE</span>
-              <span className="text-[#16A34A] font-bold">98% COMPLETE</span>
+            <div className="flex justify-between font-mono text-[10.5px] font-bold mb-1">
+              <span className="text-slate-400">SYNC QUOTA</span>
+              <span className="text-[#16A34A]">98% COMPLETE</span>
             </div>
-            <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-[#E2E8F0]">
-              <div 
-                className="bg-emerald-500 h-full" 
-                style={{ width: '98%' }}
-              />
+            <div className="w-full bg-slate-100 h-1 rounded-full overflow-hidden">
+              <div className="bg-emerald-500 h-full" style={{ width: '98%' }} />
             </div>
           </div>
-
           <button 
             type="button"
             onClick={handleTriggerExport}
-            className="w-full py-2.5 bg-slate-50 hover:bg-slate-100 border border-[#E2E8F0] text-slate-700 font-mono text-[10.5px] font-bold uppercase rounded-xl transition-all cursor-pointer shadow-sm text-center flex items-center justify-center gap-1.5"
+            className="mt-2.5 w-full py-1.5 bg-slate-50 hover:bg-slate-100 border border-[#E2E8F0] text-slate-700 font-mono text-[11px] font-bold uppercase rounded-lg cursor-pointer flex items-center justify-center gap-1.5 leading-none"
           >
-            <FileText className="w-4 h-4" />
+            <FileText className="w-3 h-3" />
             Validate Pending Logs
           </button>
         </div>

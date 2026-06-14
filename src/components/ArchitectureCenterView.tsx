@@ -118,7 +118,7 @@ const pipelineNodes: ArchNode[] = [
     structures: `struct TelemetryFeatureMatrix {
   double keypress_dwell_entropy;
   double bezier_trajectory_jerk;
-  double foveal_hesitation_index;
+  double reading_hesitation_index;
 };`,
     description: "Transforms unstructured temporal sequences into mathematical summaries, processing speed variations, pause patterns, and navigation metrics over sliding 15-second tracking blocks."
   },
@@ -233,6 +233,37 @@ const pipelineNodes: ArchNode[] = [
   }
 ];
 
+function highlightCode(code: string) {
+  const keywords = ['struct', 'uint64_t', 'uint16_t', 'uint8_t', 'uint32_t', 'char', 'bool', 'double', 'float', 'int'];
+  const lines = code.split('\n');
+  return lines.map((line, lineIdx) => {
+    const parts = line.split(/(\s+|,|;|{|}|\(|\)|\[|\])/);
+    const highlightedParts = parts.map((part, partIdx) => {
+      if (keywords.includes(part)) {
+        return <span key={partIdx} className="text-blue-600 font-bold">{part}</span>;
+      }
+      if (part.match(/^\d+$/) || part.match(/^\d+\.\d+$/)) {
+        return <span key={partIdx} className="text-amber-600 font-bold">{part}</span>;
+      }
+      if (part.startsWith('//') || part.startsWith('/*')) {
+        return <span key={partIdx} className="text-slate-400 italic">{part}</span>;
+      }
+      if (part.startsWith('"') || part.startsWith("'")) {
+        return <span key={partIdx} className="text-emerald-600 font-semibold">{part}</span>;
+      }
+      if (part.match(/^[A-Z][a-zA-Z0-9_]*$/)) {
+        return <span key={partIdx} className="text-indigo-600 font-bold">{part}</span>;
+      }
+      return <span key={partIdx} className="text-slate-800">{part}</span>;
+    });
+    return (
+      <div key={lineIdx} className="min-h-[1.25rem]">
+        {highlightedParts}
+      </div>
+    );
+  });
+}
+
 export default function ArchitectureCenterView() {
   const [selectedNodeId, setSelectedNodeId] = useState<string>("device");
   const selectedNode = pipelineNodes.find(n => n.id === selectedNodeId) || pipelineNodes[0];
@@ -241,11 +272,11 @@ export default function ArchitectureCenterView() {
     <div className="h-full overflow-y-auto p-8 bg-[#F8FAFC] custom-scrollbar text-slate-800 pb-16">
       
       {/* Page Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-[#0F172A] font-sans">
+      <div className="mb-2.5">
+        <h1 className="text-[13px] font-black tracking-tight text-[#0F172A] font-sans uppercase leading-none">
           Core Engine Process Architecture
         </h1>
-        <p className="text-[13px] text-[#475569] mt-0.5">
+        <p className="text-[10px] text-[#64748B] mt-0.5">
           Step-by-step cryptographic pipeline map showing how applicant device signals are securely processed into verified decisions.
         </p>
       </div>
@@ -278,7 +309,7 @@ export default function ArchitectureCenterView() {
           </p>
         </div>
         <span className="text-[10px] font-mono font-bold bg-[#EFF6FF] text-[#2563EB] px-2 py-0.5 rounded border border-[#BFDBFE] shrink-0">
-          PROPRIETARY UBE ENGINE
+          PROPRIETARY BEHAVIOR ENGINE
         </span>
       </div>
 
@@ -472,8 +503,8 @@ export default function ArchitectureCenterView() {
               {/* Memory structural view */}
               <div className="space-y-1.5">
                 <span className="text-[9.5px] font-mono text-[#64748B] uppercase font-bold tracking-wider block">[ Corresponding memory data alignment ]</span>
-                <div className="bg-slate-900 px-4 py-3 rounded-xl border border-[#E2E8F0] font-mono text-[10.5px] text-emerald-400 leading-snug overflow-x-auto shadow-inner">
-                  <pre>{selectedNode.structures}</pre>
+                <div className="bg-slate-50 px-4 py-3 rounded-xl border border-[#E2E8F0] font-mono text-[10.5px] leading-snug overflow-x-auto shadow-inner">
+                  <pre>{highlightCode(selectedNode.structures)}</pre>
                 </div>
               </div>
 

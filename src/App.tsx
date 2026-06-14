@@ -21,6 +21,7 @@ import ArchitectureCenterView from './components/ArchitectureCenterView';
 import CommandPalette from './components/CommandPalette';
 import JudgeWalkthroughPanel from './components/JudgeWalkthroughPanel';
 import DemoSnapshotCenterView from './components/DemoSnapshotCenterView';
+import WhyCdtxView from './components/WhyCdtxView';
 
 import { 
   ActiveTab, 
@@ -262,8 +263,12 @@ const initialNotes: AuditorNote[] = [
 ];
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.CONTROL_ROOM);
+  const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.WHY_CDT_X);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  
+  // Lifted Technical Notes states
+  const [showTechNotes, setShowTechNotes] = useState(false);
+  const [activeTechTab, setActiveTechTabTech] = useState<'architecture' | 'validation' | 'research' | 'simulation'>('architecture');
   
   // Command Palette settings
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
@@ -616,6 +621,15 @@ export default function App() {
   // Select dynamic workspace page panel
   const renderTabContent = () => {
     switch (activeTab) {
+      case ActiveTab.WHY_CDT_X:
+        return (
+          <WhyCdtxView 
+            showTechNotes={showTechNotes} 
+            setShowTechNotes={setShowTechNotes} 
+            activeTechTab={activeTechTab} 
+            setActiveTechTab={setActiveTechTabTech} 
+          />
+        );
       case ActiveTab.DEMO_SNAPSHOT:
         return <DemoSnapshotCenterView setActiveTab={setActiveTab} />;
       case ActiveTab.CONTROL_ROOM:
@@ -699,6 +713,14 @@ export default function App() {
         setActiveTab={setActiveTab}
         operatorName={operatorName}
         operatorRole={operatorRole}
+        onOpenTechNotes={() => {
+          setActiveTab(ActiveTab.WHY_CDT_X);
+          setShowTechNotes(true);
+          setTimeout(() => {
+            const el = document.getElementById('tech-notes-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }, 150);
+        }}
       />
 
       {/* Primary diagnostic workbench container */}
@@ -725,7 +747,7 @@ export default function App() {
         />
 
         {/* Dynamic Panel Screen & Walkthrough */}
-        <div className="flex-grow flex overflow-hidden mt-16 bg-[#f8fafc]">
+        <div className="flex-grow flex overflow-hidden mt-10 bg-[#f8fafc]">
           <main className="flex-1 overflow-hidden bg-[#f8fafc]">
             {renderTabContent()}
           </main>

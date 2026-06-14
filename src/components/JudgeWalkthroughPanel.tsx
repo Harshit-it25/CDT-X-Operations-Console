@@ -15,9 +15,11 @@ import {
   FileCheck2,
   ChevronRight,
   ChevronLeft,
-  Sparkles
+  Sparkles,
+  ShieldAlert
 } from 'lucide-react';
 import { ActiveTab } from '../types';
+import DemoSnapshotCard from './DemoSnapshotCard';
 
 interface Step {
   title: string;
@@ -34,8 +36,17 @@ interface Step {
 
 const steps: Step[] = [
   {
-    title: "1. Candidate Enrollment",
-    desc: "Establish candidate identity and initial biometric profile mapping.",
+    title: "1. Why CDT-X?",
+    desc: "Understand the core problem & passive biometrics solution.",
+    tab: ActiveTab.WHY_CDT_X,
+    icon: Sparkles,
+    action: ({ setActiveTab }) => {
+      setActiveTab(ActiveTab.WHY_CDT_X);
+    }
+  },
+  {
+    title: "2. Candidate Enrollment",
+    desc: "Candidate identity registration & workspace setup.",
     tab: ActiveTab.CANDIDATE_PORTAL,
     icon: UserPlus,
     action: ({ setActiveTab }) => {
@@ -43,8 +54,8 @@ const steps: Step[] = [
     }
   },
   {
-    title: "2. Behavior Collection",
-    desc: "SDK collects active keystroke timings, mouse paths, and focus inputs.",
+    title: "3. Behavior Calibration",
+    desc: "SDK captures typing, mouse, and focus baseline.",
     tab: ActiveTab.CANDIDATE_PORTAL,
     icon: Activity,
     action: ({ setActiveTab }) => {
@@ -52,17 +63,8 @@ const steps: Step[] = [
     }
   },
   {
-    title: "3. Digital Twin Creation",
-    desc: "Generate a high-dimensional digital behavior profile representation.",
-    tab: ActiveTab.DIGITAL_TWIN,
-    icon: Cpu,
-    action: ({ setActiveTab }) => {
-      setActiveTab(ActiveTab.DIGITAL_TWIN);
-    }
-  },
-  {
-    title: "4. Examination Starts",
-    desc: "Monitor continuous trust levels as the cohort begins testing.",
+    title: "4. Live Trust Monitoring",
+    desc: "Continuous passive checks during live examination.",
     tab: ActiveTab.CONTROL_ROOM,
     icon: Play,
     action: ({ setActiveTab, handleScenarioSelect }) => {
@@ -71,8 +73,8 @@ const steps: Step[] = [
     }
   },
   {
-    title: "5. Identity Drift Detected",
-    desc: "Detect keystroke latency anomalies and flag high risk in real-time.",
+    title: "5. Anomaly Detection",
+    desc: "Typing drift triggers alerts in real-time.",
     tab: ActiveTab.CONTROL_ROOM,
     icon: AlertTriangle,
     action: ({ setActiveTab, handleScenarioSelect }) => {
@@ -81,8 +83,8 @@ const steps: Step[] = [
     }
   },
   {
-    title: "6. Investigation Triggered",
-    desc: "Inspect granular typing drift signals on the Forensic Investigation desk.",
+    title: "6. Forensic Investigation",
+    desc: "Inspect explainable typing & navigation drift signals.",
     tab: ActiveTab.INVESTIGATIONS,
     icon: Search,
     action: ({ setActiveTab, setSelectedAlertId, setSearchQuery }) => {
@@ -92,19 +94,8 @@ const steps: Step[] = [
     }
   },
   {
-    title: "7. Decision Generated",
-    desc: "Explainable AI triggers automated lockdown recommendations.",
-    tab: ActiveTab.INVESTIGATIONS,
-    icon: CheckSquare,
-    action: ({ setActiveTab, setSelectedAlertId, setSearchQuery }) => {
-      setActiveTab(ActiveTab.INVESTIGATIONS);
-      setSelectedAlertId('AL-7712');
-      setSearchQuery('Rohan');
-    }
-  },
-  {
-    title: "8. Case Closed",
-    desc: "Commit proctor decisions to the cryptographically signed ledger.",
+    title: "7. Sealed Audit Ledger",
+    desc: "Decisions committed to immutable compliance ledger.",
     tab: ActiveTab.AUDIT_LEDGER,
     icon: FileCheck2,
     action: ({ setActiveTab }) => {
@@ -178,7 +169,7 @@ export default function JudgeWalkthroughPanel({
         title="Open Judge Walkthrough"
       >
         <ChevronLeft className="w-5 h-5" />
-        <span className="text-[10px] font-bold font-mono tracking-wider uppercase rotate-180 writing-mode-vertical" style={{ writingMode: 'vertical-lr' }}>
+        <span className="text-[11px] font-bold font-mono tracking-wider uppercase rotate-180 writing-mode-vertical" style={{ writingMode: 'vertical-lr' }}>
           Walkthrough
         </span>
       </button>
@@ -186,12 +177,12 @@ export default function JudgeWalkthroughPanel({
   }
 
   return (
-    <aside className="w-[300px] bg-white border-l border-[#E2E8F0] h-full flex flex-col shrink-0 relative z-40 shadow-sm animate-in slide-in-from-right duration-250 font-sans">
+    <aside className="w-[272px] bg-white border-l border-[#E2E8F0] h-full flex flex-col shrink-0 relative z-40 shadow-sm animate-in slide-in-from-right duration-250 font-sans">
       {/* Header */}
-      <div className="p-4 border-b border-[#F1F5F9] bg-slate-50 flex justify-between items-center select-none">
+      <div className="px-3.5 py-2.5 border-b border-[#F1F5F9] bg-slate-50 flex justify-between items-center select-none">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-[#2563EB]" />
-          <span className="text-[11.5px] font-mono font-extrabold text-[#0F172A] uppercase tracking-wider">
+          <Sparkles className="w-3.5 h-3.5 text-[#2563EB]" />
+          <span className="text-[11px] font-mono font-extrabold text-[#0F172A] uppercase tracking-wider">
             JUDGE WALKTHROUGH
           </span>
         </div>
@@ -203,41 +194,91 @@ export default function JudgeWalkthroughPanel({
         </button>
       </div>
 
-      {/* Executive Verdict Card (Always visible on every screen) */}
-      <div className="p-3.5 border-b border-[#F1F5F9] bg-slate-50/50 space-y-2 select-none">
-        <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-widest block">
+      {/* Executive Verdict Card — always visible */}
+      <div className="px-3 py-2.5 border-b border-[#F1F5F9] select-none bg-slate-50/50">
+        <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-widest block mb-1.5">
           Platform Executive Verdict
         </span>
-        
-        <div className="grid grid-cols-2 gap-2 text-center text-xs font-mono">
-          <div className="bg-white p-2 rounded-xl border border-slate-200/60 shadow-sm">
-            <span className="text-[8.5px] text-slate-400 block font-sans">Trust Score</span>
-            <span className="text-sm font-black text-slate-800">{trustScore}/100</span>
-          </div>
-          <div className="bg-white p-2 rounded-xl border border-slate-200/60 shadow-sm">
-            <span className="text-[8.5px] text-slate-400 block font-sans">Identity Conf.</span>
-            <span className="text-sm font-black text-slate-800">{identityConfidence}</span>
-          </div>
-        </div>
 
-        <div className="flex justify-between items-center pt-1">
-          <span className="text-[10px] text-slate-500 font-sans">Risk Level:</span>
-          <span className={`px-2 py-0.5 rounded font-mono text-[9px] font-extrabold border uppercase ${riskColor}`}>
-            {riskLevel}
-          </span>
-        </div>
+        {currentScenario !== 'NORMAL' ? (
+          <div className="p-2 bg-red-50/60 border border-red-200 rounded-lg space-y-1.5 text-[11px]">
+            <div className="flex items-center gap-1 text-red-700 font-bold uppercase tracking-wider text-[11px]">
+              <ShieldAlert className="w-3.5 h-3.5 text-red-500 animate-pulse shrink-0" />
+              Why Flagged
+            </div>
+            
+            <div className="space-y-1 font-mono text-[11px]">
+              <div className="flex justify-between items-center bg-white/80 px-2 py-0.5 rounded border border-red-100">
+                <span className="text-slate-500 font-sans">Typing Drift:</span>
+                <span className="font-bold text-red-655 text-red-600">
+                  {currentScenario === 'IMPERSONATION' ? "+31%" : currentScenario === 'COLLUSION' ? "+15%" : "+11%"}
+                </span>
+              </div>
+              <div className="flex justify-between items-center bg-white/80 px-2 py-0.5 rounded border border-red-100">
+                <span className="text-slate-500 font-sans">Navigation Drift:</span>
+                <span className="font-bold text-red-655 text-red-600">
+                  {currentScenario === 'IMPERSONATION' ? "+14%" : currentScenario === 'COLLUSION' ? "+18%" : "+42%"}
+                </span>
+              </div>
+              <div className="flex justify-between items-center bg-white/80 px-2 py-0.5 rounded border border-red-100">
+                <span className="text-slate-500 font-sans">Clipboard Activity:</span>
+                <span className="font-bold text-red-655 text-red-600">
+                  {currentScenario === 'IMPERSONATION' ? "+6" : currentScenario === 'COLLUSION' ? "+2" : "+3"}
+                </span>
+              </div>
+              <div className="flex justify-between items-center bg-white/80 px-2 py-0.5 rounded border border-red-100">
+                <span className="text-slate-500 font-sans">Identity Confidence:</span>
+                <span className="font-bold text-[#2563EB]">
+                  {currentScenario === 'IMPERSONATION' ? "44%" : currentScenario === 'COLLUSION' ? "84%" : "89%"}
+                </span>
+              </div>
+              <div className="flex justify-between items-center bg-white/80 px-2 py-0.5 rounded border border-red-100">
+                <span className="text-slate-500 font-sans">Recommended Action:</span>
+                <span className="font-bold text-red-600 text-[11px] uppercase truncate">
+                  {currentScenario === 'IMPERSONATION' ? "Investigation Triggered" : "Audit Queue"}
+                </span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-1">
+            {/* 4-metric compact grid */}
+            <div className="grid grid-cols-2 gap-1.5 mb-1">
+              <div className="bg-slate-50 px-2 py-1 rounded-lg border border-slate-200/80 text-center">
+                <span className="text-[11px] text-slate-400 block font-sans">Trust Score</span>
+                <span className={`text-[11px] font-black ${trustScore < 50 ? 'text-red-700' : trustScore < 70 ? 'text-amber-700' : 'text-emerald-700'}`}>{trustScore}/100</span>
+              </div>
+              <div className="bg-slate-50 px-2 py-1 rounded-lg border border-slate-200/80 text-center">
+                <span className="text-[11px] text-slate-400 block font-sans">Identity Conf.</span>
+                <span className={`text-[11px] font-black ${parseInt(identityConfidence) < 50 ? 'text-red-700' : parseInt(identityConfidence) < 80 ? 'text-amber-700' : 'text-emerald-700'}`}>{identityConfidence}</span>
+              </div>
+            </div>
 
-        <div className="pt-2 border-t border-slate-200/60 flex flex-col text-[10px] font-sans">
-          <span className="text-slate-400 font-mono text-[9px]">Recommended Action:</span>
-          <strong className="text-[#0F172A] mt-0.5 leading-snug">{recommendedAction}</strong>
-        </div>
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[11px] text-slate-500 font-sans">Risk:</span>
+              <span className={`px-2 py-0.5 rounded font-mono text-[11px] font-extrabold border uppercase ${riskColor}`}>
+                {riskLevel}
+              </span>
+            </div>
+
+            <div className="flex flex-col text-[11px] font-sans border-t border-slate-100 pt-1">
+              <span className="text-slate-400 font-mono text-[11px]">Action:</span>
+              <strong className="text-[#0F172A] leading-tight text-[11px]">{recommendedAction}</strong>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Demo Snapshot Flow Card (collapsible or compact in walkthrough) */}
+      <div className="p-2 border-b border-[#F1F5F9]">
+        <DemoSnapshotCard currentStage={currentStep === 0 ? -1 : currentStep === 1 ? 0 : currentStep === 2 ? 1 : (currentStep === 3 || currentStep === 4) ? 2 : currentStep === 5 ? 3 : 4} />
       </div>
 
       {/* Steps List */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar">
-        <div className="p-2.5 bg-blue-50/50 rounded-xl border border-blue-100 mb-3 text-[11px] text-[#475569] leading-relaxed">
-          <p className="font-semibold text-slate-800 mb-1">90-Second Quick Demo Flow</p>
-          Click each step to auto-navigate the workspace and trigger real behavior streams.
+      <div className="flex-1 overflow-y-auto py-2 px-2 space-y-1 custom-scrollbar">
+        <div className="px-1.5 py-1.5 bg-blue-50/60 rounded-lg border border-blue-100 mb-2 text-[11px] text-[#475569] leading-relaxed">
+          <p className="font-semibold text-slate-700">90-Second Demo Flow</p>
+          <span className="text-[11px] text-slate-500">Click a step to navigate &amp; trigger live streams.</span>
         </div>
 
         {steps.map((step, idx) => {
@@ -249,29 +290,29 @@ export default function JudgeWalkthroughPanel({
             <button
               key={idx}
               onClick={() => handleStepClick(idx)}
-              className={`w-full text-left p-3 rounded-xl border transition-all cursor-pointer flex gap-3 ${
+              className={`w-full text-left px-2 py-1.5 rounded-lg border transition-all cursor-pointer flex gap-2 ${
                 isSelected 
                   ? 'bg-[#EFF6FF] border-[#93C5FD] text-[#0F172A] shadow-sm'
                   : isTabActive
                   ? 'bg-slate-50 border-slate-300 text-slate-700'
-                  : 'bg-white border-[#E2E8F0] hover:border-slate-350 text-slate-600'
+                  : 'bg-white border-[#E2E8F0] hover:border-slate-300 text-slate-600'
               }`}
             >
-              <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
+              <div className={`w-5.5 h-5.5 rounded-md flex items-center justify-center shrink-0 ${
                 isSelected 
                   ? 'bg-[#2563EB] text-white' 
                   : isTabActive
                   ? 'bg-slate-200 text-slate-700'
                   : 'bg-slate-100 text-slate-400'
               }`}>
-                <StepIcon className="w-4 h-4" />
+                <StepIcon className="w-3 h-3" />
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className={`text-[12px] font-bold ${isSelected ? 'text-[#2563EB]' : 'text-[#0F172A]'}`}>
+                <p className={`text-[11px] font-bold leading-tight ${isSelected ? 'text-[#2563EB]' : 'text-[#0F172A]'}`}>
                   {step.title}
                 </p>
-                <p className="text-[10px] text-slate-500 leading-snug mt-0.5">
+                <p className="text-[10px] text-slate-400 leading-snug mt-0.5">
                   {step.desc}
                 </p>
               </div>
@@ -280,29 +321,9 @@ export default function JudgeWalkthroughPanel({
         })}
       </div>
 
-      {/* Visual Pipeline Map (Vertical) */}
-      <div className="p-3 border-t border-[#F1F5F9] bg-slate-50/50 space-y-1 text-[9px] font-mono select-none text-slate-500">
-        <span className="text-[8px] font-mono font-bold text-slate-400 uppercase tracking-widest block mb-1 text-center">
-          CDT-X System Pipeline
-        </span>
-        <div className="flex flex-col items-center gap-0.5 text-center">
-          <div className="bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-700 font-bold">Student Device</div>
-          <div className="text-[7.5px] leading-none">⬇</div>
-          <div className="bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-700 font-bold">Behavior Ingestion</div>
-          <div className="text-[7.5px] leading-none">⬇</div>
-          <div className="bg-white px-2 py-0.5 rounded border border-slate-200 text-[#2563EB] font-bold">Digital Twin Modeling</div>
-          <div className="text-[7.5px] leading-none">⬇</div>
-          <div className="bg-white px-2 py-0.5 rounded border border-[#93C5FD] text-[#2563EB] font-bold">Trust Engine Scoring</div>
-          <div className="text-[7.5px] leading-none">⬇</div>
-          <div className="bg-white px-2 py-0.5 rounded border border-slate-200 text-slate-700 font-bold">Forensic Investigation</div>
-          <div className="text-[7.5px] leading-none">⬇</div>
-          <div className="bg-white px-2 py-0.5 rounded border border-emerald-250 text-emerald-700 font-bold">Sealed Audit Record</div>
-        </div>
-      </div>
-
-      {/* Footer Info */}
-      <div className="p-3 border-t border-[#F1F5F9] bg-slate-50 text-[10px] font-mono text-center text-slate-400 select-none">
-        PIPELINE ID: CDT-X-WIN-2026
+      {/* Compact footer */}
+      <div className="px-3 py-1.5 border-t border-[#F1F5F9] bg-slate-50 text-[11px] font-mono text-center text-slate-400 select-none">
+        CDT-X PIPELINE V4.2 · ASIA-PACIFIC
       </div>
     </aside>
   );

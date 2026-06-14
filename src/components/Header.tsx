@@ -144,6 +144,12 @@ export default function Header({
   // Dynamic header titles & search placeholders
   const getTabDetails = () => {
     switch (activeTab) {
+      case ActiveTab.WHY_CDT_X:
+        return {
+          title: 'Why CDT-X?',
+          placeholder: 'Search product details, limitations...',
+          subtitle: 'Core product explanation, architecture & benefits'
+        };
       case ActiveTab.DEMO_SNAPSHOT:
         return {
           title: 'Demo Snapshot Center',
@@ -240,12 +246,12 @@ export default function Header({
   };
 
   return (
-    <header className="fixed top-0 left-[280px] right-0 z-40 bg-white/95 backdrop-blur-md shadow-[0_2px_12px_rgba(15,23,42,0.03)] h-16 flex justify-between items-center px-8 transition-all duration-300">
+    <header className="fixed top-0 left-[280px] right-0 z-40 bg-white/95 backdrop-blur-md shadow-[0_2px_12px_rgba(15,23,42,0.03)] h-10 flex justify-between items-center px-4 transition-all duration-300">
       {/* Title & Interactive Palette Trigger search bar */}
-      <div className="flex items-center gap-8 flex-1 max-w-[360px]">
-        <div className="flex items-center gap-3 select-none">
-          <div className="p-2 bg-blue-50 text-[#2563EB] rounded-xl">
-            <Activity className="w-5 h-5" />
+      <div className="flex items-center gap-4 flex-1 max-w-[340px]">
+        <div className="flex items-center gap-2 select-none">
+          <div className="p-1.5 bg-blue-50 text-[#2563EB] rounded-lg">
+            <Activity className="w-4 h-4" />
           </div>
           <div className="flex flex-col">
             <span className="font-sans text-[13px] font-extrabold text-[#0F172A] uppercase tracking-wider whitespace-nowrap">
@@ -275,41 +281,41 @@ export default function Header({
       </div>
 
       {/* Live Integrity Indicators Section */}
-      <div className="hidden xl:flex items-center gap-5 bg-slate-50 border border-slate-200/50 px-4 py-1.5 rounded-xl shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] select-none">
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
+      <div className="hidden xl:flex items-center gap-3 bg-slate-50 border border-slate-200/50 px-2.5 py-1 rounded-lg shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] select-none">
+        <div className="flex items-center gap-1.5">
+          <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
           </span>
           <div className="flex flex-col">
-            <span className="text-[8px] font-mono font-bold text-slate-400 uppercase tracking-wider leading-none text-slate-400">Candidates Active</span>
-            <span className="text-[11.5px] font-mono font-bold text-slate-700 leading-none mt-0.5 text-slate-705">{activeCandidateCount}</span>
+            <span className="text-[7.5px] font-mono font-bold text-slate-400 uppercase tracking-wider leading-none">Candidates Active</span>
+            <span className="text-[10.5px] font-mono font-bold text-slate-700 leading-none mt-0.5">{activeCandidateCount}</span>
           </div>
         </div>
-        <div className="h-4 w-px bg-slate-200/80"></div>
-        <div className="flex items-center gap-1.5">
-          <CheckCircle className="w-3.5 h-3.5 text-blue-500" />
+        <div className="h-3 w-px bg-slate-200/80"></div>
+        <div className="flex items-center gap-1">
+          <CheckCircle className="w-3 h-3 text-blue-500" />
           <div className="flex flex-col">
-            <span className="text-[8px] font-mono font-bold text-slate-400 uppercase tracking-wider leading-none text-slate-400">Investigations</span>
-            <span className="text-[11.5px] font-mono font-bold text-slate-700 leading-none mt-0.5 text-slate-705">{activeAlertsCount} pending</span>
+            <span className="text-[7.5px] font-mono font-bold text-slate-400 uppercase tracking-wider leading-none">Investigations</span>
+            <span className="text-[10.5px] font-mono font-bold text-slate-700 leading-none mt-0.5">{activeAlertsCount} pending</span>
           </div>
         </div>
-        <div className="h-4 w-px bg-slate-200/80"></div>
-        <div className="flex items-center gap-1.5">
-          <Clock className="w-3.5 h-3.5 text-indigo-500/80" />
+        <div className="h-3 w-px bg-slate-200/80"></div>
+        <div className="flex items-center gap-1">
+          <Clock className="w-3 h-3 text-indigo-500/80" />
           <div className="flex flex-col">
-            <span className="text-[8px] font-mono font-bold text-slate-400 uppercase tracking-wider leading-none text-slate-400">Engine Uptime</span>
-            <span className="text-[11.5px] font-mono font-bold text-slate-700 leading-none mt-0.5 text-slate-705">{formatUptime(uptimeSeconds)}</span>
+            <span className="text-[7.5px] font-mono font-bold text-slate-400 uppercase tracking-wider leading-none">Engine Uptime</span>
+            <span className="text-[10.5px] font-mono font-bold text-slate-700 leading-none mt-0.5">{formatUptime(uptimeSeconds)}</span>
           </div>
         </div>
       </div>
 
       {/* Control Tools & Live Badges */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-3">
         {/* Unified Capsule enclosing consolidated Demo Scenarios */}
-        <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200/50 p-1.5 rounded-xl shrink-0 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">
-          <div className="flex items-center gap-1.5">
-            <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-widest pl-2 pr-1 select-none">
+        <div className="flex items-center gap-1 bg-slate-50 border border-slate-200/50 p-1 rounded-lg shrink-0 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">
+          <div className="flex items-center gap-1">
+            <span className="text-[8.5px] font-mono font-bold text-slate-400 uppercase tracking-widest pl-1.5 pr-0.5 select-none">
               Demo:
             </span>
             
@@ -336,7 +342,7 @@ export default function Header({
               } else if (sc === 'COLLUSION') {
                 btnClass = isActive 
                   ? 'bg-amber-600 text-white shadow-sm font-semibold' 
-                  : 'text-slate-500 hover:text-amber-705 lg:hover:text-amber-700 hover:bg-slate-200/30';
+                  : 'text-slate-500 hover:text-amber-700 hover:bg-slate-200/30';
                 label = 'Collusion';
               }
 
@@ -344,7 +350,7 @@ export default function Header({
                 <button
                   key={sc}
                   onClick={() => onScenarioSelect?.(sc)}
-                  className={`px-2.5 py-1 text-[10px] font-sans rounded-lg transition-all duration-150 uppercase tracking-wider cursor-pointer ${btnClass}`}
+                  className={`px-1.5 py-0.5 text-[9px] font-sans rounded transition-all duration-150 uppercase tracking-wider cursor-pointer ${btnClass}`}
                 >
                   {label}
                 </button>
@@ -354,13 +360,13 @@ export default function Header({
         </div>
 
         {/* Live Streaming Indicator without raw solid bounds */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50 text-[#2563EB] select-none shrink-0 font-medium font-sans">
-          <span className="relative flex h-2 w-2">
+        <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-blue-50 text-[#2563EB] select-none shrink-0 font-medium font-sans">
+          <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2563EB] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2563EB]"></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#2563EB]"></span>
           </span>
-          <span className="text-[10px] font-mono font-bold tracking-widest uppercase">
-            LIVE MONITOR
+          <span className="text-[9px] font-mono font-bold tracking-widest uppercase">
+            LIVE
           </span>
         </div>
 
@@ -372,11 +378,11 @@ export default function Header({
               setShowNotifications(!showNotifications);
               setUnreadCount(0);
             }}
-            className="p-2 rounded-xl text-slate-400 hover:text-[#0F172A] hover:bg-slate-100 transition-colors relative cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-[#0F172A] hover:bg-slate-100 transition-colors relative cursor-pointer"
           >
-            <Bell className="w-4 h-4" />
+            <Bell className="w-3.5 h-3.5" />
             {unreadCount > 0 && (
-              <span className="absolute top-1.5 right-1.5 px-1 py-0.2 bg-rose-500 text-[8px] font-bold font-mono text-white rounded-full min-w-[12px] h-[12px] flex items-center justify-center animate-bounce leading-none">
+              <span className="absolute top-1 right-1 px-0.5 py-0.2 bg-rose-500 text-[7.5px] font-bold font-mono text-white rounded-full min-w-[10px] h-[10px] flex items-center justify-center animate-bounce leading-none">
                 {unreadCount}
               </span>
             )}
@@ -452,15 +458,15 @@ export default function Header({
         </div>
 
         {/* User Quick Identity profile with soft separation */}
-        <div className="flex items-center gap-2.5 cursor-default select-none bg-slate-50 hover:bg-slate-100 p-1 pr-2.5 rounded-xl transition-colors duration-150 relative">
-          <div className="w-8 h-8 rounded-xl bg-blue-100 text-[#2563EB] flex items-center justify-center font-bold font-mono text-[12px]">
+        <div className="flex items-center gap-1.5 cursor-default select-none bg-slate-50 hover:bg-slate-100 p-0.5 pr-2 rounded-lg transition-colors duration-150 relative">
+          <div className="w-6.5 h-6.5 rounded-lg bg-blue-100 text-[#2563EB] flex items-center justify-center font-bold font-mono text-[10.5px]">
             {operatorName.charAt(0).toUpperCase()}
           </div>
           <div className="flex flex-col">
-            <span className="font-mono text-[10.5px] font-bold text-[#0F172A] hidden md:inline truncate max-w-[80px]">
+            <span className="font-mono text-[9.5px] font-bold text-[#0F172A] hidden md:inline truncate max-w-[80px]">
               {operatorName}
             </span>
-            <span className="text-[8px] font-mono text-slate-400 font-bold leading-none select-none uppercase tracking-wider hidden md:inline">
+            <span className="text-[7.5px] font-mono text-slate-400 font-bold leading-none select-none uppercase tracking-wider hidden md:inline">
               OPERATOR
             </span>
           </div>

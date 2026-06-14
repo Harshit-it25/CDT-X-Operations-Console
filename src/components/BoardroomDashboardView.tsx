@@ -67,11 +67,11 @@ export default function BoardroomDashboardView() {
     <div className="h-full overflow-y-auto p-8 bg-[#F8FAFC] custom-scrollbar text-slate-800 pb-16">
       
       {/* Executive Header Block */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-[#0F172A] font-sans">
+      <div className="mb-2.5">
+        <h1 className="text-[13px] font-black tracking-tight text-[#0F172A] font-sans uppercase leading-none">
           Business Impact Center
         </h1>
-        <p className="text-[13px] text-[#475569] mt-0.5">
+        <p className="text-[10px] text-[#64748B] mt-0.5">
           Review high-level proctoring ROI, computational operational cost savings, fraud prevention parameters, and enterprise scalability metrics.
         </p>
       </div>

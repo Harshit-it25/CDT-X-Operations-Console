@@ -1,0 +1,255 @@
+{
+  "candidates": {
+    "USR_00122_SIDD": {
+      "candidateId": "USR_00122_SIDD",
+      "scenario": "NORMAL_BASELINE",
+      "trustScore": 94.2,
+      "impersonationRisk": 5.8,
+      "aiAssistanceRisk": 4.2,
+      "collusionRisk": 2.1,
+      "verdict": "APPROVED",
+      "agentBreakdown": [
+        {
+          "agent_name": "typing_biometrics",
+          "match": 94.2,
+          "drift": 5.8
+        },
+        {
+          "agent_name": "mouse_dynamics",
+          "match": 88.5,
+          "drift": 11.5
+        },
+        {
+          "agent_name": "navigation",
+          "match": 96,
+          "drift": 4
+        },
+        {
+          "agent_name": "writing_stylometry",
+          "match": 93,
+          "drift": 7
+        },
+        {
+          "agent_name": "cognitive_latency",
+          "match": 91,
+          "drift": 9
+        },
+        {
+          "agent_name": "collusion_correlator",
+          "match": 97.9,
+          "drift": 2.1
+        }
+      ],
+      "timeline": [
+        {
+          "timestamp": "14:00",
+          "title": "Continuous Auth Active",
+          "desc": "Biometric channels initialized.",
+          "severity": "INFO"
+        },
+        {
+          "timestamp": "14:12",
+          "title": "Reference Signature Match",
+          "desc": "Typing and mouse drift indices securely aligned.",
+          "severity": "INFO"
+        },
+        {
+          "timestamp": "14:24",
+          "title": "Cognitive Response Peak",
+          "desc": "Response latency aligns with historical aptitude averages.",
+          "severity": "INFO"
+        }
+      ]
+    },
+    "USR_89921_ROHAN": {
+      "candidateId": "USR_89921_ROHAN",
+      "scenario": "IMPERSONATION_THEFT",
+      "trustScore": 42.4,
+      "impersonationRisk": 94.2,
+      "aiAssistanceRisk": 12.5,
+      "collusionRisk": 8.4,
+      "verdict": "TERMINATED",
+      "agentBreakdown": [
+        {
+          "agent_name": "typing_biometrics",
+          "match": 36.5,
+          "drift": 63.5
+        },
+        {
+          "agent_name": "mouse_dynamics",
+          "match": 42,
+          "drift": 58
+        },
+        {
+          "agent_name": "navigation",
+          "match": 88,
+          "drift": 12
+        },
+        {
+          "agent_name": "writing_stylometry",
+          "match": 91,
+          "drift": 9
+        },
+        {
+          "agent_name": "cognitive_latency",
+          "match": 85,
+          "drift": 15
+        },
+        {
+          "agent_name": "collusion_correlator",
+          "match": 91.6,
+          "drift": 8.4
+        }
+      ],
+      "timeline": [
+        {
+          "timestamp": "14:00",
+          "title": "Continuous Auth Active",
+          "desc": "Biometric channels initialized.",
+          "severity": "INFO"
+        },
+        {
+          "timestamp": "14:02",
+          "title": "Flight-Time Mismatch",
+          "desc": "Continuous typing drift exceeds 40% threshold.",
+          "severity": "CRITICAL"
+        },
+        {
+          "timestamp": "14:07",
+          "title": "Robotic Arc Detected",
+          "desc": "Flat cursor paths indicating hardware script inputs.",
+          "severity": "WARNING"
+        },
+        {
+          "timestamp": "14:20",
+          "title": "Session Closed Code 48",
+          "desc": "Lockdown unit restricts access to workstation.",
+          "severity": "CRITICAL"
+        }
+      ]
+    },
+    "USR_73322_AARAV": {
+      "candidateId": "USR_73322_AARAV",
+      "scenario": "AI_GENERATED_INTELECT",
+      "trustScore": 61.2,
+      "impersonationRisk": 14.8,
+      "aiAssistanceRisk": 72,
+      "collusionRisk": 5.5,
+      "verdict": "REVIEW",
+      "agentBreakdown": [
+        {
+          "agent_name": "typing_biometrics",
+          "match": 89.2,
+          "drift": 10.8
+        },
+        {
+          "agent_name": "mouse_dynamics",
+          "match": 91,
+          "drift": 9
+        },
+        {
+          "agent_name": "navigation",
+          "match": 58,
+          "drift": 42
+        },
+        {
+          "agent_name": "writing_stylometry",
+          "match": 45,
+          "drift": 55
+        },
+        {
+          "agent_name": "cognitive_latency",
+          "match": 48,
+          "drift": 52
+        },
+        {
+          "agent_name": "collusion_correlator",
+          "match": 94.5,
+          "drift": 5.5
+        }
+      ],
+      "timeline": [
+        {
+          "timestamp": "14:00",
+          "title": "Continuous Auth Active",
+          "desc": "Biometric channels initialized.",
+          "severity": "INFO"
+        },
+        {
+          "timestamp": "14:11",
+          "title": "Linguistic Divergence",
+          "desc": "Vocabulary perplexity shifted. Stylometric drift +55%.",
+          "severity": "CRITICAL"
+        },
+        {
+          "timestamp": "14:15",
+          "title": "Fast Cognition Latency",
+          "desc": "High complexity question solved under 240ms.",
+          "severity": "WARNING"
+        }
+      ]
+    },
+    "USR_44112_NEHA": {
+      "candidateId": "USR_44112_NEHA",
+      "scenario": "COLLUSION_R_COHORT",
+      "trustScore": 48,
+      "impersonationRisk": 22.4,
+      "aiAssistanceRisk": 18,
+      "collusionRisk": 88,
+      "verdict": "REVIEW",
+      "agentBreakdown": [
+        {
+          "agent_name": "typing_biometrics",
+          "match": 88.2,
+          "drift": 11.8
+        },
+        {
+          "agent_name": "mouse_dynamics",
+          "match": 84,
+          "drift": 16
+        },
+        {
+          "agent_name": "navigation",
+          "match": 82,
+          "drift": 18
+        },
+        {
+          "agent_name": "writing_stylometry",
+          "match": 86,
+          "drift": 14
+        },
+        {
+          "agent_name": "cognitive_latency",
+          "match": 52,
+          "drift": 48
+        },
+        {
+          "agent_name": "collusion_correlator",
+          "match": 12,
+          "drift": 88
+        }
+      ],
+      "timeline": [
+        {
+          "timestamp": "14:00",
+          "title": "Continuous Auth Active",
+          "desc": "Biometric channels initialized.",
+          "severity": "INFO"
+        },
+        {
+          "timestamp": "14:12",
+          "title": "Synchronized Page Hop",
+          "desc": "Question navigation correlated on adjacent stations.",
+          "severity": "WARNING"
+        },
+        {
+          "timestamp": "14:22",
+          "title": "Answers Path Overlap",
+          "desc": "Response sequences show 98% matching pattern.",
+          "severity": "CRITICAL"
+        }
+      ]
+    }
+  },
+  "logs": []
+}

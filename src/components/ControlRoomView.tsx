@@ -412,199 +412,118 @@ export default function ControlRoomView({
   const totalCandidates = sessions.reduce((acc, s) => acc + s.candidatesActive, 0);
 
   return (
-    <div className="flex-1 overflow-y-auto h-[calc(100vh-3.5rem)] bg-[#F8FAFC] px-8 py-6 text-slate-800 custom-scrollbar">
+    <div className="flex-grow overflow-y-auto h-[calc(100vh-3rem)] bg-[#F8FAFC] px-4 py-2.5 text-slate-800 custom-scrollbar">
       
-      {/* 1. Page Title & 2. Executive Summary */}
-      <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+      {/* 1. Page Title — compact inline header */}
+      <div className="mb-2.5 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-[#0F172A] font-sans uppercase">
+          <h1 className="text-[13px] font-black tracking-tight text-[#0F172A] font-sans uppercase leading-none">
             Continuous Trust Heatmap
           </h1>
-          <p className="text-xs text-[#475569] mt-0.5 font-medium leading-normal">
-            Real-time behavioral alignment monitoring, physical identity verification streams, and continuous passive checking.
+          <p className="text-[11px] text-[#64748B] mt-0.5 font-medium leading-none">
+            Real-time behavioral identity monitoring · passive verification
           </p>
         </div>
-        <div className="mt-2 md:mt-0">
-          <button 
-            onClick={() => setShowLimitationsModal(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white border border-[#E2E8F0] hover:border-[#CBD5E1] text-[#475569] hover:text-[#0F172A] rounded-lg transition-all text-xs font-semibold font-sans shadow-sm cursor-pointer"
-          >
-            <Info className="w-4 h-4 text-[#2563EB]" />
-            Accommodations & System Bounds
-          </button>
-        </div>
+        <button 
+          onClick={() => setShowLimitationsModal(true)}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#E2E8F0] hover:border-[#CBD5E1] text-[#475569] hover:text-[#0F172A] rounded-lg transition-all text-[11px] font-semibold font-sans shadow-sm cursor-pointer shrink-0"
+        >
+          <Info className="w-3.5 h-3.5 text-[#2563EB]" />
+          System Bounds
+        </button>
       </div>
 
-      {/* NEW: Executive Summary Scorecard (Must sit at the very top of the page, replaces technical metrics) */}
-      <h3 className="text-[11px] font-mono font-black uppercase tracking-wider text-slate-400 mb-2">Executive Summary Scoreboard</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-        
-        {/* Card 1: Current Risk */}
-        <div className="bg-white border border-[#E2E8F0] p-4 rounded-xl shadow-sm">
-          <span className="text-[9.5px] font-mono font-black uppercase text-slate-500 tracking-wider block">Current Risk Level</span>
-          <div className="flex items-center gap-2 mt-1.5">
-            <span className={`px-2.5 py-0.5 rounded text-xs font-black uppercase border font-sans ${currentRiskStatus.color}`}>
-              {currentRiskStatus.text}
+      {/* Standardized 4-Metric Header Strip */}
+      <div className="grid grid-cols-4 gap-2 mb-2">
+        {/* Metric 1: Trust Score */}
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm h-[76px] flex flex-col justify-between">
+          <span className="text-[9.5px] font-mono font-black uppercase text-slate-400 tracking-wider block">Trust Score</span>
+          <div className="flex items-baseline gap-1 font-sans">
+            <span className="text-[15px] font-black text-[#0f172a] tracking-tight leading-none">{currentTrustScore}%</span>
+            <span className={`text-[9.5px] font-extrabold ${currentTrustScore >= 94 ? 'text-emerald-600' : 'text-amber-600'}`}>
+              {currentTrustScore >= 94 ? '✓ READY' : '⚡ EXCEPTION'}
             </span>
           </div>
-          <p className="text-[10px] text-slate-500 mt-2 font-medium">{currentRiskStatus.desc}</p>
+          <p className="text-[9.5px] text-slate-400 leading-none">Auto-calibrating telemetry</p>
         </div>
 
-        {/* Card 2: Trust Score */}
-        <div className="bg-white border border-[#E2E8F0] p-4 rounded-xl shadow-sm">
-          <span className="text-[9.5px] font-mono font-black uppercase text-slate-500 tracking-wider block">Passive Integrity Index</span>
-          <div className="flex items-baseline gap-1 mt-1.5 font-sans">
-            <span className="text-2xl font-black text-[#0f172a] tracking-tight">{currentTrustScore}%</span>
-            <span className={`text-[9.5px] font-extrabold ${currentTrustScore >= 94 ? 'text-emerald-650' : 'text-amber-600'}`}>
-              {currentTrustScore >= 94 ? '✓ OPTIMAL' : '⚡ DRIFTING'}
-            </span>
+        {/* Metric 2: Identity Confidence */}
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm h-[76px] flex flex-col justify-between">
+          <span className="text-[9.5px] font-mono font-black uppercase text-slate-400 tracking-wider block">Identity Confidence</span>
+          <div className="text-[15px] font-black text-[#2563EB] tracking-tight font-sans leading-none">
+            {currentDecisionConfidence.split(' System')[0]}
           </div>
-          <p className="text-[10px] text-slate-500 mt-2 font-medium">Auto-calibrating telemetry</p>
+          <p className="text-[9.5px] text-slate-400 leading-none">Rhythm match index</p>
         </div>
 
-        {/* Card 3: Recommended Action */}
-        <div className="bg-white border border-[#E2E8F0] p-4 rounded-xl shadow-sm lg:col-span-1">
-          <span className="text-[9.5px] font-mono font-black uppercase text-slate-500 tracking-wider block">Recommended Resolution</span>
-          <div className="text-[11px] font-bold text-slate-800 tracking-tight mt-1.5 line-clamp-2 leading-relaxed">
+        {/* Metric 3: Risk Level */}
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm h-[76px] flex flex-col justify-between items-start">
+          <span className="text-[9.5px] font-mono font-black uppercase text-slate-400 tracking-wider block">Risk Level</span>
+          <span className={`px-1.5 py-0.2 rounded text-[9.5px] font-black uppercase border font-sans leading-none ${currentRiskStatus.color}`}>
+            {currentRiskStatus.text}
+          </span>
+          <p className="text-[9.5px] text-slate-400 leading-none">{currentRiskStatus.desc}</p>
+        </div>
+
+        {/* Metric 4: Recommended Action */}
+        <div className="bg-white border border-[#E2E8F0] px-2.5 py-1.5 rounded-lg shadow-sm h-[76px] flex flex-col justify-between">
+          <span className="text-[9.5px] font-mono font-black uppercase text-slate-400 tracking-wider block">Recommended Action</span>
+          <div className="text-[10px] font-bold text-slate-800 tracking-tight line-clamp-1 leading-tight">
             {currentRecommendedAction}
           </div>
-          <p className="text-[10px] text-slate-500 mt-1 font-medium">Calculated by Decision Engine</p>
+          <p className="text-[9.5px] text-slate-400 leading-none">Real-time prescription</p>
         </div>
-
-        {/* Card 4: Decision Confidence */}
-        <div className="bg-white border border-[#E2E8F0] p-4 rounded-xl shadow-sm">
-          <span className="text-[9.5px] font-mono font-black uppercase text-slate-500 tracking-wider block">Decision Confidence</span>
-          <div className="text-xl font-black text-[#2563EB] tracking-tight mt-1.5 font-sans">
-            {currentDecisionConfidence}
-          </div>
-          <p className="text-[10px] text-slate-500 mt-2.5 font-medium">99.8% verification reliability</p>
-        </div>
-
-        {/* Card 5: Protection Status */}
-        <div className="bg-white border border-[#E2E8F0] p-4 rounded-xl shadow-sm">
-          <span className="text-[9.5px] font-mono font-black uppercase text-slate-500 tracking-wider block">Operational Mode</span>
-          <div className="flex items-center gap-1.5 mt-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-[11.5px] font-black text-slate-800 tracking-tight uppercase">{currentSystemStatus}</span>
-          </div>
-          <p className="text-[10px] text-slate-500 mt-2 font-medium">Consensus ledger active</p>
-        </div>
-
       </div>
 
-      {/* NEW: Today's Examination Impact (Global Hero Panel) */}
-      <div className="bg-gradient-to-br from-slate-900 to-slate-850 text-white rounded-2xl p-6 shadow-md border border-slate-800 mb-6 relative overflow-hidden">
-        {/* Subtle background decoration */}
-        <div className="absolute right-0 bottom-0 opacity-[0.03] pointer-events-none select-none">
-          <Fingerprint className="w-80 h-80 text-white" />
+      {/* Examination Impact — optimized light-themed strip */}
+      <div className="bg-white rounded-xl px-4 py-2 border border-[#E2E8F0] mb-2.5 shadow-sm text-slate-800">
+        <div className="flex items-center justify-between mb-1.5 pb-1 border-b border-[#F1F5F9]">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span className="text-[11px] font-mono uppercase tracking-widest font-extrabold text-slate-450">Today's National Examination Impact</span>
+          </div>
+          <span className="text-[11px] font-mono text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 border border-emerald-200 rounded">AUTONOMOUS ONLINE</span>
         </div>
-
-        <div className="relative z-10">
-          <div className="flex flex-col sm:flex-row justify-between sm:items-center border-b border-white/10 pb-3 mb-4 gap-2">
-            <div>
-              <h2 className="text-base font-black uppercase tracking-tight font-sans text-white">
-                Today's National Examination Impact
-              </h2>
-              <p className="text-[11px] text-slate-400 font-medium">
-                Autonomous auditing analytics & telemetry coverage across distributed examination centers.
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span className="text-[10px] font-mono uppercase bg-white/10 px-2.5 py-1 rounded-md tracking-wider font-extrabold border border-white/5">
-                AUTONOMOUS SYSTEM ONLINE
-              </span>
-            </div>
+        <div className="grid grid-cols-6 gap-2.5">
+          <div className="bg-[#F8FAFC] border border-[#E2E8F0] p-2.5 rounded-xl shadow-sm">
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">Monitored</span>
+            <div className="text-[18px] font-black text-[#0F172A] tracking-tight leading-none">{totalMonitoredCount}</div>
+            <span className="text-[11px] font-mono text-emerald-600 block mt-1">{totalCandidates} active</span>
           </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
-            
-            {/* Stat 1: Candidates Monitored */}
-            <div className="space-y-1">
-              <span className="text-[10.5px] font-semibold text-slate-400 font-sans block">Candidates Monitored</span>
-              <div className="text-2xl font-black text-white tracking-tight font-sans">{totalMonitoredCount}</div>
-              <span className="text-[9px] font-mono text-emerald-400 font-bold block">● {totalCandidates} ACTIVE NOW</span>
-            </div>
-
-            {/* Stat 2: Behavior Signals Processed */}
-            <div className="space-y-1">
-              <span className="text-[10.5px] font-semibold text-slate-400 block font-sans">Behavior Signals Processed</span>
-              <div className="text-2xl font-black text-white tracking-tight font-mono">{behaviorSignalsProcessed}</div>
-              <span className="text-[9px] font-mono text-emerald-400 font-bold block">● INGESTING LIVE</span>
-            </div>
-
-            {/* Stat 3: Threat Events Detected */}
-            <div className="space-y-1">
-              <span className="text-[10.5px] font-semibold text-slate-400 block">Threat Events Detected</span>
-              <div className="text-2xl font-black text-rose-400 tracking-tight font-sans">{activeThreatsCount + 42}</div>
-              <span className="text-[9px] font-mono text-slate-400 font-bold block">INCLUDES HISTORIC</span>
-            </div>
-
-            {/* Stat 4: Investigations Opened */}
-            <div className="space-y-1">
-              <span className="text-[10.5px] font-semibold text-slate-400 block">Investigations Opened</span>
-              <div className="text-2xl font-black text-amber-500 tracking-tight font-sans">{investigationsOpenedCount}</div>
-              <span className="text-[9px] font-mono text-amber-400 font-bold block">✓ ACTION TRANSITIONS</span>
-            </div>
-
-            {/* Stat 5: Cases Resolved */}
-            <div className="space-y-1">
-              <span className="text-[10.5px] font-semibold text-slate-400 block">Cases Resolved</span>
-              <div className="text-2xl font-black text-emerald-400 tracking-tight font-sans">{casesResolvedCount}</div>
-              <span className="text-[9px] font-mono text-emerald-400 font-bold block">AI REASONING ENFORCED</span>
-            </div>
-
-            {/* Stat 6: Trust Evaluations Completed */}
-            <div className="space-y-1 col-span-2 lg:col-span-1">
-              <span className="text-[10.5px] font-semibold text-slate-400 block">Trust Evaluations Completed</span>
-              <div className="text-2xl font-black text-sky-400 tracking-tight font-sans">{evaluationsTuned.toLocaleString()}</div>
-              <span className="text-[9px] font-mono text-sky-400 font-bold block">PASSIVE TELEMETRY LOGGED</span>
-            </div>
-
+          <div className="bg-[#F8FAFC] border border-[#E2E8F0] p-2.5 rounded-xl shadow-sm">
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">Behavior Signals</span>
+            <div className="text-[18px] font-black text-[#0F172A] tracking-tight font-mono leading-none">{behaviorSignalsProcessed}</div>
+            <span className="text-[11px] font-mono text-emerald-600 block mt-1">live ingestion</span>
           </div>
-
-          {/* Horizontal divider & Signals Processed Today */}
-          <div className="border-t border-white/10 mt-5 pt-4">
-            <h4 className="text-[10px] font-mono font-black uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
-              Signals Processed Today (Large-Scale Enterprise Telemetry Ingestion)
-            </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
-              <div className="space-y-1">
-                <span className="text-[10.5px] font-semibold text-slate-400 block font-sans">Keyboard Events</span>
-                <div className="text-xl font-black text-white font-mono">{(8.4 + (heatmapTick * 0.0001)).toFixed(4)}M</div>
-                <span className="text-[9px] font-mono text-emerald-400 font-bold block">● STREAMING LIVE</span>
-              </div>
-              <div className="space-y-1">
-                <span className="text-[10.5px] font-semibold text-slate-400 block font-sans">Mouse Events</span>
-                <div className="text-xl font-black text-white font-mono">{(31.2 + (heatmapTick * 0.0005)).toFixed(4)}M</div>
-                <span className="text-[9px] font-mono text-emerald-400 font-bold block">● STREAMING LIVE</span>
-              </div>
-              <div className="space-y-1">
-                <span className="text-[10.5px] font-semibold text-slate-400 block font-sans">Navigation Events</span>
-                <div className="text-xl font-black text-white font-mono">{(2.1 + (heatmapTick * 0.00001)).toFixed(5)}M</div>
-                <span className="text-[9px] font-mono text-emerald-400 font-bold block">● STREAMING LIVE</span>
-              </div>
-              <div className="space-y-1">
-                <span className="text-[10.5px] font-semibold text-slate-400 block font-sans">Behavior Profiles</span>
-                <div className="text-xl font-black text-white font-mono">2,514</div>
-                <span className="text-[9px] font-mono text-slate-400 block font-bold">ACTIVE EMBEDDINGS</span>
-              </div>
-              <div className="space-y-1">
-                <span className="text-[10.5px] font-semibold text-slate-400 block font-sans">Trust Evaluations</span>
-                <div className="text-xl font-black text-sky-400 font-mono">{(48203 + heatmapTick).toLocaleString()}</div>
-                <span className="text-[9px] font-mono text-sky-400 font-bold block">✓ CONSENSUS ACTIVE</span>
-              </div>
-            </div>
+          <div className="bg-[#FEF2F2] border border-red-250 p-2.5 rounded-xl shadow-sm">
+            <span className="text-[11px] font-bold text-rose-500 uppercase tracking-wider block mb-0.5">Threats Detected</span>
+            <div className="text-[18px] font-black text-rose-600 tracking-tight leading-none">{activeThreatsCount + 42}</div>
+            <span className="text-[11px] font-mono text-rose-500 block mt-1">incl. historic</span>
+          </div>
+          <div className="bg-[#FFFBEB] border border-amber-200 p-2.5 rounded-xl shadow-sm">
+            <span className="text-[11px] font-bold text-amber-600 uppercase tracking-wider block mb-0.5">Investigations</span>
+            <div className="text-[18px] font-black text-amber-600 tracking-tight leading-none">{investigationsOpenedCount}</div>
+            <span className="text-[11px] font-mono text-amber-600 block mt-1">active cases</span>
+          </div>
+          <div className="bg-[#ECFDF5] border border-emerald-200 p-2.5 rounded-xl shadow-sm">
+            <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider block mb-0.5">Cases Resolved</span>
+            <div className="text-[18px] font-black text-emerald-600 tracking-tight leading-none">{casesResolvedCount}</div>
+            <span className="text-[11px] font-mono text-emerald-600 block mt-1">AI enforced</span>
+          </div>
+          <div className="bg-[#F0F9FF] border border-sky-200 p-2.5 rounded-xl shadow-sm">
+            <span className="text-[11px] font-bold text-sky-600 uppercase tracking-wider block mb-0.5">Trust Evals</span>
+            <div className="text-[18px] font-black text-sky-600 tracking-tight leading-none">{evaluationsTuned.toLocaleString()}</div>
+            <span className="text-[11px] font-mono text-sky-600 block mt-1">consensus active</span>
           </div>
         </div>
       </div>
 
       {/* 4. Main Content: Grid & Inspector Column */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-4 items-start">
         
         {/* Workstation Grid Column */}
-        <div className="lg:col-span-8 bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] flex flex-col justify-between shrink-0 min-h-[350px]">
+        <div className="lg:col-span-8 space-y-4">
+          <div className="bg-white border border-[#E2E8F0] rounded-xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] flex flex-col justify-between shrink-0">
           
           <div className="flex flex-col sm:flex-row justify-between sm:items-center pb-3 border-b border-[#F1F5F9] mb-4 gap-2">
             <div className="flex items-center gap-2">
@@ -631,18 +550,18 @@ export default function ControlRoomView({
             </div>
           </div>
 
-          {/* Reduced Grid Height wrapper by 25% for high scannability */}
-          <div className="grid grid-cols-6 gap-2 w-full content-center py-2 min-h-[160px]">
+          {/* Compact workstation grid */}
+          <div className="grid grid-cols-6 gap-1.5 w-full content-center py-1">
             {workstations.map((ws) => {
               const isSelected = ws.seatIndex === selectedSeatIndex;
               let bgBorderClass = '';
               
               if (ws.status === 'EMPTY') {
-                bgBorderClass = 'bg-[#F8FAFC] text-[#94A3B8] border-[#E2E8F0] hover:border-[#CBD5E1] cursor-not-allowed';
+                bgBorderClass = 'bg-[#F8FAFC] text-[#94A3B8] border-[#E2E8F0] cursor-not-allowed';
               } else if (ws.status === 'ALERT') {
-                bgBorderClass = 'bg-red-50 text-red-700 border-red-300 hover:border-red-400 animate-pulse shadow-[0_0_4px_rgba(239,68,68,0.15)]';
+                bgBorderClass = 'bg-red-50 text-red-700 border-red-300 hover:border-red-400 animate-pulse';
               } else if (ws.status === 'WARNING') {
-                bgBorderClass = 'bg-amber-50 text-amber-700 border-amber-300 hover:border-amber-400 shadow-[0_0_3px_rgba(245,158,11,0.1)]';
+                bgBorderClass = 'bg-amber-50 text-amber-700 border-amber-300 hover:border-amber-400';
               } else {
                 bgBorderClass = 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:border-emerald-300';
               }
@@ -656,11 +575,11 @@ export default function ControlRoomView({
                   key={ws.seatIndex}
                   onClick={() => ws.status !== 'EMPTY' && setSelectedSeatIndex(ws.seatIndex)}
                   disabled={ws.status === 'EMPTY'}
-                  className={`h-11 flex flex-col items-center justify-center rounded-lg border text-sans text-[11px] font-bold uppercase transition-all duration-150 relative cursor-pointer ${bgBorderClass}`}
+                  className={`h-8 flex flex-col items-center justify-center rounded-lg border text-[10px] font-bold uppercase transition-all duration-150 relative cursor-pointer ${bgBorderClass}`}
                 >
-                  <span className="text-[12px]">{ws.label}</span>
+                  <span className="text-[10px] leading-tight">{ws.label}</span>
                   {ws.status !== 'EMPTY' && (
-                    <span className="text-[8.5px] font-mono block opacity-80">{ws.trustScore}% TST</span>
+                    <span className="text-[7.5px] font-mono block opacity-75 leading-none">{ws.trustScore}%</span>
                   )}
                 </button>
               );
@@ -676,7 +595,7 @@ export default function ControlRoomView({
                 ({centerTabs.find(t => t.id === selectedSessionId)?.label})
               </span>
             </span>
-            <div className="flex gap-4 font-mono text-[10px]">
+            <div className="flex gap-4 font-mono text-[11px]">
               <span className="text-red-650 font-bold flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block"></span>
                 Impersonation Flag
@@ -691,29 +610,110 @@ export default function ControlRoomView({
             </div>
           </div>
 
+          </div>
+
+          {/* Ongoing Exam Rooms Table (Left column) */}
+          <div className="bg-white border border-[#E2E8F0] rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] overflow-hidden">
+            <div className="px-5 py-3 border-b border-[#F1F5F9] bg-slate-50 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+              <h4 className="font-sans font-bold text-[#0F172A] text-[12px] uppercase tracking-wider">
+                Ongoing Exam Sessions
+              </h4>
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search session..."
+                    value={sessionSearchQuery}
+                    onChange={(e) => setSessionSearchQuery(e.target.value)}
+                    className="pl-7 pr-2.5 py-1 bg-white border border-[#E2E8F0] rounded-lg text-[11px] font-sans text-slate-800 placeholder-slate-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 w-44 outline-none shadow-sm"
+                  />
+                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                </div>
+                <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded font-mono text-[11px] font-bold">
+                  ● SECURE DATA COURIERS
+                </span>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-[11.5px]">
+                <thead className="bg-[#F8FAFC] text-[#64748B] font-mono text-[11px] uppercase border-b border-[#E2E8F0]">
+                  <tr>
+                    <th className="text-left px-3.5 py-1.5 font-medium">Session ID</th>
+                    <th className="text-left px-3.5 py-1.5 font-medium">Location Hub</th>
+                    <th className="text-left px-3.5 py-1.5 font-medium">Student Spans</th>
+                    <th className="text-left px-3.5 py-1.5 font-medium">Completion</th>
+                    <th className="text-right px-3.5 py-1.5 font-medium">Verify</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#F1F5F9]">
+                  {filteredSessions.map((session) => (
+                    <tr key={session.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-3.5 py-1.5 font-mono text-[#0F172A] font-bold">
+                        {session.id}
+                      </td>
+                      <td className="px-3.5 py-1.5 text-[#475569]">
+                        {session.location}
+                      </td>
+                      <td className="px-3.5 py-1.5 text-[#64748B]">
+                        {session.candidatesActive} active / {session.candidatesTotal} total
+                      </td>
+                      <td className="px-3.5 py-1.5 w-32">
+                        <div className="flex items-center gap-1.5">
+                          <div className="flex-1 h-1.5 bg-[#E2E8F0] rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-[#2563EB] rounded-full" 
+                              style={{ width: `${session.progress}%` }}
+                            ></div>
+                          </div>
+                          <span className="font-mono text-[11px] text-[#475569]">{session.progress}%</span>
+                        </div>
+                      </td>
+                      <td className="px-3.5 py-1.5 text-right">
+                        <button 
+                          onClick={() => {
+                            const associatedAlert = alerts.find(a => a.centerId.includes(session.location.split(' ')[0]));
+                            if (associatedAlert) {
+                              setSelectedAlertId(associatedAlert.id);
+                            }
+                            setActiveTab(ActiveTab.INVESTIGATIONS);
+                          }}
+                          className="p-1 rounded-lg text-[#2563EB] hover:bg-[#EFF6FF] transition-colors inline-block cursor-pointer"
+                          title="Analyze Session Forensics"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
 
         {/* Seat Inspector Detail Card Side column */}
-        <div className="lg:col-span-4 space-y-6 flex flex-col">
-          <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] flex flex-col justify-between shrink-0 min-h-[350px]">
+        <div className="lg:col-span-4 space-y-3 flex flex-col">
+          <div className="bg-white border border-[#E2E8F0] p-4 rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] flex flex-col justify-between shrink-0">
           
           {/* Identity details and workstation label */}
           <div className="border-b border-[#F1F5F9] pb-3 mb-3">
             <div className="flex justify-between items-center mb-1.5">
-              <span className="text-[9.5px] font-mono bg-[#EFF6FF] text-[#2563EB] px-2 py-0.5 rounded-md border border-[#93C5FD] uppercase font-bold tracking-wider">
+              <span className="text-[11px] font-mono bg-[#EFF6FF] text-[#2563EB] px-2 py-0.5 rounded-md border border-[#93C5FD] uppercase font-bold tracking-wider">
                 Station {selectedStation.label}
               </span>
               
               {selectedStation.status === 'ALERT' ? (
-                <span className="text-[9px] font-mono text-red-600 font-extrabold tracking-wider uppercase flex items-center gap-1">
+                <span className="text-[11px] font-mono text-red-600 font-extrabold tracking-wider uppercase flex items-center gap-1">
                   ● HIGH DRIFT
                 </span>
               ) : selectedStation.status === 'WARNING' ? (
-                <span className="text-[9px] font-mono text-amber-600 font-extrabold tracking-wider uppercase flex items-center gap-1">
+                <span className="text-[11px] font-mono text-amber-600 font-extrabold tracking-wider uppercase flex items-center gap-1">
                   ● TELEMETRY SHIFT
                 </span>
               ) : (
-                <span className="text-[9px] font-mono text-emerald-600 font-extrabold tracking-wider uppercase flex items-center gap-1">
+                <span className="text-[11px] font-mono text-emerald-600 font-extrabold tracking-wider uppercase flex items-center gap-1">
                   ● SECURED
                 </span>
               )}
@@ -722,25 +722,25 @@ export default function ControlRoomView({
             <h3 className="font-sans font-black text-[#0F172A] text-[17px] tracking-tight">
               {selectedStation.candidateName}
             </h3>
-            <p className="text-[10.5px] font-mono text-[#64748B] mt-0.5">
+            <p className="text-[11px] font-mono text-[#64748B] mt-0.5">
               Registration Base: {selectedStation.label.startsWith('SOL') ? 'SOL-REG-2026' : selectedStation.label.startsWith('HYD') ? 'HYD-REG-2026' : 'PUN-REG-2026'}
             </p>
           </div>
 
           {/* Live Session Card (Mini) */}
-          <div className="bg-slate-900 border border-slate-800 text-white p-3.5 rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.1)] mb-4 relative overflow-hidden text-xs">
-            <div className="flex justify-between items-center mb-2 pb-1.5 border-b border-slate-800 font-mono text-[9px] text-slate-400 font-bold uppercase tracking-wider">
+          <div className="bg-white border border-[#E2E8F0] text-slate-800 p-3.5 rounded-xl shadow-sm mb-4 relative overflow-hidden text-xs">
+            <div className="flex justify-between items-center mb-2 pb-1.5 border-b border-[#F1F5F9] font-mono text-[11px] text-slate-500 font-bold uppercase tracking-wider">
               <span>Live Session Monitor</span>
-              <span className="text-emerald-400">● Streaming</span>
+              <span className="text-emerald-600">● Streaming</span>
             </div>
             <div className="grid grid-cols-2 gap-2 font-mono">
               <div>
-                <span className="text-[8.5px] text-slate-400 uppercase block font-bold">Elapsed</span>
-                <span className="font-bold text-white block mt-0.5">18m {heatmapTick % 60}s</span>
+                <span className="text-[11px] text-slate-400 uppercase block font-bold">Elapsed</span>
+                <span className="font-bold text-slate-800 block mt-0.5">18m {heatmapTick % 60}s</span>
               </div>
               <div>
-                <span className="text-[8.5px] text-slate-400 uppercase block font-bold">Telemetry</span>
-                <span className="font-bold text-white block mt-0.5">{seatFlags.keyboardEvents.toLocaleString()} evs</span>
+                <span className="text-[11px] text-slate-400 uppercase block font-bold">Telemetry</span>
+                <span className="font-bold text-slate-800 block mt-0.5">{seatFlags.keyboardEvents.toLocaleString()} evs</span>
               </div>
             </div>
           </div>
@@ -754,10 +754,10 @@ export default function ControlRoomView({
               : 'bg-emerald-50/45 border-emerald-100'
           }`}>
             <div className="flex justify-between items-center border-b border-slate-100 pb-2 mb-2">
-              <span className="font-mono text-[9px] uppercase tracking-wider text-slate-500 font-bold">
+              <span className="font-mono text-[11px] uppercase tracking-wider text-slate-500 font-bold">
                 Platform Action Verdict
               </span>
-              <span className={`px-2 py-0.5 rounded text-[9.5px] font-sans font-extrabold uppercase tracking-wide border ${
+              <span className={`px-2 py-0.5 rounded text-[11px] font-sans font-extrabold uppercase tracking-wide border ${
                 selectedStation.status === 'ALERT'
                   ? 'text-red-700 bg-red-100 border-red-300'
                   : selectedStation.status === 'WARNING'
@@ -774,7 +774,7 @@ export default function ControlRoomView({
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <span className="text-slate-500 block text-[9px] font-mono uppercase tracking-tight">Behavior Similarity:</span>
+                <span className="text-slate-500 block text-[11px] font-mono uppercase tracking-tight">Behavior Similarity:</span>
                 <span className={`text-[17px] font-semibold tracking-tight ${
                   selectedStation.status === 'ALERT' ? 'text-red-650' : selectedStation.status === 'WARNING' ? 'text-amber-700' : 'text-emerald-700'
                 }`}>
@@ -782,7 +782,7 @@ export default function ControlRoomView({
                 </span>
               </div>
               <div>
-                <span className="text-slate-500 block text-[9px] font-mono uppercase tracking-tight">Confidence Score:</span>
+                <span className="text-slate-500 block text-[11px] font-mono uppercase tracking-tight">Confidence Score:</span>
                 <span className={`text-[17px] font-semibold tracking-tight ${
                   selectedStation.status === 'ALERT' ? 'text-red-650' : selectedStation.status === 'WARNING' ? 'text-amber-700' : 'text-emerald-700'
                 }`}>
@@ -792,40 +792,64 @@ export default function ControlRoomView({
             </div>
           </div>
 
-          {/* Flag Explanation Engine */}
-          <div className="my-4 space-y-2">
-            <span className="text-[10px] font-mono text-[#64748B] uppercase tracking-wider block font-bold">
-              Flag Explanation Engine
-            </span>
-            <div className="space-y-1.5 font-mono text-[9.5px]">
-              {[
-                { name: "Identity Verification Drift", val: seatFlags.identityDrift, color: "bg-red-500" },
-                { name: "Typing Consistency Loss", val: seatFlags.typingLoss, color: "bg-amber-500" },
-                { name: "Writing Pattern Shift", val: seatFlags.writingShift, color: "bg-purple-500" },
-                { name: "Mouse Behavior Drift", val: seatFlags.mouseDrift, color: "bg-blue-500" },
-                { name: "Overall Trust Reduction", val: seatFlags.trustReduction, color: "bg-red-650" }
-              ].map((flag, idx) => (
-                <div key={idx} className="space-y-0.5 bg-slate-50 p-1.5 rounded-lg border border-[#E2E8F0]">
-                  <div className="flex justify-between items-center text-[8.5px] font-sans">
-                    <span className="font-semibold text-[#0F172A]">{flag.name}</span>
-                    <span className="font-bold text-red-650">{flag.val.toFixed(1)}%</span>
+          {/* Why Flagged (Priority 1) */}
+          {(selectedStation.status === 'ALERT' || selectedStation.status === 'WARNING') ? (
+            <div className="bg-white border border-red-200 rounded-xl p-3 shadow-sm space-y-2.5 my-3">
+              <h3 className="text-[11px] font-black text-[#0F172A] font-sans tracking-wide uppercase flex items-center gap-2">
+                <ShieldAlert className="w-3.5 h-3.5 text-red-500 animate-pulse" />
+                Why Flagged
+              </h3>
+              
+              <div className="grid grid-cols-2 gap-2 font-mono text-[11px]">
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center px-2 py-1 bg-slate-50 border border-slate-200/50 rounded-lg">
+                    <span className="text-slate-500 font-sans">Typing Drift:</span>
+                    <span className="font-bold text-red-600">
+                      {selectedStation.candidateName === "Rohan Patil" ? "+31%" : selectedStation.candidateName === "Aarav Kulkarni" ? "+11%" : selectedStation.candidateName === "Neha Joshi" ? "+15%" : "+2%"}
+                    </span>
                   </div>
-                  <div className="h-1 w-full bg-slate-200 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full rounded-full transition-all duration-350 ${flag.color}`}
-                      style={{ width: `${flag.val}%` }}
-                    ></div>
+                  <div className="flex justify-between items-center px-2 py-1 bg-slate-50 border border-slate-200/50 rounded-lg">
+                    <span className="text-slate-500 font-sans">Navigation Drift:</span>
+                    <span className="font-bold text-red-650">
+                      {selectedStation.candidateName === "Rohan Patil" ? "+14%" : selectedStation.candidateName === "Aarav Kulkarni" ? "+42%" : selectedStation.candidateName === "Neha Joshi" ? "+18%" : "+1%"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center px-2 py-1 bg-slate-50 border border-slate-200/50 rounded-lg">
+                    <span className="text-slate-500 font-sans">Clipboard:</span>
+                    <span className="font-bold text-red-600">
+                      {selectedStation.candidateName === "Rohan Patil" ? "+6" : selectedStation.candidateName === "Aarav Kulkarni" ? "+3" : selectedStation.candidateName === "Neha Joshi" ? "+2" : "0"}
+                    </span>
                   </div>
                 </div>
-              ))}
+                
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center px-2 py-1 bg-slate-50 border border-slate-200/50 rounded-lg">
+                    <span className="text-slate-500 font-sans">Identity Conf:</span>
+                    <span className="font-bold text-[#2563EB]">
+                      {selectedStation.candidateName === "Rohan Patil" ? "44%" : selectedStation.candidateName === "Aarav Kulkarni" ? "89%" : selectedStation.candidateName === "Neha Joshi" ? "84%" : "98%"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center px-2 py-1 bg-slate-50 border border-slate-200/50 rounded-lg">
+                    <span className="text-slate-500 font-sans">Action:</span>
+                    <span className="font-bold text-red-650 text-[10px] uppercase truncate">
+                      {selectedStation.status === 'ALERT' ? "Investigation Triggered" : "Audit Queue"}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="bg-emerald-50/20 border border-emerald-100 rounded-xl p-3 shadow-sm my-3 text-[11px] text-emerald-800 font-sans">
+              <span className="font-bold uppercase tracking-wider block mb-0.5">Behavior Verification Stable</span>
+              All biometric metrics are within historical deviation bounds. No manual audit triggers registered.
+            </div>
+          )}
 
           {/* Behavior Collection Visualization */}
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 shadow-sm space-y-3 text-white mb-4">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-1.5">
-              <span className="text-[9.5px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                <Activity className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+          <div className="bg-white border border-[#E2E8F0] rounded-xl p-3.5 shadow-sm space-y-3 text-slate-800 mb-4">
+            <div className="flex justify-between items-center border-b border-[#F1F5F9] pb-1.5">
+              <span className="text-[9.5px] font-mono font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                <Activity className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
                 Behavior Collection
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -835,16 +859,16 @@ export default function ControlRoomView({
               {[
                 { name: "Keyboard Rhythm", color: "bg-emerald-500", scale: Math.max(15, (seatFlags.keyboardEvents % 10) * 10) },
                 { name: "Mouse Spline Consistency", color: "bg-blue-500", scale: Math.max(20, (seatFlags.mouseEvents % 8) * 12) },
-                { name: "Focus & Window Adherence", color: "bg-emerald-400", scale: seatFlags.focusChanges > 3 ? 30 : 90 },
+                { name: "Focus & Window Adherence", color: "bg-emerald-500", scale: seatFlags.focusChanges > 3 ? 30 : 90 },
                 { name: "Reading Pace Coherence", color: "bg-purple-500", scale: Math.max(15, (seatFlags.questionInteractions % 5) * 20) },
-                { name: "Live Trust Signal", color: "bg-emerald-400", scale: selectedStation.trustScore }
+                { name: "Live Trust Signal", color: "bg-emerald-500", scale: selectedStation.trustScore }
               ].map((sig, sIdx) => (
                 <div key={sIdx} className="space-y-0.5">
-                  <div className="flex justify-between items-center text-[8.5px] font-mono text-slate-400">
+                  <div className="flex justify-between items-center text-[8.5px] font-mono text-slate-550">
                     <span>{sig.name}</span>
                     <span>{sig.scale.toFixed(0)}%</span>
                   </div>
-                  <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
                     <div 
                       className={`h-full rounded-full transition-all duration-300 ${sig.color}`} 
                       style={{ width: `${sig.scale}%` }}
@@ -874,132 +898,56 @@ export default function ControlRoomView({
                 Launch Full Auditing Review
               </button>
             ) : (
+                selectedStudent && (
               <button
+                type="button"
                 onClick={() => {
-                  setActiveTab(ActiveTab.DIGITAL_TWIN);
+                  setActiveTab(ActiveTab.INVESTIGATIONS);
                 }}
                 className="w-full py-2.5 bg-[#EFF6FF] hover:bg-[#DBEAFE] text-[#2563EB] text-[12px] font-sans font-bold uppercase rounded-lg border border-[#BFDBFE] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <Fingerprint className="w-4 h-4" />
-                Explore Behavioral Profile
+                Explore Forensic Desk
               </button>
-            )}
+            ))}
           </div>
           </div>
 
-          {/* LMS Deployment Integrations Card */}
-          <div className="bg-white border border-[#E2E8F0] p-5 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] space-y-3">
-            <h4 className="text-xs font-black text-[#0F172A] font-sans tracking-wide uppercase flex items-center gap-2">
-              <Globe className="w-4 h-4 text-[#2563EB]" />
-              Enterprise LMS Integrations
-            </h4>
-            
-            <p className="text-[11px] text-slate-500 leading-normal font-sans">
-              CDT-X integrates directly with institutional infrastructure to enable rapid campus-wide deployment:
-            </p>
-
-            <div className="grid grid-cols-2 gap-2 text-xs font-semibold text-slate-700">
-              {["Moodle", "Canvas", "Google Classroom", "ExamSoft", "Custom LMS"].map((lms, lIdx) => (
-                <div key={lIdx} className="flex items-center gap-1 bg-slate-50 border border-[#E2E8F0] p-1.5 rounded-lg text-[10.5px]">
-                  <Check className="w-3.5 h-3.5 text-emerald-600 font-extrabold shrink-0" />
-                  <span>{lms}</span>
+          {/* Student Device Connector Card */}
+          <div className="bg-white border border-[#E2E8F0] p-3.5 rounded-xl shadow-sm">
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-[11px] font-black text-[#0F172A] font-sans tracking-wide uppercase flex items-center gap-1.5">
+                <Laptop className="w-3.5 h-3.5 text-[#2563EB]" />
+                Connected Candidate Device
+              </h4>
+              <span className="text-[11px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded font-bold">SDK LIVE</span>
+            </div>
+            <div className="grid grid-cols-2 gap-1.5 text-[11px] font-mono mb-2">
+              {[
+                { label: "Keyboard SDK", status: "Active", ok: true },
+                { label: "Mouse SDK", status: "Active", ok: true },
+                { label: "Focus Monitor", status: "Active", ok: true },
+                { label: "Clipboard Monitor", status: "Active", ok: true },
+              ].map((item, i) => (
+                <div key={i} className="flex justify-between items-center bg-slate-50 px-2 py-1 rounded-lg border border-[#E2E8F0]">
+                  <span className="text-slate-500">{item.label}</span>
+                  <span className={item.ok ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}>{item.status}</span>
                 </div>
               ))}
             </div>
-
-            <div className="pt-2.5 border-t border-[#F1F5F9] flex justify-between items-center text-xs">
-              <span className="text-[#64748B] font-mono text-[9.5px]">Deployment Time:</span>
-              <span className="text-[#2563EB] font-bold font-mono bg-[#EFF6FF] px-2 py-0.5 rounded border border-[#BFDBFE]">&lt; 1 Day</span>
+            <div className="flex justify-between items-center text-[11px] font-mono bg-slate-50 px-2 py-1.5 rounded-lg border border-[#E2E8F0]">
+              <span className="text-slate-400">Events Processed</span>
+              <span className="font-black text-[#0F172A]">{(seatFlags.keyboardEvents + seatFlags.mouseEvents).toLocaleString()}</span>
             </div>
-          </div>
-
+         </div>
+         </div>
         </div>
 
-      </div>
-
       {/* 5. Supporting Data: Ongoing sessions & Critical Event Streams */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         
         {/* Left Column Stack: Ongoing Rooms & Systems Actions */}
-        <div className="lg:col-span-7 space-y-6">
-          {/* Ongoing Exam Rooms Table (Left column) */}
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] overflow-hidden">
-            <div className="px-5 py-3 border-b border-[#F1F5F9] bg-slate-50 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
-              <h4 className="font-sans font-bold text-[#0F172A] text-[12px] uppercase tracking-wider">
-                Ongoing Exam Sessions
-              </h4>
-              <div className="flex items-center gap-2">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search session..."
-                    value={sessionSearchQuery}
-                    onChange={(e) => setSessionSearchQuery(e.target.value)}
-                    className="pl-7 pr-2.5 py-1 bg-white border border-[#E2E8F0] rounded-lg text-[11px] font-sans text-slate-800 placeholder-slate-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 w-44 outline-none shadow-sm"
-                  />
-                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-                </div>
-                <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded font-mono text-[9px] font-bold">
-                  ● SECURE DATA COURIERS
-                </span>
-              </div>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-[12px]">
-                <thead className="bg-[#F8FAFC] text-[#64748B] font-mono text-[9.5px] uppercase border-b border-[#E2E8F0]">
-                  <tr>
-                    <th className="text-left px-5 py-2.5 font-medium">Session ID</th>
-                    <th className="text-left px-5 py-2.5 font-medium">Location Hub</th>
-                    <th className="text-left px-5 py-2.5 font-medium">Student Spans</th>
-                    <th className="text-left px-5 py-2.5 font-medium">Completion</th>
-                    <th className="text-right px-5 py-2.5 font-medium">Verify</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#F1F5F9]">
-                  {filteredSessions.map((session) => (
-                    <tr key={session.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-5 py-2.5 font-mono text-[#0F172A] font-bold">
-                        {session.id}
-                      </td>
-                      <td className="px-5 py-2.5 text-[#475569]">
-                        {session.location}
-                      </td>
-                      <td className="px-5 py-2.5 text-[#64748B]">
-                        {session.candidatesActive} active / {session.candidatesTotal} total
-                      </td>
-                      <td className="px-5 py-2.5 w-32">
-                        <div className="flex items-center gap-1.5">
-                          <div className="flex-1 h-1.5 bg-[#E2E8F0] rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-[#2563EB] rounded-full" 
-                              style={{ width: `${session.progress}%` }}
-                            ></div>
-                          </div>
-                          <span className="font-mono text-[9px] text-[#475569]">{session.progress}%</span>
-                        </div>
-                      </td>
-                      <td className="px-5 py-2.5 text-right">
-                        <button 
-                          onClick={() => {
-                            const associatedAlert = alerts.find(a => a.centerId.includes(session.location.split(' ')[0]));
-                            if (associatedAlert) {
-                              setSelectedAlertId(associatedAlert.id);
-                            }
-                            setActiveTab(ActiveTab.INVESTIGATIONS);
-                          }}
-                          className="p-1.5 rounded-lg text-[#2563EB] hover:bg-[#EFF6FF] transition-colors inline-block cursor-pointer"
-                          title="Analyze Session Forensics"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <div className="lg:col-span-7 space-y-4">
 
           {/* SYSTEM ACTIONS PANEL */}
           <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-4">
