@@ -1,12 +1,3 @@
----
-title: CDT-X Operations Console
-emoji: 🛡️
-colorFrom: blue
-colorTo: indigo
-sdk: docker
-app_port: 7860
----
-
 <div align="center">
 
 # 🛡️ CDT-X Operations Console
@@ -65,7 +56,6 @@ The **Judge Walkthrough Panel** (bottom-right on any view) guides you through th
 ## Core Capabilities
 
 ### 🧬 Behavioral Fingerprinting
-
 Captures and continuously compares six biometric channels against the candidate's registered Digital Twin baseline:
 
 - **Keystroke Dynamics** — dwell time, flight time, inter-key intervals
@@ -76,7 +66,6 @@ Captures and continuously compares six biometric channels against the candidate'
 - **Collusion Correlator** — cross-station behavioral synchrony detection
 
 ### 🤖 Multi-Agent Scoring Engine
-
 Six decoupled agents run independently and feed a **Consensus Scoring Engine** that produces a weighted Trust Score. No single agent can trigger a flag alone — the system requires corroborating evidence across channels.
 
 ```
@@ -84,9 +73,7 @@ Telemetry In → Feature Extraction → Digital Twin Match → Agent Array → C
 ```
 
 ### 🔬 Forensic Investigation Desk
-
 Every flagged alert includes:
-
 - **What happened** — plain-language summary of the detected anomaly
 - **Why it happened** — probable cause with evidence chain
 - **Evidence used** — which biometric channels triggered
@@ -94,20 +81,16 @@ Every flagged alert includes:
 - **Confidence score** — how certain the system is (0–100%)
 
 ### 📋 Immutable Audit Ledger
-
 Every system action — alert raised, verdict issued, adjudication override — is written to a tamper-evident log with a hash chain. Operators can export ledger entries for regulatory compliance.
 
 ### 🏢 Operations Control Room
-
 Real-time dashboard showing:
-
 - Live Trust Score heatmap across all exam seats
 - Active session progress per testing center
 - Alert queue with bulk resolve capability
 - KPI strip (active candidates, risk distribution, global integrity index)
 
 ### 🎭 Candidate Portal (SDK Demo)
-
 A full simulation of what the candidate sees — enrollment, biometric calibration (typing, mouse, reading, writing), and the live telemetry stream during the exam. Ships with the `cdtx.sdk.js` browser SDK that any exam platform can embed.
 
 ---
@@ -344,21 +327,18 @@ The SDK captures keystrokes, mouse movement (throttled to 100ms), focus/blur eve
 CDT-X is built with privacy as a first-order constraint, not an afterthought.
 
 **What we collect:**
-
 - Keystroke timing metadata (not the content of what is typed)
 - Mouse coordinate vectors and velocity profiles
 - Focus/blur window events
 - Aggregate writing style metrics (not the answer content)
 
 **What we never collect:**
-
 - Screen recordings or screenshots
 - Webcam or microphone data
 - Answer content or question responses
 - Any personally identifiable information beyond the candidate ID
 
 **Operator safeguards:**
-
 - Every adjudication action is written to the immutable audit ledger
 - No automated termination — all TERMINATE verdicts require a human operator
 - All flagged alerts include a full evidence chain so operators can verify before acting
