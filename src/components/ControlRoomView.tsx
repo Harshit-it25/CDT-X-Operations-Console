@@ -24,7 +24,8 @@ import {
   Boxes,
   Globe,
   Check,
-  Activity
+  Activity,
+  Search
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { SecurityAlert, ExamSession, ActiveTab } from '../types';
@@ -54,6 +55,11 @@ export default function ControlRoomView({
   const [assessmentDelay, setAssessmentDelay] = useState(12);
   const [showLimitationsModal, setShowLimitationsModal] = useState(false);
   const [heatmapTick, setHeatmapTick] = useState(0);
+  
+  const [sessionSearchQuery, setSessionSearchQuery] = useState('');
+  const [severityFilter, setSeverityFilter] = useState<'ALL' | 'HIGH' | 'MEDIUM' | 'LOW'>('ALL');
+  const [categoryFilter, setCategoryFilter] = useState<'ALL' | 'IMPERSONATION' | 'AI_ASSISTANCE' | 'COLLUSION' | 'COGNITIVE'>('ALL');
+  const [selectedAlertIds, setSelectedAlertIds] = useState<string[]>([]);
 
   // Simulate real-time metric drift
   useEffect(() => {
@@ -66,8 +72,8 @@ export default function ControlRoomView({
   }, []);
 
   const filteredSessions = sessions.filter(session => {
-    if (!searchQuery) return true;
-    const term = searchQuery.toLowerCase();
+    if (!sessionSearchQuery) return true;
+    const term = sessionSearchQuery.toLowerCase();
     return (
       session.id.toLowerCase().includes(term) ||
       session.location.toLowerCase().includes(term)
@@ -75,6 +81,58 @@ export default function ControlRoomView({
   });
 
   const activeAlarms = alerts.filter(a => !a.resolved);
+
+  const filteredAlarms = React.useMemo(() => {
+    return activeAlarms.filter(a => {
+      // Category filter
+      if (categoryFilter !== 'ALL' && a.category !== categoryFilter) return false;
+
+      // Severity filter based on riskScore
+      if (severityFilter === 'HIGH' && a.riskScore < 75) return false;
+      if (severityFilter === 'MEDIUM' && (a.riskScore < 50 || a.riskScore >= 75)) return false;
+      if (severityFilter === 'LOW' && a.riskScore >= 50) return false;
+
+      return true;
+    });
+  }, [activeAlarms, severityFilter, categoryFilter]);
+
+  const handleBulkResolve = async () => {
+    if (selectedAlertIds.length === 0) return;
+    
+    // 1. Update backend database for all selected alerts
+    for (const alertId of selectedAlertIds) {
+      const alertItem = alerts.find(a => a.id === alertId);
+      if (alertItem && alertItem.candidateId) {
+        try {
+          await fetch(`/api/candidate/${alertItem.candidateId}/adjudicate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'RESOLVED_FALSE_POSITIVE' })
+          });
+        } catch (err) {
+          console.error(`Failed to adjudicate ${alertItem.candidateId}:`, err);
+        }
+      }
+    }
+
+    // 2. Update frontend state
+    setAlerts(prev => prev.map(a => selectedAlertIds.includes(a.id) ? { ...a, resolved: true } : a));
+    setSelectedAlertIds([]);
+  };
+
+  const handleToggleSelectAllAlerts = () => {
+    if (selectedAlertIds.length === filteredAlarms.length) {
+      setSelectedAlertIds([]);
+    } else {
+      setSelectedAlertIds(filteredAlarms.map(a => a.id));
+    }
+  };
+
+  const handleToggleSelectAlert = (id: string) => {
+    setSelectedAlertIds(prev =>
+      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+    );
+  };
 
   const handleAlertClick = (alertId: string) => {
     setSelectedAlertId(alertId);
@@ -866,13 +924,25 @@ export default function ControlRoomView({
         <div className="lg:col-span-7 space-y-6">
           {/* Ongoing Exam Rooms Table (Left column) */}
           <div className="bg-white border border-[#E2E8F0] rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] overflow-hidden">
-            <div className="px-5 py-3 border-b border-[#F1F5F9] bg-slate-50 flex justify-between items-center">
+            <div className="px-5 py-3 border-b border-[#F1F5F9] bg-slate-50 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
               <h4 className="font-sans font-bold text-[#0F172A] text-[12px] uppercase tracking-wider">
                 Ongoing Exam Sessions
               </h4>
-              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded font-mono text-[9px] font-bold">
-                ● SECURE DATA COURIERS
-              </span>
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search session..."
+                    value={sessionSearchQuery}
+                    onChange={(e) => setSessionSearchQuery(e.target.value)}
+                    className="pl-7 pr-2.5 py-1 bg-white border border-[#E2E8F0] rounded-lg text-[11px] font-sans text-slate-800 placeholder-slate-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 w-44 outline-none shadow-sm"
+                  />
+                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                </div>
+                <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded font-mono text-[9px] font-bold">
+                  ● SECURE DATA COURIERS
+                </span>
+              </div>
             </div>
 
             <div className="overflow-x-auto">
@@ -1031,36 +1101,104 @@ export default function ControlRoomView({
             <span className="text-[9.5px] font-mono text-slate-400">1S Refresh</span>
           </div>
 
+          {/* Alert Filters and Selection Controls */}
+          <div className="p-3 bg-slate-50 border-b border-[#E2E8F0] space-y-2 text-xs">
+            <div className="flex flex-wrap gap-2">
+              <div className="flex items-center gap-1 px-2 py-1 bg-white border border-[#E2E8F0] rounded-lg">
+                <span className="text-[9px] font-mono text-[#64748B] font-bold">TYPE:</span>
+                <select
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value as any)}
+                  className="bg-transparent border-none text-[10px] font-mono text-[#2563EB] p-0 focus:ring-0 cursor-pointer outline-none"
+                >
+                  <option value="ALL">ALL</option>
+                  <option value="IMPERSONATION">IMPERSONATION</option>
+                  <option value="AI_ASSISTANCE">AI ASSIST</option>
+                  <option value="COLLUSION">COLLUSION</option>
+                  <option value="COGNITIVE">COGNITIVE</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-1 px-2 py-1 bg-white border border-[#E2E8F0] rounded-lg">
+                <span className="text-[9px] font-mono text-[#64748B] font-bold">SEVERITY:</span>
+                <select
+                  value={severityFilter}
+                  onChange={(e) => setSeverityFilter(e.target.value as any)}
+                  className="bg-transparent border-none text-[10px] font-mono text-[#2563EB] p-0 focus:ring-0 cursor-pointer outline-none"
+                >
+                  <option value="ALL">ALL</option>
+                  <option value="HIGH">{"HIGH (>=75%)"}</option>
+                  <option value="MEDIUM">{"MEDIUM (50-74%)"}</option>
+                  <option value="LOW">{"LOW (<50%)"}</option>
+                </select>
+              </div>
+            </div>
+
+            {filteredAlarms.length > 0 && (
+              <div className="flex justify-between items-center pt-1 border-t border-slate-200/60 font-sans">
+                <label className="flex items-center gap-1.5 cursor-pointer text-[11px] font-medium text-slate-700">
+                  <input
+                    type="checkbox"
+                    checked={filteredAlarms.length > 0 && selectedAlertIds.length === filteredAlarms.length}
+                    onChange={handleToggleSelectAllAlerts}
+                    className="rounded border-[#CBD5E1] text-[#2563EB] focus:ring-blue-500 w-3.5 h-3.5"
+                  />
+                  <span>Select All ({filteredAlarms.length})</span>
+                </label>
+
+                {selectedAlertIds.length > 0 && (
+                  <button
+                    onClick={handleBulkResolve}
+                    className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[10.5px] font-bold uppercase rounded-lg shadow-sm transition-colors cursor-pointer"
+                  >
+                    Resolve Selected ({selectedAlertIds.length})
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+
           <div className="p-3 space-y-2.5 max-h-[220px] overflow-y-auto custom-scrollbar">
-            {activeAlarms.length === 0 ? (
+            {filteredAlarms.length === 0 ? (
               <div className="flex flex-col items-center justify-center p-6 text-[#64748B] text-center">
-                <CheckCircle className="w-8 h-8 text-emerald-500 mb-1.5 animate-bounce" />
-                <p className="font-sans text-[12px] font-semibold text-[#0F172A]">All Candidates Verified Compliance</p>
-                <p className="text-[10px] text-[#64748B] mt-0.5">No continuous biometric exceptions registered.</p>
+                <CheckCircle className="w-8 h-8 text-emerald-500 mb-1.5" />
+                <p className="font-sans text-[12px] font-semibold text-[#0F172A]">No Matching Exceptions</p>
+                <p className="text-[10px] text-[#64748B] mt-0.5">Try altering your severity or type filters.</p>
               </div>
             ) : (
-              activeAlarms.map((alert) => {
+              filteredAlarms.map((alert) => {
                 const isCrit = alert.riskScore >= 90;
+                const isSelected = selectedAlertIds.includes(alert.id);
                 return (
                   <div
                     key={alert.id}
-                    onClick={() => handleAlertClick(alert.id)}
-                    className="p-3 bg-white hover:bg-slate-50 border border-[#E2E8F0] hover:border-[#CBD5E1] rounded-xl transition-all cursor-pointer group"
+                    className={`p-3 bg-white border rounded-xl transition-all flex items-start gap-2.5 ${
+                      isSelected ? 'border-blue-400 bg-blue-50/10' : 'border-[#E2E8F0] hover:border-[#CBD5E1]'
+                    }`}
                   >
-                    <div className="flex justify-between items-center mb-1">
-                      <span className={`font-mono text-[9px] px-1.5 py-0.2 rounded font-extrabold uppercase line-none ${
-                        isCrit ? 'text-red-700 bg-red-50 border border-red-200' : 'text-amber-805 bg-amber-50 border border-amber-200'
-                      }`}>
-                        {alert.type}
-                      </span>
-                      <span className="font-mono text-[9px] text-[#64748B]">{alert.timestamp}</span>
-                    </div>
-                    <p className="text-[12px] text-[#334155] leading-snug font-sans truncate">
-                      {alert.description}
-                    </p>
-                    <div className="mt-1.5 flex justify-between items-center text-[9.5px] font-mono">
-                      <span className="text-[#2563EB] font-bold">{alert.candidateName?.toUpperCase()}</span>
-                      <span className={`font-bold ${isCrit ? 'text-red-650' : 'text-amber-600'}`}>Risk: {alert.riskScore}%</span>
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => handleToggleSelectAlert(alert.id)}
+                      className="rounded border-[#CBD5E1] text-[#2563EB] focus:ring-blue-500 w-4 h-4 mt-0.5 cursor-pointer"
+                    />
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-center mb-1 cursor-pointer" onClick={() => handleAlertClick(alert.id)}>
+                        <span className={`font-mono text-[9px] px-1.5 py-0.2 rounded font-extrabold uppercase line-none ${
+                          isCrit ? 'text-red-700 bg-red-50 border border-red-200' : 'text-amber-850 bg-amber-50 border border-amber-200'
+                        }`}>
+                          {alert.type}
+                        </span>
+                        <span className="font-mono text-[9px] text-[#64748B]">{alert.timestamp}</span>
+                      </div>
+                      <p className="text-[12px] text-[#334155] leading-snug font-sans truncate cursor-pointer" onClick={() => handleAlertClick(alert.id)}>
+                        {alert.description}
+                      </p>
+                      <div className="mt-1.5 flex justify-between items-center text-[9.5px] font-mono cursor-pointer" onClick={() => handleAlertClick(alert.id)}>
+                        <span className="text-[#2563EB] font-bold">{alert.candidateName?.toUpperCase()}</span>
+                        <span className={`font-bold ${isCrit ? 'text-red-650' : 'text-amber-600'}`}>Risk: {alert.riskScore}%</span>
+                      </div>
                     </div>
                   </div>
                 );

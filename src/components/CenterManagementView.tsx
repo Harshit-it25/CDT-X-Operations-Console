@@ -285,13 +285,16 @@ export default function CenterManagementView({
                     <td className="px-6 py-4">
                       <div>
                         {/* Risk States must use color-coded badges rather than large colored backgrounds */}
-                        <span className={`px-2 py-0.5 font-mono text-[9.5px] font-bold rounded-lg uppercase border ${
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[9.5px] font-bold rounded-lg uppercase border ${
                           candidate.status === 'PATCHED' 
                             ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
                             : candidate.status === 'PENDING' 
                             ? 'bg-amber-50 text-amber-700 border-amber-200' 
                             : 'bg-red-50 text-red-700 border-red-200 animate-pulse'
                         }`}>
+                          {candidate.status === 'PATCHED' && <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />}
+                          {candidate.status === 'PENDING' && <Activity className="w-3.5 h-3.5 text-amber-600" />}
+                          {candidate.status === 'VULNERABILITY' && <AlertTriangle className="w-3.5 h-3.5 text-red-600" />}
                           {candidate.status === 'PATCHED' ? 'OPTIMAL' : candidate.status === 'PENDING' ? 'SWAPPING' : 'KEYSTROKE DRIFT'}
                         </span>
                         <div className="text-[9.5px] text-slate-400 font-mono mt-1">{candidate.biometricHardware}</div>

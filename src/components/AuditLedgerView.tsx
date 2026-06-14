@@ -89,6 +89,36 @@ export default function AuditLedgerView({ entries, searchQuery }: AuditLedgerVie
     }, 1200);
   };
 
+  const handleExportJSON = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(filteredEntries, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `audit_ledger_${new Date().toISOString().split('T')[0]}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  };
+
+  const handleExportCSV = () => {
+    const headers = ['ID', 'Timestamp', 'Type', 'Description', 'Operator', 'Hash'];
+    const rows = filteredEntries.map(entry => [
+      entry.id,
+      entry.timestamp,
+      entry.type,
+      `"${entry.description.replace(/"/g, '""')}"`,
+      entry.operator,
+      entry.hash
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const dataStr = "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent);
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `audit_ledger_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  };
+
   return (
     <div className="h-full overflow-y-auto p-8 bg-[#F8FAFC] custom-scrollbar text-slate-800 pb-16">
       
@@ -378,10 +408,19 @@ export default function AuditLedgerView({ entries, searchQuery }: AuditLedgerVie
             <div className="flex flex-col gap-2">
               <button 
                 type="button"
-                onClick={() => setShowExportModal(false)}
-                className="w-full py-2.5 bg-[#2563EB] hover:bg-blue-700 text-white font-mono font-bold text-xs uppercase rounded-xl transition-all cursor-pointer shadow-sm"
+                onClick={handleExportCSV}
+                className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-mono font-bold text-xs uppercase rounded-xl transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
               >
-                DOWNLOAD AUDIT COPIES (.PDF)
+                <Download className="w-4 h-4" />
+                EXPORT TO CSV (.CSV)
+              </button>
+              <button 
+                type="button"
+                onClick={handleExportJSON}
+                className="w-full py-2.5 bg-[#2563EB] hover:bg-blue-700 text-white font-mono font-bold text-xs uppercase rounded-xl transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+              >
+                <Download className="w-4 h-4" />
+                EXPORT TO JSON (.JSON)
               </button>
               <button 
                 type="button"
