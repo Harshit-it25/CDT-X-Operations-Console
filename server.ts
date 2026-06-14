@@ -6,21 +6,7 @@
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
-
-// Local cache representing running digital twin sessions on the server side
-interface SimulatedCandidate {
-  candidateId: string;
-  scenario: string;
-  trustScore: number;
-  impersonationRisk: number;
-  aiAssistanceRisk: number;
-  collusionRisk: number;
-  verdict: "APPROVED" | "REVIEW" | "TERMINATED";
-  agentBreakdown: { agent_name: string; match: number; drift: number }[];
-  timeline: { timestamp: string; title: string; desc: string; severity: "INFO" | "WARNING" | "CRITICAL" }[];
-}
-
-const dbCache: Record<string, SimulatedCandidate> = {};
+import { db, SimulatedCandidate } from "./server-db";
 
 // Generator simulation helper functions
 function getNormalProfile(cid: string): SimulatedCandidate {
@@ -126,32 +112,23 @@ function getCollusionProfile(cid: string): SimulatedCandidate {
 
 function resolveCandidate(cid: string): SimulatedCandidate {
   const norm_cid = cid.toUpperCase();
-  if (dbCache[norm_cid]) return dbCache[norm_cid];
+  const cached = db.getCandidate(norm_cid);
+  if (cached) return cached;
   
+  let candidate: SimulatedCandidate;
   // Seed initial values to keep preview beautiful without blank screens
   if (norm_cid.includes("ROHAN") || norm_cid.includes("AL-7712") || norm_cid.includes("89921")) {
-    dbCache[norm_cid] = getImpersonationProfile(cid);
+    candidate = getImpersonationProfile(cid);
   } else if (norm_cid.includes("AARAV") || norm_cid.includes("1102") || norm_cid.includes("73322")) {
-    dbCache[norm_cid] = getAiAssistedProfile(cid);
+    candidate = getAiAssistedProfile(cid);
   } else if (norm_cid.includes("NEHA") || norm_cid.includes("9942") || norm_cid.includes("44112")) {
-    dbCache[norm_cid] = getCollusionProfile(cid);
+    candidate = getCollusionProfile(cid);
   } else {
-    // Memory limit guard: prevent infinite cache growth DoS
-    const cacheKeys = Object.keys(dbCache);
-    if (cacheKeys.length >= 200) {
-      // Evict an arbitrary item (first one that isn't one of the core mock candidates)
-      const coreKeys = ["ROHAN", "AARAV", "NEHA", "AL-7712", "EXM-88219-B", "EXM-44102-X", "EXM-10294-Z"];
-      const keyToEvict = cacheKeys.find(key => !coreKeys.some(ck => key.includes(ck)));
-      if (keyToEvict) {
-        delete dbCache[keyToEvict];
-      } else {
-        // Fallback: evict the first key
-        delete dbCache[cacheKeys[0]];
-      }
-    }
-    dbCache[norm_cid] = getNormalProfile(cid);
+    db.evictOldestCandidates(200);
+    candidate = getNormalProfile(cid);
   }
-  return dbCache[norm_cid];
+  db.saveCandidate(norm_cid, candidate);
+  return candidate;
 }
 
 
@@ -179,6 +156,18 @@ async function startServer() {
         res.status(400).json({ error: "Invalid candidate identifier format." });
         return;
       }
+    }
+    next();
+  });
+
+  // CORS Middleware for external SDK communication
+  app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+    if (req.method === "OPTIONS") {
+      res.sendStatus(200);
+      return;
     }
     next();
   });
@@ -225,7 +214,7 @@ async function startServer() {
   // Start Exam
   app.post("/api/exam/start", (req, res) => {
     const cid = (req.body.candidate_id || "USR_DEFAULT").toUpperCase();
-    dbCache[cid] = getNormalProfile(cid);
+    db.saveCandidate(cid, getNormalProfile(cid));
     res.json({ success: true, message: `Telemetry channels initialized for Candidate ${cid}.` });
   });
 
@@ -245,6 +234,10 @@ async function startServer() {
         desc: "Instantaneous character stream insert action detected on active response textarea.",
         severity: "CRITICAL"
       });
+      db.saveCandidate(cid, candidate);
+    } else {
+      // Save candidates to register incremental updates
+      db.saveCandidate(cid, candidate);
     }
 
     res.json({ success: true, message: "Telemetry packet filtered and recorded." });
@@ -355,6 +348,7 @@ async function startServer() {
       });
     }
 
+    db.saveCandidate(req.params.id, candidate);
     res.json({ success: true, message: `Resolution updated to ${action}.` });
   });
 
@@ -396,11 +390,12 @@ async function startServer() {
 
   // Overall dashboard stats summary
   app.get("/api/dashboard/overview", (req, res) => {
+    const candidates = db.getAllCandidates();
     let trustSum = 0;
     let count = 0;
-    for (const key in dbCache) {
-      if (dbCache[key].trustScore) {
-        trustSum += dbCache[key].trustScore;
+    for (const key in candidates) {
+      if (candidates[key].trustScore) {
+        trustSum += candidates[key].trustScore;
         count++;
       }
     }
@@ -415,7 +410,7 @@ async function startServer() {
       global_integrity_index: parseFloat(Math.max(88, Math.min(99, global_index + Math.sin(Date.now() / 5000) * 1.5)).toFixed(2)),
       active_supervised_stations: 2500 + Math.floor(Math.cos(Date.now() / 8000) * 15),
       total_alerts: count || 4,
-      resolved_alerts: Object.values(dbCache).filter(c => c.verdict === "APPROVED").length,
+      resolved_alerts: Object.values(candidates).filter(c => c.verdict === "APPROVED").length,
       active_sessions: [
         { id: "EXM-88219-B", location: "Solapur (SOL-01) Central Hub", candidatesActive: solapurActive, candidatesTotal: 150, progress: Math.min(99, 45 + Math.floor((Date.now() % 100000) / 10000)), riskHigh: 2, riskMed: 8, riskLow: solapurActive - 10, status: "STABLE" },
         { id: "EXM-44102-X", location: "Hyderabad (HYD-02) Tech Center", candidatesActive: hyderabadActive, candidatesTotal: 90, progress: Math.min(99, 88 + Math.floor((Date.now() % 50000) / 10000)), riskHigh: 1, riskMed: 3, riskLow: hyderabadActive - 4, status: "ANOMALY" },
@@ -427,25 +422,25 @@ async function startServer() {
   // Trigger Simulators
   app.post("/api/simulate/normal", (req, res) => {
     const cid = (req.body.candidate_id || "AL-7712").toUpperCase();
-    dbCache[cid] = getNormalProfile(cid);
+    db.saveCandidate(cid, getNormalProfile(cid));
     res.json({ success: true, message: `Simulator: Candidate ${cid} initialized with Normal baseline.` });
   });
 
   app.post("/api/simulate/impersonation", (req, res) => {
     const cid = (req.body.candidate_id || "AL-7712").toUpperCase();
-    dbCache[cid] = getImpersonationProfile(cid);
+    db.saveCandidate(cid, getImpersonationProfile(cid));
     res.json({ success: true, message: `Simulator: Candidate ${cid} initialized as Impersonation.` });
   });
 
   app.post("/api/simulate/ai-assisted", (req, res) => {
     const cid = (req.body.candidate_id || "AL-7712").toUpperCase();
-    dbCache[cid] = getAiAssistedProfile(cid);
+    db.saveCandidate(cid, getAiAssistedProfile(cid));
     res.json({ success: true, message: `Simulator: Candidate ${cid} initialized as AI Assisted.` });
   });
 
   app.post("/api/simulate/collusion", (req, res) => {
     const cid = (req.body.candidate_id || "AL-7712").toUpperCase();
-    dbCache[cid] = getCollusionProfile(cid);
+    db.saveCandidate(cid, getCollusionProfile(cid));
     res.json({ success: true, message: `Simulator: Candidate ${cid} initialized as Colluding.` });
   });
 
