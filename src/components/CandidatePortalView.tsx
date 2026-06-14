@@ -240,12 +240,12 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
     setDeviceCheckOk(false);
     setTwinVerificationConfidence(0);
     setEvidenceCounts({
-      keyboard: 0,
-      mouse: 0,
-      navigation: 0,
-      questionTiming: 0,
-      writingPatterns: 0,
-      readingBehavior: 0
+      keyboardEvents: 0,
+      mouseEvents: 0,
+      focusChanges: 0,
+      tabSwitches: 0,
+      copyAttempts: 0,
+      questionInteractions: 0
     });
   };
 
