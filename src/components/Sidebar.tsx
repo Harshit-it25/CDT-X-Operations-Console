@@ -17,7 +17,8 @@ import {
   BarChart3,
   Play,
   Database,
-  TrendingUp
+  TrendingUp,
+  Sparkles
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 
@@ -36,6 +37,12 @@ export default function Sidebar({
 }: SidebarProps) {
   
   const navItems = [
+    { 
+      id: ActiveTab.DEMO_SNAPSHOT, 
+      label: 'Demo Snapshot Center', 
+      icon: Sparkles,
+      description: 'Complete operational loop mental model'
+    },
     { 
       id: ActiveTab.CONTROL_ROOM, 
       label: 'Continuous Trust Heatmap', 

@@ -72,7 +72,7 @@ export default function BehaviorReplayView() {
     { timestamp: "13:59:05", mouseX: 140, mouseY: 150, wpm: 55, focused: true, trustScore: 89, note: "Temporal coordinate overlaps matching workstation solver Desk B-03." },
     { timestamp: "13:59:10", mouseX: 270, mouseY: 250, wpm: 58, focused: true, trustScore: 78, note: "Simultaneous focus swaps and answer input sequences match (+98.4%)." },
     { timestamp: "13:59:15", mouseX: 410, mouseY: 310, wpm: 42, focused: true, trustScore: 61, note: "Shared coordinate answers sequence flagged synchronously." },
-    { timestamp: "13:59:20", mouseX: 440, mouseY: 280, wpm: 50, focused: true, trustScore: 45, note: "Room acoustics identify localized vocal whispers matching neighbor." },
+    { timestamp: "13:59:20", mouseX: 440, mouseY: 280, wpm: 50, focused: true, trustScore: 45, note: "Spatial click mapping identifies localized navigation patterns matching neighbor." },
     { timestamp: "13:59:25", mouseX: 550, mouseY: 170, wpm: 0, focused: true, trustScore: 40, note: "Collusion mesh verified. Automatic supervisor alert dispatched." }
   ];
 

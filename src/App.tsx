@@ -19,6 +19,8 @@ import BoardroomDashboardView from './components/BoardroomDashboardView';
 import CandidatePortalView from './components/CandidatePortalView';
 import ArchitectureCenterView from './components/ArchitectureCenterView';
 import CommandPalette from './components/CommandPalette';
+import JudgeWalkthroughPanel from './components/JudgeWalkthroughPanel';
+import DemoSnapshotCenterView from './components/DemoSnapshotCenterView';
 
 import { 
   ActiveTab, 
@@ -614,6 +616,8 @@ export default function App() {
   // Select dynamic workspace page panel
   const renderTabContent = () => {
     switch (activeTab) {
+      case ActiveTab.DEMO_SNAPSHOT:
+        return <DemoSnapshotCenterView setActiveTab={setActiveTab} />;
       case ActiveTab.CONTROL_ROOM:
         return (
           <ControlRoomView 
@@ -720,10 +724,20 @@ export default function App() {
           onSelectAction={handleCommandSelect} 
         />
 
-        {/* Dynamic Panel Screen */}
-        <main className="mt-16 flex-1 overflow-hidden bg-[#f8fafc]">
-          {renderTabContent()}
-        </main>
+        {/* Dynamic Panel Screen & Walkthrough */}
+        <div className="flex-grow flex overflow-hidden mt-16 bg-[#f8fafc]">
+          <main className="flex-1 overflow-hidden bg-[#f8fafc]">
+            {renderTabContent()}
+          </main>
+          <JudgeWalkthroughPanel 
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            handleScenarioSelect={handleScenarioSelect}
+            setSelectedAlertId={setSelectedAlertId}
+            setSearchQuery={setSearchQuery}
+            currentScenario={currentScenario}
+          />
+        </div>
 
         {/* Immutability compliance footer bar */}
         <footer className="h-6 w-full bg-white border-t border-[#E2E8F0] px-6 flex items-center justify-between text-[10px] font-mono uppercase text-[#475569] select-none shrink-0 z-40">

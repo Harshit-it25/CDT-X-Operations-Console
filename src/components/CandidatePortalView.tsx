@@ -354,6 +354,25 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
         </div>
       </div>
 
+      {/* Student -> CDT-X Visual Pipeline */}
+      <div className="mb-6 flex flex-wrap items-center gap-1.5 p-3.5 bg-slate-50 border border-slate-200/50 rounded-xl text-[10px] font-mono text-[#475569] justify-center select-none shadow-sm">
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Student Device</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Behavior Collection</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Feature Extraction</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Digital Twin</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-[#2563EB] font-bold">Trust Engine</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Investigation</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Decision</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-emerald-700 font-bold">Audit Record</span>
+      </div>
+
       {/* Live Session Card */}
       <div className="bg-slate-900 border border-slate-800 text-white p-4 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.15)] flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 relative overflow-hidden">
         {/* Background glow */}
@@ -925,43 +944,39 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
         {/* COLUMN 2: WALKTHROUGH ASSIST & VALUE */}
         <div className="xl:col-span-4 space-y-6">
 
-          {/* LIVE TELEMETRY PANEL */}
+          {/* LIVE SDK TELEMETRY PANEL */}
           <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] space-y-4">
             <div className="flex justify-between items-center border-b border-[#F1F5F9] pb-2.5">
               <span className="text-xs font-mono font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-1.5">
                 <Activity className="w-4 h-4 text-[#2563EB] animate-pulse" />
-                Live Telemetry Stream
+                Live SDK Telemetry Panel
               </span>
-              <span className="flex items-center gap-1 bg-red-50 text-red-700 border border-red-150 px-2 py-0.5 rounded text-[9px] font-mono font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>
+              <span className="flex items-center gap-1 bg-red-50 text-red-700 border border-red-150 px-2 py-0.5 rounded text-[9px] font-mono font-bold animate-pulse">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
                 STREAM ACTIVE
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 text-xs">
+            <div className="grid grid-cols-2 gap-3 text-xs font-sans">
               <div className="bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase block">Key Hold Duration</span>
-                <span className="text-base font-bold text-[#0F172A] font-mono block mt-0.5">{telemetry.keyHoldDuration} ms</span>
+                <span className="text-[9px] font-mono text-slate-400 uppercase block font-bold">Keyboard Events Captured</span>
+                <span className="text-sm font-bold text-[#0F172A] font-mono block mt-0.5">{evidenceCounts.keyboardEvents.toLocaleString()}</span>
               </div>
               <div className="bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase block">Typing Velocity</span>
-                <span className="text-base font-bold text-[#0F172A] font-mono block mt-0.5">{telemetry.typingVelocity} WPM</span>
+                <span className="text-[9px] font-mono text-slate-400 uppercase block font-bold">Mouse Events Captured</span>
+                <span className="text-sm font-bold text-[#0F172A] font-mono block mt-0.5">{evidenceCounts.mouseEvents.toLocaleString()}</span>
               </div>
               <div className="bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase block">Mouse Velocity</span>
-                <span className="text-base font-bold text-[#0F172A] font-mono block mt-0.5">{telemetry.mouseVelocity} px/s</span>
+                <span className="text-[9px] font-mono text-slate-400 uppercase block font-bold">Focus Events</span>
+                <span className="text-sm font-bold text-[#0F172A] font-mono block mt-0.5">{evidenceCounts.focusChanges + evidenceCounts.tabSwitches}</span>
               </div>
               <div className="bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase block">Focus Changes</span>
-                <span className="text-base font-bold text-[#0F172A] font-mono block mt-0.5">{telemetry.focusChanges}</span>
+                <span className="text-[9px] font-mono text-slate-400 uppercase block font-bold">Copy/Paste Attempts</span>
+                <span className="text-sm font-bold text-[#0F172A] font-mono block mt-0.5">{evidenceCounts.copyAttempts}</span>
               </div>
-              <div className="bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase block">Reading Pace</span>
-                <span className="text-base font-bold text-[#0F172A] font-mono block mt-0.5">{telemetry.readingPace}</span>
-              </div>
-              <div className="bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0]">
-                <span className="text-[9px] font-mono text-slate-400 uppercase block">Writing Consistency</span>
-                <span className="text-base font-bold text-[#0F172A] font-mono block mt-0.5">{telemetry.writingConsistency}%</span>
+              <div className="bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0] col-span-2">
+                <span className="text-[9px] font-mono text-slate-400 uppercase block font-bold">Question Interactions</span>
+                <span className="text-sm font-bold text-[#0F172A] font-mono block mt-0.5">{evidenceCounts.questionInteractions}</span>
               </div>
             </div>
 

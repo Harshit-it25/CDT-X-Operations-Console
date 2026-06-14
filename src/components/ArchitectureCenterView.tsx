@@ -250,6 +250,25 @@ export default function ArchitectureCenterView() {
         </p>
       </div>
 
+      {/* Student -> CDT-X Visual Pipeline */}
+      <div className="mb-6 flex flex-wrap items-center gap-1.5 p-3.5 bg-slate-50 border border-slate-200/50 rounded-xl text-[10px] font-mono text-[#475569] justify-center select-none shadow-sm animate-in fade-in duration-200">
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Student Device</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Behavior Collection</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Feature Extraction</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Digital Twin</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-[#2563EB] font-bold">Trust Engine</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Investigation</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Decision</span>
+        <span>➔</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-emerald-700 font-bold">Audit Record</span>
+      </div>
+
       {/* Overview disclaimer */}
       <div className="bg-slate-100 border border-[#CBD5E1] p-3.5 rounded-xl mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">

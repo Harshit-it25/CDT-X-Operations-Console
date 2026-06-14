@@ -388,7 +388,7 @@ export default function ControlRoomView({
   const currentRecommendedAction = (() => {
     if (currentScenario === 'IMPERSONATION') return 'Trigger Secondary Biometric Challenge Scan';
     if (currentScenario === 'AI_ASSISTED') return 'Conduct Manual Stylometry Cadence Review';
-    if (currentScenario === 'COLLUSION') return 'Execute Spatial Acoustic Correlation on Clusters';
+    if (currentScenario === 'COLLUSION') return 'Execute Spatial Behavioral Correlation on Clusters';
     return 'Maintain Passive Stream Continuous Verification';
   })();
 
@@ -1034,7 +1034,7 @@ export default function ControlRoomView({
                 <span className="text-emerald-600 font-extrabold text-base">✓</span>
                 <div>
                   <div className="text-[12px] font-bold text-slate-800">18 Collusion Reviews</div>
-                  <div className="text-[10px] text-slate-500 font-medium font-sans">Acoustic & focus correlated</div>
+                  <div className="text-[10px] text-slate-500 font-medium font-sans">Behavioral & focus correlated</div>
                 </div>
               </div>
 

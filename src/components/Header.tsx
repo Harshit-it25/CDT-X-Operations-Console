@@ -144,6 +144,12 @@ export default function Header({
   // Dynamic header titles & search placeholders
   const getTabDetails = () => {
     switch (activeTab) {
+      case ActiveTab.DEMO_SNAPSHOT:
+        return {
+          title: 'Demo Snapshot Center',
+          placeholder: 'Explore operational pipeline steps...',
+          subtitle: 'End-to-End Operational Lifecycle mental model'
+        };
       case ActiveTab.CONTROL_ROOM:
         return {
           title: 'Continuous Trust Heatmap',

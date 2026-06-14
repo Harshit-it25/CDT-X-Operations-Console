@@ -232,6 +232,41 @@ export default function DigitalTwinExplorerView() {
     return () => clearInterval(interval);
   }, []);
 
+  const [typingCount, setTypingCount] = useState(480);
+  const [mouseCount, setMouseCount] = useState(8200);
+  const [readingCount, setReadingCount] = useState(76);
+  const [calibrationDone, setCalibrationDone] = useState(false);
+
+  useEffect(() => {
+    setTypingCount(410);
+    setMouseCount(7300);
+    setReadingCount(68);
+    setCalibrationDone(false);
+
+    const timer = setInterval(() => {
+      setTypingCount(t => {
+        if (t >= 500) return 500;
+        return t + Math.floor(Math.random() * 12 + 8);
+      });
+      setMouseCount(m => {
+        if (m >= 10000) return 10000;
+        return m + Math.floor(Math.random() * 300 + 200);
+      });
+      setReadingCount(r => {
+        if (r >= 100) return 100;
+        return r + Math.floor(Math.random() * 4 + 2);
+      });
+    }, 150);
+
+    return () => clearInterval(timer);
+  }, [selectedStudent.id]);
+
+  useEffect(() => {
+    if (typingCount >= 500 && mouseCount >= 10000 && readingCount >= 100) {
+      setCalibrationDone(true);
+    }
+  }, [typingCount, mouseCount, readingCount]);
+
   return (
     <div className="h-full overflow-y-auto p-8 bg-[#F8FAFC] custom-scrollbar text-slate-800 pb-16">
       
@@ -340,6 +375,44 @@ export default function DigitalTwinExplorerView() {
         {/* LEFT COLUMN: CRITICAL EXPLAINABILITY KPI METRICS (8/12) */}
         <div className="xl:col-span-8 space-y-6">
           
+          {/* Behavioral Calibration Status Card */}
+          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] space-y-4">
+            <div className="flex justify-between items-center pb-2 border-b border-[#F1F5F9]">
+              <span className="text-[11.5px] font-mono font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-1.5">
+                <Cpu className={`w-4 h-4 text-[#2563EB] ${!calibrationDone ? 'animate-spin' : ''}`} />
+                Behavioral Calibration Status
+              </span>
+              <span className={`px-2.5 py-0.5 rounded text-[9.5px] font-sans font-extrabold uppercase border ${
+                calibrationDone
+                  ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
+                  : 'text-blue-700 bg-blue-50 border-blue-200 animate-pulse'
+              }`}>
+                {calibrationDone ? 'Digital Twin Generated' : 'Behavior Baseline Collection'}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs font-mono">
+              <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200/60 shadow-sm">
+                <span className="text-[8.5px] text-slate-400 block uppercase font-bold">Typing Samples</span>
+                <span className="text-[12.5px] font-bold text-[#0F172A] block mt-0.5">{typingCount} / 500</span>
+              </div>
+              <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200/60 shadow-sm">
+                <span className="text-[8.5px] text-slate-400 block uppercase font-bold">Mouse Events</span>
+                <span className="text-[12.5px] font-bold text-[#0F172A] block mt-0.5">{mouseCount.toLocaleString()} / 10,000</span>
+              </div>
+              <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200/60 shadow-sm">
+                <span className="text-[8.5px] text-slate-400 block uppercase font-bold">Reading Actions</span>
+                <span className="text-[12.5px] font-bold text-[#0F172A] block mt-0.5">{readingCount} / 100</span>
+              </div>
+              <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200/60 shadow-sm flex flex-col justify-center">
+                <span className="text-[8.5px] text-slate-400 block uppercase font-bold">Baseline Quality</span>
+                <span className={`text-[11px] font-bold block mt-0.5 ${calibrationDone ? 'text-emerald-600' : 'text-blue-600 animate-pulse'}`}>
+                  {calibrationDone ? '✓ OPTIMAL (100%)' : 'Building...'}
+                </span>
+              </div>
+            </div>
+          </div>
+
           {/* Active Candidate At-A-Glance Card */}
           <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-[#F1F5F9] pb-4 mb-5 gap-3">

@@ -330,38 +330,44 @@ export default function InvestigationsView({
             </div>
           </div>
 
-          {/* Flag Explanation Engine */}
+          {/* Why This Candidate Was Flagged */}
           <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] space-y-4">
             <h3 className="text-xs font-black text-[#0F172A] font-sans tracking-wide uppercase flex items-center gap-2">
-              <ShieldAlert className="w-4 h-4 text-[#2563EB]" />
-              Flag Explanation Engine
+              <ShieldAlert className="w-4 h-4 text-red-500 animate-pulse" />
+              Why This Candidate Was Flagged
             </h3>
             
-            <p className="text-[11.5px] text-slate-500 leading-relaxed font-sans">
-              CDT-X extracts multi-modal telemetry signals continuously. The table below represents the behavior feature drift scores causing the active audit status:
-            </p>
-
-            <div className="space-y-3 font-mono text-[10.5px]">
-              {[
-                { name: "Identity Verification Drift", val: isRohan ? 63.5 : isAarav ? 10.8 : isNeha ? 15.5 : 2.6, color: "bg-red-500" },
-                { name: "Typing Consistency Loss", val: isRohan ? 58.0 : isAarav ? 48.5 : isNeha ? 18.8 : 1.5, color: "bg-amber-500" },
-                { name: "Writing Pattern Shift", val: isRohan ? 12.5 : isAarav ? 78.4 : isNeha ? 15.0 : 1.0, color: "bg-purple-500" },
-                { name: "Mouse Behavior Drift", val: isRohan ? 82.0 : isAarav ? 14.8 : isNeha ? 88.0 : 2.1, color: "bg-blue-500" },
-                { name: "Overall Trust Score Reduction", val: currentCase.riskScore, color: "bg-red-650" }
-              ].map((flag, idx) => (
-                <div key={idx} className="space-y-1 bg-slate-50 p-2.5 rounded-xl border border-[#E2E8F0]">
-                  <div className="flex justify-between items-center text-[10px] font-sans">
-                    <span className="font-bold text-[#0F172A]">{flag.name}</span>
-                    <span className="font-bold text-red-650">{flag.val.toFixed(1)}%</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full rounded-full transition-all duration-350 ${flag.color}`}
-                      style={{ width: `${flag.val}%` }}
-                    ></div>
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2.5 font-mono text-[11px]">
+                <div className="flex justify-between items-center p-2.5 bg-slate-50 border border-slate-200/50 rounded-xl">
+                  <span className="text-slate-500 font-sans">Typing Drift:</span>
+                  <span className="font-bold text-red-650">{isRohan ? "+31%" : isAarav ? "+10.8%" : isNeha ? "+15.5%" : "+1.5%"}</span>
                 </div>
-              ))}
+                <div className="flex justify-between items-center p-2.5 bg-slate-50 border border-slate-200/50 rounded-xl">
+                  <span className="text-slate-500 font-sans">Navigation Anomaly:</span>
+                  <span className="font-bold text-red-650">{isRohan ? "+14%" : isAarav ? "+42.0%" : isNeha ? "+18.0%" : "+0.8%"}</span>
+                </div>
+                <div className="flex justify-between items-center p-2.5 bg-slate-50 border border-slate-200/50 rounded-xl">
+                  <span className="text-slate-500 font-sans">Writing Pattern Shift:</span>
+                  <span className="font-bold text-red-650">{isRohan ? "+22%" : isAarav ? "+55.0%" : isNeha ? "+14.0%" : "+0.5%"}</span>
+                </div>
+              </div>
+              <div className="space-y-2.5 font-mono text-[11px]">
+                <div className="flex justify-between items-center p-2.5 bg-slate-50 border border-slate-200/50 rounded-xl">
+                  <span className="text-slate-500 font-sans">Trust Reduction:</span>
+                  <span className="font-bold text-red-650">{isRohan ? "-42%" : isAarav ? "-38.8%" : isNeha ? "-52.0%" : "-5.8%"}</span>
+                </div>
+                <div className="flex justify-between items-center p-2.5 bg-slate-50 border border-slate-200/50 rounded-xl">
+                  <span className="text-slate-500 font-sans">Confidence:</span>
+                  <span className="font-bold text-[#2563EB]">{isRohan ? "94.2%" : isAarav ? "78.4%" : isNeha ? "88.0%" : "98.2%"}</span>
+                </div>
+                <div className="flex justify-between items-center p-2.5 bg-slate-50 border border-slate-200/50 rounded-xl">
+                  <span className="text-slate-500 font-sans">Decision:</span>
+                  <span className={`font-bold uppercase ${isRohan ? "text-red-700" : isAarav || isNeha ? "text-amber-800" : "text-emerald-700"}`}>
+                    {isRohan ? "Lockdown Recommended" : isAarav || isNeha ? "Manual Review Required" : "System Approved"}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 

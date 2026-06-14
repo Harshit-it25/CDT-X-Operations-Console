@@ -30,7 +30,7 @@ function getCategoryData(category: 'IMPERSONATION' | 'AI_ASSISTANCE' | 'COLLUSIO
   } else if (category === 'COLLUSION') {
     recommendedAction = "Escalate Investigation to Regional Lead";
     confidenceScore = 96;
-    evidenceUsed = ["Soundwave acoustic correlation", "Synchronous active tab change delays", "Cross-station cursor trajectory match"];
+    evidenceUsed = ["Spatial behavior correlation", "Synchronous active tab change delays", "Cross-station cursor trajectory match"];
     whatHappened = "Dual workstation collaborative sequence found.";
     whyItHappened = "Simultaneous question-solving cycles and matching incorrect responses indicate active side-channel peer coordination.";
   } else if (category === 'COGNITIVE') {
