@@ -1,3 +1,12 @@
+---
+title: CDT-X Operations Console
+emoji: 🛡️
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 <div align="center">
 
 # 🛡️ CDT-X Operations Console
