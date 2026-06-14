@@ -384,7 +384,7 @@ Apache 2.0 — see [LICENSE](LICENSE) for details.
 
 <div align="center">
 
-Built with ❤️ by **Harshit Ranbhare**
+Built by **Harshit Ranbhare**
 B.Tech Information Technology (AI & ML)
 
 Built for **Far Away 2026** Hackathon
