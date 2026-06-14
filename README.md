@@ -1,12 +1,3 @@
----
-title: CDT-X Operations Console
-emoji: 🛡️
-colorFrom: blue
-colorTo: indigo
-sdk: docker
-pinned: false
----
-
 <div align="center">
 
 # 🛡️ CDT-X Operations Console
@@ -357,11 +348,11 @@ CDT-X is built with privacy as a first-order constraint, not an afterthought.
 
 ## Roadmap
 
+- [x] Unit test suite for DecisionEngine and SimulationEngine (Vitest)
+- [x] TypeScript strict mode across all components
+- [x] Accessibility audit (WCAG 2.1 AA compliance)
 - [ ] Plug Python FastAPI backend into the live demo (remove Express simulation layer)
 - [ ] Add operator authentication (JWT-based login)
-- [ ] Unit test suite for DecisionEngine and SimulationEngine (Vitest)
-- [ ] TypeScript strict mode across all components
-- [ ] Accessibility audit (WCAG 2.1 AA compliance)
 - [ ] Mobile-responsive layout for tablet-based proctoring stations
 - [ ] Exportable PDF investigation reports
 - [ ] Webhook support for real-time alert push to external SIEM systems
@@ -393,7 +384,7 @@ Apache 2.0 — see [LICENSE](LICENSE) for details.
 
 <div align="center">
 
-Built with by **Harshit Ranbhare**
+Built with ❤️ by **Harshit Ranbhare**
 B.Tech Information Technology (AI & ML)
 
 Built for **Far Away 2026** Hackathon
