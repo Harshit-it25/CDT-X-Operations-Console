@@ -55,7 +55,7 @@ export default function Header({
         if (res.ok) {
           const data = await res.json();
           if (data.active_sessions) {
-            const totalActive = data.active_sessions.reduce((acc: number, s: any) => acc + s.candidatesActive, 0);
+            const totalActive = data.active_sessions.reduce((acc: number, s: { candidatesActive: number }) => acc + s.candidatesActive, 0);
             setActiveCandidateCount(totalActive);
           }
         }

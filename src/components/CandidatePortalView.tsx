@@ -172,7 +172,7 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
 
   // Auto-updating reading timers
   useEffect(() => {
-    let interval: any;
+    let interval: ReturnType<typeof setInterval>;
     if (isReadingActive && readingProgress < 100) {
       interval = setInterval(() => {
         setReadingTimer(t => t + 1);
@@ -553,7 +553,7 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
                 return (
                   <button
                     key={item.step}
-                    onClick={() => setCalibrationStep(item.step as any)}
+                    onClick={() => setCalibrationStep(item.step as 'TYPING' | 'MOUSE' | 'READING' | 'WRITING')}
                     className={`flex flex-col items-start p-2 rounded-lg border text-left transition-all relative overflow-hidden cursor-pointer ${
                       isSelected 
                         ? 'bg-[#EFF6FF] border-[#2563EB] shadow-sm' 

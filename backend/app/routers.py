@@ -135,7 +135,7 @@ def get_candidate_replay(id: str):
     profile = "normal"
     if data["scenario"] == "IMPERSONATION_THEFT":
         profile = "impersonation"
-    elif data["scenario"] == "AI_GENERATED_INTELECT":
+    elif data["scenario"] == "AI_GENERATED_INTELLECT":
         profile = "ai_assisted"
     elif data["scenario"] == "COLLUSION_R_COHORT":
         profile = "collusion"
@@ -163,7 +163,7 @@ def get_candidate_investigation(id: str):
     data = get_candidate_data(id)
     # Map category
     cat = "IMPERSONATION"
-    if data["scenario"] == "AI_GENERATED_INTELECT":
+    if data["scenario"] == "AI_GENERATED_INTELLECT":
         cat = "AI_ASSISTANCE"
     elif data["scenario"] == "COLLUSION_R_COHORT":
         cat = "COLLUSION"

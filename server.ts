@@ -3,16 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import "dotenv/config";
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import { db, SimulatedCandidate } from "./server-db";
+import { ScenarioType } from "./src/types";
 
 // Generator simulation helper functions
 function getNormalProfile(cid: string): SimulatedCandidate {
   return {
     candidateId: cid,
-    scenario: "NORMAL_BASELINE",
+    scenario: ScenarioType.NORMAL_BASELINE,
     trustScore: 94.2,
     impersonationRisk: 5.8,
     aiAssistanceRisk: 4.2,
@@ -37,7 +39,7 @@ function getNormalProfile(cid: string): SimulatedCandidate {
 function getImpersonationProfile(cid: string): SimulatedCandidate {
   return {
     candidateId: cid,
-    scenario: "IMPERSONATION_THEFT",
+    scenario: ScenarioType.IMPERSONATION_THEFT,
     trustScore: 42.4,
     impersonationRisk: 94.2,
     aiAssistanceRisk: 12.5,
@@ -63,7 +65,7 @@ function getImpersonationProfile(cid: string): SimulatedCandidate {
 function getAiAssistedProfile(cid: string): SimulatedCandidate {
   return {
     candidateId: cid,
-    scenario: "AI_GENERATED_INTELECT",
+    scenario: ScenarioType.AI_GENERATED_INTELLECT,
     trustScore: 61.2,
     impersonationRisk: 14.8,
     aiAssistanceRisk: 72.0,
@@ -88,7 +90,7 @@ function getAiAssistedProfile(cid: string): SimulatedCandidate {
 function getCollusionProfile(cid: string): SimulatedCandidate {
   return {
     candidateId: cid,
-    scenario: "COLLUSION_R_COHORT",
+    scenario: ScenarioType.COLLUSION_R_COHORT,
     trustScore: 48.0,
     impersonationRisk: 22.4,
     aiAssistanceRisk: 18.0,
@@ -115,28 +117,74 @@ function resolveCandidate(cid: string): SimulatedCandidate {
   const cached = db.getCandidate(norm_cid);
   if (cached) return cached;
   
+  db.evictOldestCandidates(200);
+  
+  // Search all candidates in db.json for any key that contains or matches norm_cid
+  const allCandidates = db.getAllCandidates();
+  const foundKey = Object.keys(allCandidates).find(key => 
+    key.toUpperCase() === norm_cid || key.toUpperCase().includes(norm_cid) || norm_cid.includes(key.toUpperCase())
+  );
+
   let candidate: SimulatedCandidate;
-  // Seed initial values to keep preview beautiful without blank screens
-  if (norm_cid.includes("ROHAN") || norm_cid.includes("AL-7712") || norm_cid.includes("89921")) {
-    candidate = getImpersonationProfile(cid);
-  } else if (norm_cid.includes("AARAV") || norm_cid.includes("1102") || norm_cid.includes("73322")) {
-    candidate = getAiAssistedProfile(cid);
-  } else if (norm_cid.includes("NEHA") || norm_cid.includes("9942") || norm_cid.includes("44112")) {
-    candidate = getCollusionProfile(cid);
+  if (foundKey) {
+    const dbCandidate = allCandidates[foundKey];
+    const scenario = dbCandidate.scenario;
+    
+    if (scenario === ScenarioType.IMPERSONATION_THEFT) {
+      candidate = getImpersonationProfile(cid);
+    } else if (scenario === ScenarioType.AI_GENERATED_INTELLECT) {
+      candidate = getAiAssistedProfile(cid);
+    } else if (scenario === ScenarioType.COLLUSION_R_COHORT) {
+      candidate = getCollusionProfile(cid);
+    } else {
+      candidate = getNormalProfile(cid);
+    }
   } else {
-    db.evictOldestCandidates(200);
     candidate = getNormalProfile(cid);
   }
+
   db.saveCandidate(norm_cid, candidate);
   return candidate;
 }
 
 
 async function startServer() {
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL environment variable is required");
+  }
+
   const app = express();
   const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
   app.use(express.json());
+
+  const OPERATOR_TOKEN = process.env.OPERATOR_TOKEN;
+  function requireAuth(req: express.Request, res: express.Response, next: express.NextFunction) {
+    if (!OPERATOR_TOKEN) return next(); // dev mode: skip
+    const auth = req.headers.authorization;
+    if (auth !== `Bearer ${OPERATOR_TOKEN}`) return res.status(401).json({ error: "Unauthorized" });
+    next();
+  }
+
+  const proxyToPython = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (!process.env.PYTHON_API_URL) return next();
+    try {
+      const targetUrl = `${process.env.PYTHON_API_URL}${req.originalUrl}`;
+      const response = await fetch(targetUrl, {
+        method: req.method,
+        headers: {
+          ...req.headers,
+          host: new URL(process.env.PYTHON_API_URL).host
+        } as any,
+        body: ["POST", "PUT", "PATCH"].includes(req.method) ? JSON.stringify(req.body) : undefined
+      });
+      const data = await response.text();
+      res.status(response.status).type(response.headers.get("content-type") || "application/json").send(data);
+    } catch (e) {
+      console.error("Proxy error:", e);
+      res.status(502).json({ error: "Bad Gateway" });
+    }
+  };
 
   // Input Sanitization Security Middleware (Prototype Pollution & Command Injection defense)
   app.param("id", (req, res, next, id) => {
@@ -161,9 +209,16 @@ async function startServer() {
   });
 
   // CORS Middleware for external SDK communication
+  const allowedOrigins = process.env.ALLOWED_ORIGINS 
+    ? process.env.ALLOWED_ORIGINS.split(",").map(o => o.trim()) 
+    : (process.env.NODE_ENV !== "production" ? ["http://localhost:5173"] : []);
+
   app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    const origin = req.headers.origin;
+    if (origin && allowedOrigins.includes(origin)) {
+      res.header("Access-Control-Allow-Origin", origin);
+    }
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
     if (req.method === "OPTIONS") {
       res.sendStatus(200);
@@ -179,7 +234,7 @@ async function startServer() {
   });
 
   app.get("/api/infrastructure/status", (req, res) => {
-    const dbUrl = process.env.DATABASE_URL || "postgresql://cdtx_admin:cdtx_secure_pass@localhost:5432/cdtx_integrity_db";
+    const dbUrl = process.env.DATABASE_URL as string;
     const redisUrl = process.env.REDIS_URL || "redis://localhost:6379/0";
 
     const maskUrl = (raw: string) => {
@@ -249,19 +304,19 @@ async function startServer() {
   });
 
   // Get Candidate Trust details
-  app.get("/api/candidate/:id/trust", (req, res) => {
+  app.get("/api/candidate/:id/trust", proxyToPython, (req, res) => {
     const cid = req.params.id;
     const candidate = resolveCandidate(cid);
     
     // Formulate explainable findings automatically
     const findings: string[] = [];
-    if (candidate.scenario === "IMPERSONATION_THEFT") {
+    if (candidate.scenario === ScenarioType.IMPERSONATION_THEFT) {
       findings.push("Typing Cadence Drift +63.5% (Severe keystroke rhythm mismatch)");
       findings.push("Mouse Fluidity Deviation +58.0% (Robotic mouse acceleration profiles)");
-    } else if (candidate.scenario === "AI_GENERATED_INTELECT") {
+    } else if (candidate.scenario === ScenarioType.AI_GENERATED_INTELLECT) {
       findings.push("Linguistic Style Shift +55.0% (Type-Token word distributions indicating AI templates)");
       findings.push("Cognitive Solves Latency Alert (Complexity matrices solved under 240ms)");
-    } else if (candidate.scenario === "COLLUSION_R_COHORT") {
+    } else if (candidate.scenario === ScenarioType.COLLUSION_R_COHORT) {
       findings.push("Answers Sequencing Correlated +88.0% (High risk coefficient matching nearby workstation)");
     } else {
       findings.push("Linguistic styles, mouse movements and flight velocity profiles perfectly aligned.");
@@ -284,13 +339,13 @@ async function startServer() {
   });
 
   // Timeline events
-  app.get("/api/candidate/:id/timeline", (req, res) => {
+  app.get("/api/candidate/:id/timeline", proxyToPython, (req, res) => {
     const candidate = resolveCandidate(req.params.id);
     res.json({ candidate_id: req.params.id, events: candidate.timeline });
   });
 
   // Digital twin baseline profile
-  app.get("/api/candidate/:id/digital-twin", (req, res) => {
+  app.get("/api/candidate/:id/digital-twin", proxyToPython, (req, res) => {
     res.json({
       id: `TWN-${req.params.id.toUpperCase()}`,
       candidate_id: req.params.id,
@@ -307,9 +362,9 @@ async function startServer() {
   app.get("/api/candidate/:id/investigation", (req, res) => {
     const candidate = resolveCandidate(req.params.id);
     let category = "IMPERSONATION";
-    if (candidate.scenario === "AI_GENERATED_INTELECT") {
+    if (candidate.scenario === ScenarioType.AI_GENERATED_INTELLECT) {
       category = "AI_ASSISTANCE";
-    } else if (candidate.scenario === "COLLUSION_R_COHORT") {
+    } else if (candidate.scenario === ScenarioType.COLLUSION_R_COHORT) {
       category = "COLLUSION";
     }
 
@@ -326,14 +381,14 @@ async function startServer() {
   });
 
   // Adjudicate verdict override
-  app.post("/api/candidate/:id/adjudicate", (req, res) => {
+  app.post("/api/candidate/:id/adjudicate", requireAuth, (req, res) => {
     const { action } = req.body;
     const candidate = resolveCandidate(req.params.id);
     
     if (action === "RESOLVED_FALSE_POSITIVE") {
       candidate.trustScore = 98.4;
       candidate.verdict = "APPROVED";
-      candidate.scenario = "NORMAL_BASELINE";
+      candidate.scenario = ScenarioType.NORMAL_BASELINE;
       candidate.impersonationRisk = 1.2;
       candidate.aiAssistanceRisk = 0.8;
       candidate.collusionRisk = 0.5;
@@ -367,14 +422,14 @@ async function startServer() {
       let y = 200 + Math.floor(Math.sin(i * 0.4) * 80);
       let vel = 180 + Math.random() * 90;
       
-      if (candidate.scenario === "IMPERSONATION_THEFT") {
+      if (candidate.scenario === ScenarioType.IMPERSONATION_THEFT) {
         x += (Math.random() > 0.5 ? 4 : -4); // Jagged jerky lines
         y += (Math.random() > 0.5 ? 2 : -2);
         vel = 750; // Script fast speed
       }
       
       cursor_paths.push({ x, y, timestamp: i * 500, velocity: vel });
-      keystroke_sequences.push({ key: String.fromCharCode(97 + Math.floor(Math.random() * 25)), hold_ms: candidate.scenario === "IMPERSONATION_THEFT" ? 3 : 75 + Math.floor(Math.random() * 20), timestamp: i * 500 });
+      keystroke_sequences.push({ key: String.fromCharCode(97 + Math.floor(Math.random() * 25)), hold_ms: candidate.scenario === ScenarioType.IMPERSONATION_THEFT ? 3 : 75 + Math.floor(Math.random() * 20), timestamp: i * 500 });
       trust_score_evolution.push({ seconds: i, trust: Math.max(0, candidate.trustScore + Math.sin(i * 0.5) * 2) });
     }
 
@@ -382,8 +437,8 @@ async function startServer() {
       id: cid,
       cursor_paths,
       keystroke_sequences,
-      navigation_path: candidate.scenario === "NORMAL_BASELINE" ? ["Q1", "Q2", "Q3", "Q4"] : ["Q1", "Q4", "Q1", "Q30"],
-      focus_changes: candidate.scenario !== "NORMAL_BASELINE" ? [{ timestamp: 8000, event: "blur" }] : [],
+      navigation_path: candidate.scenario === ScenarioType.NORMAL_BASELINE ? ["Q1", "Q2", "Q3", "Q4"] : ["Q1", "Q4", "Q1", "Q30"],
+      focus_changes: candidate.scenario !== ScenarioType.NORMAL_BASELINE ? [{ timestamp: 8000, event: "blur" }] : [],
       trust_score_evolution
     });
   });
@@ -420,25 +475,25 @@ async function startServer() {
   });
 
   // Trigger Simulators
-  app.post("/api/simulate/normal", (req, res) => {
+  app.post("/api/simulate/normal", requireAuth, (req, res) => {
     const cid = (req.body.candidate_id || "AL-7712").toUpperCase();
     db.saveCandidate(cid, getNormalProfile(cid));
     res.json({ success: true, message: `Simulator: Candidate ${cid} initialized with Normal baseline.` });
   });
 
-  app.post("/api/simulate/impersonation", (req, res) => {
+  app.post("/api/simulate/impersonation", requireAuth, (req, res) => {
     const cid = (req.body.candidate_id || "AL-7712").toUpperCase();
     db.saveCandidate(cid, getImpersonationProfile(cid));
     res.json({ success: true, message: `Simulator: Candidate ${cid} initialized as Impersonation.` });
   });
 
-  app.post("/api/simulate/ai-assisted", (req, res) => {
+  app.post("/api/simulate/ai-assisted", requireAuth, (req, res) => {
     const cid = (req.body.candidate_id || "AL-7712").toUpperCase();
     db.saveCandidate(cid, getAiAssistedProfile(cid));
     res.json({ success: true, message: `Simulator: Candidate ${cid} initialized as AI Assisted.` });
   });
 
-  app.post("/api/simulate/collusion", (req, res) => {
+  app.post("/api/simulate/collusion", requireAuth, (req, res) => {
     const cid = (req.body.candidate_id || "AL-7712").toUpperCase();
     db.saveCandidate(cid, getCollusionProfile(cid));
     res.json({ success: true, message: `Simulator: Candidate ${cid} initialized as Colluding.` });

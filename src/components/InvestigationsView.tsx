@@ -274,13 +274,16 @@ export default function InvestigationsView({
               Active Review Queue
             </h2>
 
-            <div className="space-y-1.5 max-h-[480px] overflow-y-auto custom-scrollbar pr-1">
+            <div className="space-y-1.5 max-h-[480px] overflow-y-auto custom-scrollbar pr-1" role="list" aria-label="Active review queue cases">
               {searchableCases.map((c) => {
                 const isSelected = c.id === selectedAlertId;
                 return (
                   <button
                     key={c.id}
                     onClick={() => setSelectedAlertId(c.id)}
+                    role="listitem"
+                    aria-current={isSelected ? "true" : "false"}
+                    aria-label={`Case ${c.id} for ${c.candidateName}, risk score ${c.riskScore}%`}
                     className={`w-full flex flex-col p-3 rounded-xl border text-left transition-all cursor-pointer ${
                       isSelected 
                         ? 'bg-[#EFF6FF] border-[#2563EB] shadow-sm' 
@@ -447,8 +450,11 @@ export default function InvestigationsView({
 
             {/* Behavioral Evidence Summary (Tabs) */}
             <div className="bg-white border border-[#E2E8F0] rounded-xl p-3.5 shadow-sm space-y-3 flex flex-col justify-between">
-              <div className="flex border-b border-[#F1F5F9] pb-1.5 p-0.5 bg-slate-50 rounded-lg">
+              <div className="flex border-b border-[#F1F5F9] pb-1.5 p-0.5 bg-slate-50 rounded-lg" role="tablist" aria-label="Evidence Analysis Modality">
                 <button
+                  role="tab"
+                  aria-selected={activeAnalysisTab === 'indicators'}
+                  aria-controls="indicators-panel"
                   onClick={() => setActiveAnalysisTab('indicators')}
                   className={`flex-1 text-center py-1.5 text-[11px] font-bold rounded-md transition-all cursor-pointer ${
                     activeAnalysisTab === 'indicators' ? 'bg-white text-[#2563EB] shadow-sm' : 'text-slate-500 hover:text-slate-800'
@@ -457,6 +463,9 @@ export default function InvestigationsView({
                   Indicators
                 </button>
                 <button
+                  role="tab"
+                  aria-selected={activeAnalysisTab === 'drift'}
+                  aria-controls="drift-panel"
                   onClick={() => setActiveAnalysisTab('drift')}
                   className={`flex-1 text-center py-1.5 text-[11px] font-bold rounded-md transition-all cursor-pointer ${
                     activeAnalysisTab === 'drift' ? 'bg-white text-[#2563EB] shadow-sm' : 'text-slate-500 hover:text-slate-800'
@@ -465,6 +474,9 @@ export default function InvestigationsView({
                   Drift
                 </button>
                 <button
+                  role="tab"
+                  aria-selected={activeAnalysisTab === 'timeline'}
+                  aria-controls="timeline-panel"
                   onClick={() => setActiveAnalysisTab('timeline')}
                   className={`flex-1 text-center py-1.5 text-[11px] font-bold rounded-md transition-all cursor-pointer ${
                     activeAnalysisTab === 'timeline' ? 'bg-white text-[#2563EB] shadow-sm' : 'text-slate-500 hover:text-slate-800'
@@ -474,7 +486,7 @@ export default function InvestigationsView({
                 </button>
               </div>
 
-              <div className="min-h-[140px] flex-grow flex flex-col justify-center">
+              <div className="min-h-[140px] flex-grow flex flex-col justify-center" aria-live="polite">
                 {activeAnalysisTab === 'indicators' && (
                   <div className="space-y-2 font-sans text-[11px]">
                     <div className="p-1.5 bg-blue-50 border border-blue-100 rounded-lg">
@@ -629,6 +641,7 @@ export default function InvestigationsView({
                     type="text"
                     value={noteValue}
                     onChange={(e) => setNoteValue(e.target.value)}
+                    aria-label="Append compliance note"
                     className="flex-1 bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg px-2 py-1 text-xs text-[#0F172A] focus:outline-none placeholder-slate-400 text-[11px]"
                     placeholder="Append compliance note..."
                     onKeyDown={(e) => {
@@ -637,6 +650,7 @@ export default function InvestigationsView({
                   />
                   <button
                     onClick={handleSaveNote}
+                    aria-label="Save compliance note"
                     className="px-2 bg-[#2563EB] hover:bg-blue-700 text-white font-bold rounded-lg text-xs flex items-center justify-center cursor-pointer shadow-sm transition-all text-[11px] leading-none"
                   >
                     Save

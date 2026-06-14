@@ -135,7 +135,7 @@ class CDTIntegritySimulator:
         
         return {
             "candidate_id": candidate_id,
-            "scenario": "AI_GENERATED_INTELECT",
+            "scenario": "AI_GENERATED_INTELLECT",
             "trust_score": round(max(35.0, w_avg), 1),
             "impersonation_risk": round(100.0 - (typing_match * 0.6 + mouse_match * 0.4), 1),
             "ai_assistance_risk": round(100.0 - (writing_match * 0.6 + cognitive_match * 0.4), 1),

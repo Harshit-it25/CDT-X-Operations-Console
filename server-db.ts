@@ -1,10 +1,11 @@
 import fs from "fs";
 import path from "path";
+import { ScenarioType } from "./src/types";
 
 // Standard types
 export interface SimulatedCandidate {
   candidateId: string;
-  scenario: string;
+  scenario: ScenarioType;
   trustScore: number;
   impersonationRisk: number;
   aiAssistanceRisk: number;
@@ -25,6 +26,8 @@ interface DatabaseSchema {
   candidates: Record<string, SimulatedCandidate>;
   logs: AuditLog[];
 }
+
+let writeQueue: Promise<void> = Promise.resolve();
 
 class FileDatabase {
   private dbPath: string;
@@ -60,20 +63,29 @@ class FileDatabase {
       candidates: {},
       logs: []
     };
-    this.saveDatabaseImmediately(defaultStructure);
+    this.queueSave(defaultStructure);
     return defaultStructure;
   }
 
-  private saveDatabaseImmediately(data: DatabaseSchema) {
-    const tempPath = `${this.dbPath}.tmp`;
-    try {
-      fs.writeFileSync(tempPath, JSON.stringify(data, null, 2), "utf-8");
-      fs.renameSync(tempPath, this.dbPath);
-    } catch (err) {
-      console.error("[Database] Atomic write failed:", err);
-      // Fallback
-      fs.writeFileSync(this.dbPath, JSON.stringify(data, null, 2), "utf-8");
-    }
+  private queueSave(data: DatabaseSchema) {
+    const serialized = JSON.stringify(data, null, 2);
+    writeQueue = writeQueue.then(async () => {
+      const tempPath = `${this.dbPath}.tmp`;
+      try {
+        await fs.promises.writeFile(tempPath, serialized, "utf-8");
+        await fs.promises.rename(tempPath, this.dbPath);
+      } catch (err) {
+        console.error("[Database] Atomic write failed:", err);
+        // Fallback
+        try {
+          await fs.promises.writeFile(this.dbPath, serialized, "utf-8");
+        } catch (fallbackErr) {
+          console.error("[Database] Fallback write failed:", fallbackErr);
+        }
+      }
+    }).catch(err => {
+      console.error("[Database] Write queue error:", err);
+    });
   }
 
   // API Methods
@@ -85,7 +97,7 @@ class FileDatabase {
   public saveCandidate(id: string, candidate: SimulatedCandidate): void {
     const norm = id.toUpperCase();
     this.cachedData.candidates[norm] = candidate;
-    this.saveDatabaseImmediately(this.cachedData);
+    this.queueSave(this.cachedData);
   }
 
   public evictOldestCandidates(maxLimit: number = 200) {
@@ -95,7 +107,7 @@ class FileDatabase {
       const keyToEvict = keys.find(key => !coreKeys.some(ck => key.includes(ck)));
       if (keyToEvict) {
         delete this.cachedData.candidates[keyToEvict];
-        this.saveDatabaseImmediately(this.cachedData);
+        this.queueSave(this.cachedData);
       }
     }
   }
@@ -112,7 +124,7 @@ class FileDatabase {
     if (this.cachedData.logs.length > 1000) {
       this.cachedData.logs.pop();
     }
-    this.saveDatabaseImmediately(this.cachedData);
+    this.queueSave(this.cachedData);
   }
 
   public getLogs(): AuditLog[] {

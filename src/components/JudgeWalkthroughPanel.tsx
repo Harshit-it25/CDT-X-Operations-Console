@@ -25,7 +25,7 @@ interface Step {
   title: string;
   desc: string;
   tab: ActiveTab;
-  icon: any;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
   action: (utils: {
     setActiveTab: (tab: ActiveTab) => void;
     handleScenarioSelect: (sc: 'NORMAL' | 'IMPERSONATION' | 'AI_ASSISTED' | 'COLLUSION') => void;

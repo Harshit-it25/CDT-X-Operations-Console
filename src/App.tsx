@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useReducer } from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import ControlRoomView from './components/ControlRoomView';
@@ -356,11 +356,52 @@ export default function App() {
     }
   };
   
-  const [alerts, setAlerts] = useState<SecurityAlert[]>(() => 
-    initialAlerts.map((alert, idx) => initializeAlertIntelligence(alert, idx))
-  );
-  const [sessions, setSessions] = useState<ExamSession[]>(initialSessions);
-  const [ledgerEntries, setLedgerEntries] = useState<LedgerEntry[]>(initialLedgerEntries);
+  type AppState = {
+    alerts: SecurityAlert[];
+    sessions: ExamSession[];
+    ledgerEntries: LedgerEntry[];
+  };
+
+  type AppAction = 
+    | { type: 'TICK'; payload: { alerts: SecurityAlert[]; ledger: LedgerEntry[]; sessions: ExamSession[] } }
+    | { type: 'SET_ALERTS'; payload: SecurityAlert[] | ((prev: SecurityAlert[]) => SecurityAlert[]) }
+    | { type: 'SET_SESSIONS'; payload: ExamSession[] | ((prev: ExamSession[]) => ExamSession[]) }
+    | { type: 'SET_LEDGER_ENTRIES'; payload: LedgerEntry[] | ((prev: LedgerEntry[]) => LedgerEntry[]) };
+
+  const appReducer = (state: AppState, action: AppAction): AppState => {
+    switch (action.type) {
+      case 'TICK':
+        return {
+          ...state,
+          alerts: action.payload.alerts,
+          ledgerEntries: action.payload.ledger,
+          sessions: action.payload.sessions,
+        };
+      case 'SET_ALERTS':
+        return { ...state, alerts: typeof action.payload === 'function' ? action.payload(state.alerts) : action.payload };
+      case 'SET_SESSIONS':
+        return { ...state, sessions: typeof action.payload === 'function' ? action.payload(state.sessions) : action.payload };
+      case 'SET_LEDGER_ENTRIES':
+        return { ...state, ledgerEntries: typeof action.payload === 'function' ? action.payload(state.ledgerEntries) : action.payload };
+      default:
+        return state;
+    }
+  };
+
+  const [appState, dispatch] = useReducer(appReducer, {
+    alerts: initialAlerts.map((alert, idx) => initializeAlertIntelligence(alert, idx)),
+    sessions: initialSessions,
+    ledgerEntries: initialLedgerEntries,
+  });
+
+  const alerts = appState.alerts;
+  const sessions = appState.sessions;
+  const ledgerEntries = appState.ledgerEntries;
+
+  const setAlerts = (payload: SecurityAlert[] | ((prev: SecurityAlert[]) => SecurityAlert[])) => dispatch({ type: 'SET_ALERTS', payload });
+  const setSessions = (payload: ExamSession[] | ((prev: ExamSession[]) => ExamSession[])) => dispatch({ type: 'SET_SESSIONS', payload });
+  const setLedgerEntries = (payload: LedgerEntry[] | ((prev: LedgerEntry[]) => LedgerEntry[])) => dispatch({ type: 'SET_LEDGER_ENTRIES', payload });
+
   const [centers, setCenters] = useState<TestingCenter[]>(initialCenters);
   const [notes, setNotes] = useState<AuditorNote[]>(initialNotes);
   const [selectedAlertId, setSelectedAlertId] = useState<string>('AL-7712');
@@ -375,7 +416,7 @@ export default function App() {
       setLiveClockTime(`UTC ${timeString}`);
     };
     updateTime();
-    const timerId = setInterval(updateTime, 1000);
+    const timerId = setInterval(updateTime, 1000) as ReturnType<typeof setInterval>;
     return () => clearInterval(timerId);
   }, []);
 
@@ -384,6 +425,9 @@ export default function App() {
 
   const ledgerEntriesRef = useRef(ledgerEntries);
   ledgerEntriesRef.current = ledgerEntries;
+
+  const sessionsRef = useRef(sessions);
+  sessionsRef.current = sessions;
 
   // CDT-X Central Inteligency Simulation Engine Background Thread
   useEffect(() => {
@@ -394,7 +438,7 @@ export default function App() {
 
     let secondsElapsedSinceAlert = 0;
     let active = true;
-    let timerId: any = null;
+    let timerId: ReturnType<typeof setTimeout> | null = null;
 
     const tick = () => {
       if (!active) return;
@@ -403,6 +447,7 @@ export default function App() {
       // Local copy of current synchronous values to prevent React double updates / side effect runs
       let nextAlerts = [...alertsRef.current];
       let nextLedger = [...ledgerEntriesRef.current];
+      let nextSessions = [...sessionsRef.current];
 
       // 1. Generate live events when state threshold matches frequency
       if (secondsElapsedSinceAlert >= expectedInterval) {
@@ -426,7 +471,7 @@ export default function App() {
       }
 
       // 3. Mutate testing seats KPI counts and active centers/sessions
-      setSessions(prevSessions => mutateSessions(prevSessions, currentScenario));
+      nextSessions = mutateSessions(nextSessions, currentScenario);
       updateKPIFluctuations(currentScenario);
 
       // 4. Advance decision intelligence lifecycle
@@ -440,9 +485,8 @@ export default function App() {
         nextLedger = [...filteredNewLedgerEntries, ...nextLedger].slice(0, 50);
       }
 
-      // 5. Update React states exactly once per tick
-      setAlerts(nextAlerts);
-      setLedgerEntries(nextLedger);
+      // 5. Update React states exactly once per tick using reducer
+      dispatch({ type: 'TICK', payload: { alerts: nextAlerts, ledger: nextLedger, sessions: nextSessions } });
 
       // Re-schedule with standard randomized interval variance as requested (randomized jitter)
       const randomDelay = 800 + Math.random() * 400; // ~1s with slight jitter
