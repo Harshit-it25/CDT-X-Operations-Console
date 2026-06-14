@@ -124,9 +124,9 @@ const pipelineNodes: ArchNode[] = [
   },
   {
     id: "profile",
-    name: "Digital Behavior Profile",
-    label: "Latent Identity Twin Creation",
-    valueSentence: "Compiles features into a continuous multi-dimensional cryptographic identity twin.",
+    name: "Behavioral Identity Profile",
+    label: "Latent Profile Creation",
+    valueSentence: "Compiles features into a continuous multi-dimensional cryptographic identity profile.",
     inputs: [
       "Extracted flight-time matrices",
       "Bezier spline coefficient vectors"
@@ -141,7 +141,7 @@ const pipelineNodes: ArchNode[] = [
       "Cross-modal behavioral attention maps",
       "Calibration baseline coordinate embeddings"
     ],
-    structures: `struct CryptographicTwinEmbedding {
+    structures: `struct CryptographicIdentityEmbedding {
   float profile_vector_512[512];
   double baseline_fit_entropy;
   uint8_t calibration_version;
@@ -289,7 +289,7 @@ export default function ArchitectureCenterView() {
         <span>➔</span>
         <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Feature Extraction</span>
         <span>➔</span>
-        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Digital Twin</span>
+        <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-slate-800 font-bold">Identity Profile</span>
         <span>➔</span>
         <span className="bg-white border border-[#E2E8F0] px-2 py-0.5 rounded-lg text-[#2563EB] font-bold">Trust Engine</span>
         <span>➔</span>

@@ -11,7 +11,7 @@ from app.schemas import (
     SuccessResponse,
     BehaviorEventCreate,
     RiskScoreResponse,
-    DigitalTwinResponse,
+    BehavioralIdentityProfileResponse,
     InvestigationResponse,
     TimelineEventResponse,
     ReplayResponse,
@@ -93,7 +93,7 @@ def submit_exam(payload: Dict[str, Any]):
     candidate_id = payload.get("candidate_id", "USR_DEFAULT")
     return {
         "success": True,
-        "message": f"Exam session finalized. Biometric digital twin channel for Candidate {candidate_id} closed."
+        "message": f"Exam session finalized. Biometric behavioral identity profile channel for Candidate {candidate_id} closed."
     }
 
 
@@ -144,8 +144,8 @@ def get_candidate_replay(id: str):
     return replay
 
 
-@api_router.get("/candidate/{id}/digital-twin", tags=["Digital Twin"], response_model=DigitalTwinResponse)
-def get_candidate_digital_twin(id: str):
+@api_router.get("/candidate/{id}/behavioral-identity-profile", tags=["Behavioral Identity Profile"], response_model=BehavioralIdentityProfileResponse)
+def get_candidate_behavioral_identity_profile(id: str):
     return {
         "id": f"TWN-{id}",
         "candidate_id": id,
@@ -267,11 +267,11 @@ def trigger_collusion_simulation(payload: Dict[str, Any]):
 def get_system_architecture():
     return {
         "system_name": "CDT-X Behavioral Continuous Authentication Architecture",
-        "description": "Continuous multi-agent intelligence pipeline correlating somatic mouse/keystroke coordinates into Digital Twin match curves.",
+        "description": "Continuous multi-agent intelligence pipeline correlating somatic mouse/keystroke coordinates into Behavioral Identity Profile match curves.",
         "layers": [
             {"step": 1, "name": "Telemetry Client-In", "payload": "Coordinates, Milliseconds timings, keys buffers"},
             {"step": 2, "name": "Feature Extract Service", "payload": "Hold times, flight speed, type-token vocabulary density coefficient"},
-            {"step": 3, "name": "Digital Twin Engine", "payload": "512-dimensional embedding Euclidean/Cosine alignments vector space"},
+            {"step": 3, "name": "Behavioral Identity Engine", "payload": "512-dimensional embedding Euclidean/Cosine alignments vector space"},
             {"step": 4, "name": "Multi-Agent Neural Array", "payload": "Decoupled evaluations of typing, mouse, nav, cognitive, stylometric and collusion signatures"},
             {"step": 5, "name": "Consensus Scoring Engine", "payload": "Weighted decision aggregation, trust calculations, anomaly alerts classification"},
             {"step": 6, "name": "Auditor Cryptledger", "payload": "Immutable compliance block logging hashing verification records"}

@@ -80,11 +80,11 @@ export default function CommandPalette({ isOpen, onClose, onSelectAction }: Comm
     },
     {
       id: 'act-4',
-      title: 'Export Regulatory Dossier Report',
+      title: 'Export Behavioral Identity Dossier Report',
       subtitle: 'Download complete continuous validation logs',
       category: 'ACTIONS',
       icon: <FileText className="w-4 h-4 text-indigo-600" />,
-      tab: ActiveTab.DIGITAL_TWIN,
+      tab: ActiveTab.BEHAVIORAL_IDENTITY_PROFILE,
     },
     {
       id: 'act-5',
@@ -102,7 +102,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectAction }: Comm
       subtitle: 'ID: USR_89921_ROHAN • Station: SOL-01 #18 • High Risk',
       category: 'CANDIDATES',
       icon: <User className="w-4 h-4 text-rose-600" />,
-      tab: ActiveTab.DIGITAL_TWIN,
+      tab: ActiveTab.BEHAVIORAL_IDENTITY_PROFILE,
       candidateId: 'USR_89921_ROHAN',
       alertId: 'AL-7712',
       scenario: 'IMPERSONATION'
@@ -113,7 +113,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectAction }: Comm
       subtitle: 'ID: USR_73322_AARAV • Station: HYD-02 #06 • High Risk',
       category: 'CANDIDATES',
       icon: <User className="w-4 h-4 text-amber-600" />,
-      tab: ActiveTab.DIGITAL_TWIN,
+      tab: ActiveTab.BEHAVIORAL_IDENTITY_PROFILE,
       candidateId: 'USR_73322_AARAV',
       alertId: 'AL-1102',
       scenario: 'AI_ASSISTED'
@@ -124,7 +124,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectAction }: Comm
       subtitle: 'ID: USR_44112_NEHA • Station: PUN-03 #15 • High Risk',
       category: 'CANDIDATES',
       icon: <User className="w-4 h-4 text-amber-600" />,
-      tab: ActiveTab.DIGITAL_TWIN,
+      tab: ActiveTab.BEHAVIORAL_IDENTITY_PROFILE,
       candidateId: 'USR_44112_NEHA',
       alertId: 'AL-9942',
       scenario: 'COLLUSION'
@@ -135,7 +135,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectAction }: Comm
       subtitle: 'ID: USR_00122_SIDD • Station: MUM-01 #22 • Verified',
       category: 'CANDIDATES',
       icon: <User className="w-4 h-4 text-emerald-600" />,
-      tab: ActiveTab.DIGITAL_TWIN,
+      tab: ActiveTab.BEHAVIORAL_IDENTITY_PROFILE,
       candidateId: 'USR_00122_SIDD',
       alertId: 'AL-5510',
       scenario: 'NORMAL'

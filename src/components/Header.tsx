@@ -174,11 +174,11 @@ export default function Header({
           placeholder: 'Search pipeline layers, nodes, inputs...',
           subtitle: 'Interactive BFM Pipeline & Processing Canvas'
         };
-      case ActiveTab.DIGITAL_TWIN:
+      case ActiveTab.BEHAVIORAL_IDENTITY_PROFILE:
         return {
-          title: 'Digital Behavior Profile Explorer',
+          title: 'Behavioral Identity Profile Explorer',
           placeholder: 'Search candidate name, biometric ID...',
-          subtitle: 'Continuous Biometric Profiling & Similarity'
+          subtitle: 'Continuous Behavioral Profiling & Similarity'
         };
       case ActiveTab.INVESTIGATIONS:
         return {

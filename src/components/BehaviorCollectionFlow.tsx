@@ -24,7 +24,7 @@ export default function BehaviorCollectionFlow({ currentStage = 4 }: BehaviorCol
     { name: "Student Device", desc: "Local keystroke & mouse interrupts", icon: Laptop },
     { name: "Raw Events", desc: "Timestamped coordinate packets", icon: Radio },
     { name: "Feature Extraction", desc: "Bezier spline & dwell metrics", icon: Sliders },
-    { name: "Digital Twin", desc: "512D muscle memory baseline", icon: Fingerprint },
+    { name: "Identity Profile", desc: "512D muscle memory baseline", icon: Fingerprint },
     { name: "Trust Engine", desc: "Bayesian anomaly classification", icon: Brain },
     { name: "Investigation", desc: "Forensic dashboard verification", icon: Search },
     { name: "Audit Ledger", desc: "Legally defensible signed logs", icon: ScrollText }

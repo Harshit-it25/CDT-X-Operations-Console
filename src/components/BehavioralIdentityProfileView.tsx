@@ -66,7 +66,7 @@ interface CandidateProfile {
   }[];
 }
 
-export default function DigitalTwinExplorerView() {
+export default function BehavioralIdentityProfileView() {
   const cohorts: CandidateProfile[] = [
     {
       id: "USR_89921_ROHAN",
@@ -437,7 +437,7 @@ export default function DigitalTwinExplorerView() {
                   ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
                   : 'text-blue-700 bg-blue-50 border-blue-200 animate-pulse'
               }`}>
-                {calibrationDone ? 'Digital Twin Generated' : 'Behavior Baseline Collection'}
+                {calibrationDone ? 'Behavioral Identity Profile Generated' : 'Behavior Baseline Collection'}
               </span>
             </div>
 
@@ -620,7 +620,7 @@ export default function DigitalTwinExplorerView() {
 
         </div>
 
-        {/* RIGHT COLUMN: TIMELINE STREAM & TWIN CALIBRATION DETAIL (4/12) */}
+        {/* RIGHT COLUMN: TIMELINE STREAM & PROFILE CALIBRATION DETAIL (4/12) */}
         <div className="xl:col-span-4 space-y-6">
           
           {/* Live Behavior Evidence Panel */}
@@ -863,11 +863,11 @@ export default function DigitalTwinExplorerView() {
             <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block text-center">40/512 behavior profile features verified</span>
           </div>
 
-          {/* Digital Twin generation pipeline */}
+          {/* Behavioral Identity Profile generation pipeline */}
           <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
             <h3 className="text-xs font-black text-[#0F172A] font-sans tracking-wide uppercase mb-3.5 flex items-center gap-2">
               <Zap className="w-4 h-4 text-[#2563EB]" />
-              Digital Twin Creation Flow
+              Behavioral Identity Profile Creation Flow
             </h3>
 
             <div className="relative pl-6 space-y-4 text-xs text-[#475569]">
@@ -879,14 +879,14 @@ export default function DigitalTwinExplorerView() {
                 { name: "Behavior Collection", desc: "Continuous signal capture of mouse & key sequences", icon: Radio },
                 { name: "Feature Extraction (Vector Space Details)", desc: "Transforms raw coordinate streams into vector matrices", icon: Sliders },
                 { name: "Behavior Profile", desc: "Integrates spatial/temporal parameters to Behavior Profile similarity space", icon: Cpu },
-                { name: "Digital Twin Creation", desc: "Compiles a verified, hardened behavioral model", icon: Fingerprint },
+                { name: "Profile Creation", desc: "Compiles a verified, hardened behavioral model", icon: Fingerprint },
                 { name: "Trust Intelligence", desc: "Continuous Bayesian model threat analysis check", icon: Brain },
-                { name: "Continuous Verification", desc: "Cross-checks live streams against verified twin", icon: ShieldCheck }
+                { name: "Continuous Verification", desc: "Cross-checks live streams against verified profile", icon: ShieldCheck }
               ].map((step, idx) => {
                 const Icon = step.icon;
                 // Highlight active stages based on selected candidate risk / status
                 const isApproved = selectedStudent.verdict === 'APPROVED';
-                const isActive = isApproved ? true : idx < 5; // if terminated/review, highlight up to twin creation
+                const isActive = isApproved ? true : idx < 5; // if terminated/review, highlight up to profile creation
                 const dotColor = isApproved ? 'bg-emerald-500 text-white border-emerald-600' : isActive ? 'bg-blue-500 text-white border-blue-600' : 'bg-slate-100 text-slate-400 border-slate-200';
                 
                 return (

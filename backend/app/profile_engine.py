@@ -1,5 +1,5 @@
 """
-CDT-X Digital Twin Alignment & Feature Embedding Engine.
+CDT-X Behavioral Profile Alignment & Feature Embedding Engine.
 Handles cosine similarity calculations, 512-dimensional vectorization emulation,
 baseline identity profile consolidation, and real-time behavioral drift tracking.
 """
@@ -8,9 +8,9 @@ import math
 import random
 from typing import List, Dict, Any, Tuple
 
-class DigitalTwinEngine:
+class BehavioralProfileEngine:
     """
-    Continuous Behavioral Digital Twin vector space modeling engine.
+    Continuous Behavioral Identity Profile vector space modeling engine.
     Computes profile similarity thresholds.
     """
 

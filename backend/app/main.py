@@ -1,5 +1,5 @@
 """
-CDT-X: Behavioral Digital Twin Examination Integrity Platform
+CDT-X: Behavioral Identity Profile Examination Integrity Platform
 FastAPI Application Entry Point
 """
 
@@ -13,7 +13,7 @@ from app.routers import api_router
 app = FastAPI(
     title="CDT-X Behavioral Integrity Engine",
     description=(
-        "Production-grade Cognitive Digital Twin Integrity platform API. "
+        "Production-grade Cognitive Behavioral Identity Profile Integrity platform API. "
         "Continuously evaluates student physical keystroke/mouse/navigation telemetry "
         "against historical identity signatures via multi-agent intelligence."
     ),

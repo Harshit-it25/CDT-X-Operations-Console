@@ -88,8 +88,8 @@ class BehaviorEventResponse(BaseModel):
         from_attributes = True
 
 
-# --- Twin Engine / Biometric Embeddings Schemas ---
-class DigitalTwinResponse(BaseModel):
+# --- Behavioral Identity Profile / Biometric Embeddings Schemas ---
+class BehavioralIdentityProfileResponse(BaseModel):
     id: str
     candidate_id: str
     similarity_threshold: float

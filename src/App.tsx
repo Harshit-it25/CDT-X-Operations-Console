@@ -10,7 +10,7 @@ import ControlRoomView from './components/ControlRoomView';
 import InvestigationsView from './components/InvestigationsView';
 import AuditLedgerView from './components/AuditLedgerView';
 import CenterManagementView from './components/CenterManagementView';
-import DigitalTwinExplorerView from './components/DigitalTwinExplorerView';
+import BehavioralIdentityProfileView from './components/BehavioralIdentityProfileView';
 import SettingsView from './components/SettingsView';
 import EvaluationBenchmarkView from './components/EvaluationBenchmarkView';
 import BehaviorReplayView from './components/BehaviorReplayView';
@@ -720,8 +720,8 @@ export default function App() {
             updateCenterStatus={updateCenterStatus}
           />
         );
-      case ActiveTab.DIGITAL_TWIN:
-        return <DigitalTwinExplorerView />;
+      case ActiveTab.BEHAVIORAL_IDENTITY_PROFILE:
+        return <BehavioralIdentityProfileView />;
       case ActiveTab.BEHAVIOR_REPLAY:
         return <BehaviorReplayView />;
       case ActiveTab.EVALUATION:

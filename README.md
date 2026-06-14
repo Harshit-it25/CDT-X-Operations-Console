@@ -16,7 +16,7 @@
 
 ## What is CDT-X?
 
-CDT-X is an enterprise-grade **examination integrity and behavioral forensics platform**. Instead of relying on invasive webcam proctoring, it builds a continuous **Digital Twin** of each candidate — a behavioral fingerprint derived from keystroke dynamics, mouse trajectories, cognitive response latency, and linguistic stylometry — and flags deviations in real time.
+CDT-X is an enterprise-grade **examination integrity and behavioral forensics platform**. Instead of relying on invasive webcam proctoring, it builds a continuous **Behavioral Identity Profile** of each candidate — a behavioral fingerprint derived from keystroke dynamics, mouse trajectories, cognitive response latency, and linguistic stylometry — and flags deviations in real time.
 
 No camera. No privacy invasion. Just math.
 
@@ -56,7 +56,7 @@ The **Judge Walkthrough Panel** (bottom-right on any view) guides you through th
 ## Core Capabilities
 
 ### 🧬 Behavioral Fingerprinting
-Captures and continuously compares six biometric channels against the candidate's registered Digital Twin baseline:
+Captures and continuously compares six biometric channels against the candidate's registered Behavioral Identity Profile baseline:
 
 - **Keystroke Dynamics** — dwell time, flight time, inter-key intervals
 - **Mouse Dynamics** — Bézier curvature, angular velocity, jerk coefficient
@@ -69,7 +69,7 @@ Captures and continuously compares six biometric channels against the candidate'
 Six decoupled agents run independently and feed a **Consensus Scoring Engine** that produces a weighted Trust Score. No single agent can trigger a flag alone — the system requires corroborating evidence across channels.
 
 ```
-Telemetry In → Feature Extraction → Digital Twin Match → Agent Array → Consensus → Audit Log
+Telemetry In → Feature Extraction → Behavioral Identity Profile Match → Agent Array → Consensus → Audit Log
 ```
 
 ### 🔬 Forensic Investigation Desk
@@ -98,10 +98,10 @@ A full simulation of what the candidate sees — enrollment, biometric calibrati
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                  Browser (React 19)                  │
-│  Control Room │ Investigations │ Digital Twin │ ...  │
-└──────────────────────┬──────────────────────────────┘
+┌───────────────────────────────────────────────────────────┐
+│                     Browser (React 19)                    │
+│  Control Room │ Investigations │ Behavioral Profile │ ... │
+└───────────────────────────────────────────────────────────┘
                        │ REST API
 ┌──────────────────────▼──────────────────────────────┐
 │            Express / TypeScript Server               │
@@ -214,7 +214,7 @@ cdt-x-operations-console/
 │   │   ├── InvestigationsView.tsx    # Forensic investigation desk
 │   │   ├── AuditLedgerView.tsx       # Immutable audit log
 │   │   ├── CandidatePortalView.tsx   # Candidate-facing portal & SDK demo
-│   │   ├── DigitalTwinExplorerView.tsx
+│   │   ├── BehavioralIdentityProfileView.tsx
 │   │   ├── BehaviorReplayView.tsx
 │   │   ├── BoardroomDashboardView.tsx
 │   │   ├── JudgeWalkthroughPanel.tsx # Hackathon demo guide
@@ -235,7 +235,7 @@ cdt-x-operations-console/
 │   │   ├── routers.py                # FastAPI route handlers
 │   │   ├── services.py               # Business logic
 │   │   ├── simulator.py              # Scenario simulation
-│   │   └── twin_engine.py            # Digital twin matching
+│   │   └── profile_engine.py         # Behavioral profile matching
 │   ├── requirements.txt
 │   └── docker-compose.yml
 ├── data/
@@ -271,11 +271,11 @@ POST /api/behavior/event      { candidate_id, event_type, payload }
 ### Candidate Intelligence
 
 ```
-GET /api/candidate/:id/trust          Trust score + primary findings
-GET /api/candidate/:id/timeline       Chronological event timeline
-GET /api/candidate/:id/digital-twin   Baseline biometric profile
-GET /api/candidate/:id/investigation  Investigation brief
-GET /api/candidate/:id/replay         Cursor path + keystroke replay data
+GET /api/candidate/:id/trust                  Trust score + primary findings
+GET /api/candidate/:id/timeline               Chronological event timeline
+GET /api/candidate/:id/behavioral-identity-profile   Baseline biometric profile
+GET /api/candidate/:id/investigation          Investigation brief
+GET /api/candidate/:id/replay                 Cursor path + keystroke replay data
 ```
 
 ### Adjudication *(requires OPERATOR_TOKEN in production)*

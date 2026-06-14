@@ -22,7 +22,7 @@ import {
 import DemoSnapshotCard from './DemoSnapshotCard';
 import ArchitectureCenterView from './ArchitectureCenterView';
 import EvaluationBenchmarkView from './EvaluationBenchmarkView';
-import DigitalTwinExplorerView from './DigitalTwinExplorerView';
+import BehavioralIdentityProfileView from './BehavioralIdentityProfileView';
 import SyntheticGeneratorView from './SyntheticGeneratorView';
 
 interface WhyCdtxViewProps {
@@ -302,7 +302,7 @@ export default function WhyCdtxView({
                 <div className="border border-[#F1F5F9] rounded-lg overflow-hidden min-h-[300px]">
                   {activeTechTab === 'architecture' && <ArchitectureCenterView />}
                   {activeTechTab === 'validation' && <EvaluationBenchmarkView />}
-                  {activeTechTab === 'research' && <DigitalTwinExplorerView />}
+                  {activeTechTab === 'research' && <BehavioralIdentityProfileView />}
                   {activeTechTab === 'simulation' && <SyntheticGeneratorView />}
                 </div>
 

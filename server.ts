@@ -344,8 +344,8 @@ async function startServer() {
     res.json({ candidate_id: req.params.id, events: candidate.timeline });
   });
 
-  // Digital twin baseline profile
-  app.get("/api/candidate/:id/digital-twin", proxyToPython, (req, res) => {
+  // Behavioral identity baseline profile
+  app.get("/api/candidate/:id/behavioral-identity-profile", proxyToPython, (req, res) => {
     res.json({
       id: `TWN-${req.params.id.toUpperCase()}`,
       candidate_id: req.params.id,
@@ -503,11 +503,11 @@ async function startServer() {
   app.get("/api/architecture", (req, res) => {
     res.json({
       system_name: "CDT-X Behavioral Continuous Authentication Architecture",
-      description: "Continuous multi-agent intelligence pipeline correlating somatic mouse/keystroke coordinates into Digital Twin match curves.",
+      description: "Continuous multi-agent intelligence pipeline correlating somatic mouse/keystroke coordinates into Behavioral Identity Profile match curves.",
       layers: [
         { step: 1, name: "Telemetry Client-In", payload: "Coordinates, Milliseconds timings, key press ranges" },
         { step: 2, name: "Feature Extract Service", payload: "Hold times, flight speed, type-token vocabulary density coefficient" },
-        { step: 3, name: "Digital Twin Engine", payload: "512-dimensional embedding Euclidean/Cosine alignments vector space" },
+        { step: 3, name: "Behavioral Identity Engine", payload: "512-dimensional embedding Euclidean/Cosine alignments vector space" },
         { step: 4, name: "Multi-Agent Neural Array", payload: "Decoupled evaluations of typing, mouse, nav, cognitive, stylometric and collusion signatures" },
         { step: 5, name: "Consensus Scoring Engine", payload: "Weighted decision aggregation, trust calculations, anomaly alerts classification" },
         { step: 6, name: "Auditor Cryptledger", payload: "Immutable compliance block logging hashing verification records" }

@@ -185,7 +185,7 @@ export default function BoardroomDashboardView() {
                   </div>
                 </div>
 
-                {/* CDT-X Digital Twin Expenses */}
+                {/* CDT-X Behavioral Identity Profile Expenses */}
                 <div className="space-y-1.5">
                   <div className="flex justify-between text-xs font-mono font-bold">
                     <span className="text-[#2563EB]">CDT-X CONTINUOUS BIOMETRIC MODEL PASSIVE AUDITING</span>

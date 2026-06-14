@@ -34,7 +34,7 @@ class Candidate(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationships
-    digital_twins = relationship("DigitalTwin", back_populates="candidate")
+    behavioral_identity_profiles = relationship("BehavioralIdentityProfile", back_populates="candidate")
     risk_scores = relationship("RiskScore", back_populates="candidate")
     investigations = relationship("Investigation", back_populates="candidate")
     embeddings = relationship("BehaviorEmbedding", back_populates="candidate")
@@ -89,9 +89,9 @@ class BehaviorEmbedding(Base):
     candidate = relationship("Candidate", back_populates="embeddings")
 
 
-class DigitalTwin(Base):
+class BehavioralIdentityProfile(Base):
     """The aggregate reference baseline representing a student's optimal behavioral pattern."""
-    __tablename__ = "digital_twins"
+    __tablename__ = "behavioral_identity_profiles"
 
     id = Column(String, primary_key=True, index=True)
     candidate_id = Column(String, ForeignKey("candidates.id"), unique=True, nullable=False)
@@ -106,7 +106,7 @@ class DigitalTwin(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationships
-    candidate = relationship("Candidate", back_populates="digital_twins")
+    candidate = relationship("Candidate", back_populates="behavioral_identity_profiles")
 
 
 class RiskScore(Base):
@@ -204,7 +204,7 @@ class ReplaySession(Base):
 
 
 class AuditLog(Base):
-    """Immutable record logs stamped into the regulatory digital-twin system ledger."""
+    """Immutable record logs stamped into the regulatory behavioral-identity-profile system ledger."""
     __tablename__ = "audit_logs"
 
     id = Column(String, primary_key=True, index=True)  # e.g., LG-001

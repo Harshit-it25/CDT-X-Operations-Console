@@ -10,7 +10,7 @@ Features:
 import math
 import random
 from typing import Dict, List, Any
-from app.twin_engine import DigitalTwinEngine
+from app.profile_engine import BehavioralProfileEngine
 
 
 class BehaviorCollectionService:
@@ -46,14 +46,14 @@ class FeatureExtractionService:
         """
         Calculates hold time, flight time, and speed (WPM).
         """
-        return DigitalTwinEngine.extract_typing_fingerprint(raw_keystore_logs)
+        return BehavioralProfileEngine.extract_typing_fingerprint(raw_keystore_logs)
 
     @staticmethod
     def compile_mouse_features(raw_mouse_logs: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
         Calculates acceleration vectors, clicks profiles, and hover delays.
         """
-        return DigitalTwinEngine.extract_mouse_vectors(raw_mouse_logs)
+        return BehavioralProfileEngine.extract_mouse_vectors(raw_mouse_logs)
 
     @staticmethod
     def compile_navigation_features(nav_events: List[Dict[str, Any]]) -> Dict[str, Any]:

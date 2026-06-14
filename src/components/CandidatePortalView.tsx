@@ -164,8 +164,8 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
 
   // Pre-exam states
   const [deviceCheckOk, setDeviceCheckOk] = useState(false);
-  const [twinVerificationConfidence, setTwinVerificationConfidence] = useState(0);
-  const [isVerifyingTwin, setIsVerifyingTwin] = useState(false);
+  const [profileVerificationConfidence, setProfileVerificationConfidence] = useState(0);
+  const [isVerifyingProfile, setIsVerifyingProfile] = useState(false);
 
   // Collapsible Judge walkthrough state
   const [isWalkthroughCollapsed, setIsWalkthroughCollapsed] = useState(false);
@@ -238,7 +238,7 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
     setEnrollmentStatus('UNENROLLED');
     setCalibrationStep('TYPING');
     setDeviceCheckOk(false);
-    setTwinVerificationConfidence(0);
+    setProfileVerificationConfidence(0);
     setEvidenceCounts({
       keyboardEvents: 0,
       mouseEvents: 0,
@@ -255,12 +255,12 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
       return;
     }
     setEnrollmentStatus('CALIBRATING');
-    setIsVerifyingTwin(true);
+    setIsVerifyingProfile(true);
     setTimeout(() => {
       setEnrollmentStatus('VERIFIED');
       setDeviceCheckOk(true);
-      setTwinVerificationConfidence(99.64);
-      setIsVerifyingTwin(false);
+      setProfileVerificationConfidence(99.64);
+      setIsVerifyingProfile(false);
     }, 2000);
   };
 
@@ -295,7 +295,7 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
   } else if (completedModules === 4) {
     activeJourneyIdx = 2; // Verify Readiness
   } else if (currentOverallProgress > 0) {
-    activeJourneyIdx = 1; // Build Digital Twin
+    activeJourneyIdx = 1; // Build Behavioral Identity Profile
   } else {
     activeJourneyIdx = 0; // Enroll
   }
@@ -318,12 +318,12 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
 
   const demoLaunchExam = () => {
     setEnrollmentStatus('CALIBRATING');
-    setIsVerifyingTwin(true);
+    setIsVerifyingProfile(true);
     setTimeout(() => {
       setEnrollmentStatus('VERIFIED');
       setDeviceCheckOk(true);
-      setTwinVerificationConfidence(99.85);
-      setIsVerifyingTwin(false);
+      setProfileVerificationConfidence(99.85);
+      setIsVerifyingProfile(false);
     }, 1000);
   };
 
@@ -737,14 +737,14 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
             <div className="pt-2 border-t border-[#F1F5F9] flex justify-between items-center">
               <div className="space-y-0.5">
                 <span className="text-[11px] text-[#0F172A] font-bold block leading-tight">Consolidate Behavioral Baseline</span>
-                <span className="text-[9px] text-[#64748B] block leading-none">Generate continuous digital twin token</span>
+                <span className="text-[9px] text-[#64748B] block leading-none">Generate continuous behavioral identity token</span>
               </div>
               <button 
                 onClick={triggerEnrollmentVerification}
-                disabled={enrollmentStatus === 'VERIFIED' || isVerifyingTwin}
+                disabled={enrollmentStatus === 'VERIFIED' || isVerifyingProfile}
                 className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-lg text-[10.5px] hover:from-blue-500 hover:to-indigo-500 transition-all shadow flex items-center gap-1 disabled:opacity-40 cursor-pointer"
               >
-                {isVerifyingTwin ? (
+                {isVerifyingProfile ? (
                   <>
                     <Activity className="w-3.5 h-3.5 animate-spin" /> COMPILING...
                   </>
@@ -834,12 +834,12 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
       {/* Lower Secondary Grid - Compacter */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-3 mt-3">
         
-        {/* Digital Twin Preview Section */}
+        {/* Behavioral Identity Profile Preview Section */}
         <div className="md:col-span-4 bg-white border border-[#E2E8F0] rounded-xl p-3 shadow-sm flex flex-col justify-between">
           <div className="flex justify-between items-center border-b border-[#F1F5F9] pb-1.5 mb-2">
             <span className="text-[9.5px] font-mono font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-1">
               <Award className="w-3.5 h-3.5 text-[#2563EB]" />
-              Twin Profile Manifest
+              Identity Profile Manifest
             </span>
             <span className="text-[9px] font-mono text-emerald-600 font-bold">CONNECTED</span>
           </div>
@@ -849,7 +849,7 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
               <div className="bg-emerald-50 border border-emerald-250 rounded-lg p-2.5 space-y-1.5 text-emerald-800">
                 <div className="flex items-center gap-1.5 font-bold">
                   <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Twin Baseline Verified</span>
+                  <span>Profile Baseline Verified</span>
                 </div>
                 <div className="grid grid-cols-2 gap-1 text-[9.5px] font-mono text-slate-700">
                   <div>Keys: <strong className="text-emerald-700">1,248</strong></div>
@@ -861,10 +861,10 @@ export default function CandidatePortalView({ setActiveTab }: CandidatePortalVie
             ) : (
               <div className="space-y-1.5">
                 <p className="text-slate-500 leading-tight">
-                  Upon finishing calibration, CDT-X outputs a cryptographic digital twin used for verification.
+                  Upon finishing calibration, CDT-X outputs a cryptographic behavioral identity profile used for verification.
                 </p>
                 <div className="space-y-0.5 font-mono text-[9.5px] text-slate-400">
-                  <div>○ Digital Twin Profile</div>
+                  <div>○ Behavioral Identity Profile</div>
                   <div>○ Identity Confidence Index</div>
                   <div>○ Behavioral Baseline</div>
                 </div>
