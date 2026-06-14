@@ -274,47 +274,37 @@ export default function JudgeWalkthroughPanel({
         <DemoSnapshotCard currentStage={currentStep === 0 ? -1 : currentStep === 1 ? 0 : currentStep === 2 ? 1 : (currentStep === 3 || currentStep === 4) ? 2 : currentStep === 5 ? 3 : 4} />
       </div>
 
-      {/* Steps List */}
-      <div className="flex-1 overflow-y-auto py-2 px-2 space-y-1 custom-scrollbar">
-        <div className="px-1.5 py-1.5 bg-blue-50/60 rounded-lg border border-blue-100 mb-2 text-[11px] text-[#475569] leading-relaxed">
-          <p className="font-semibold text-slate-700">90-Second Demo Flow</p>
-          <span className="text-[11px] text-slate-500">Click a step to navigate &amp; trigger live streams.</span>
+      {/* Demo Progress List */}
+      <div className="flex-1 overflow-y-auto py-2 px-3 space-y-2 custom-scrollbar">
+        <div className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest mb-1">
+          Demo Progress
         </div>
 
         {steps.map((step, idx) => {
-          const StepIcon = step.icon;
           const isSelected = currentStep === idx;
-          const isTabActive = activeTab === step.tab;
+          const isCompleted = idx < currentStep;
 
           return (
             <button
               key={idx}
               onClick={() => handleStepClick(idx)}
-              className={`w-full text-left px-2 py-1.5 rounded-lg border transition-all cursor-pointer flex gap-2 ${
-                isSelected 
-                  ? 'bg-[#EFF6FF] border-[#93C5FD] text-[#0F172A] shadow-sm'
-                  : isTabActive
-                  ? 'bg-slate-50 border-slate-300 text-slate-700'
-                  : 'bg-white border-[#E2E8F0] hover:border-slate-300 text-slate-600'
-              }`}
+              className="w-full text-left flex items-center gap-2 group cursor-pointer"
             >
-              <div className={`w-5.5 h-5.5 rounded-md flex items-center justify-center shrink-0 ${
-                isSelected 
-                  ? 'bg-[#2563EB] text-white' 
-                  : isTabActive
-                  ? 'bg-slate-200 text-slate-700'
-                  : 'bg-slate-100 text-slate-400'
-              }`}>
-                <StepIcon className="w-3 h-3" />
+              <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                {isCompleted ? (
+                  <CheckSquare className="w-3.5 h-3.5 text-emerald-500" />
+                ) : isSelected ? (
+                  <Play className="w-3.5 h-3.5 text-blue-600 fill-blue-600" />
+                ) : (
+                  <div className="w-3.5 h-3.5 rounded-full border border-slate-300 group-hover:border-slate-400 transition-colors" />
+                )}
               </div>
 
-              <div className="flex-1 min-w-0">
-                <p className={`text-[11px] font-bold leading-tight ${isSelected ? 'text-[#2563EB]' : 'text-[#0F172A]'}`}>
-                  {step.title}
-                </p>
-                <p className="text-[10px] text-slate-400 leading-snug mt-0.5">
-                  {step.desc}
-                </p>
+              <div className={`text-[12px] font-medium truncate ${
+                isSelected ? 'text-blue-700 font-bold' : 
+                isCompleted ? 'text-emerald-700' : 'text-slate-500'
+              }`}>
+                {step.title.replace(/^\d+\.\s*/, '')}
               </div>
             </button>
           );

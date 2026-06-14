@@ -694,7 +694,7 @@ export default function ControlRoomView({
         </div>
 
         {/* Seat Inspector Detail Card Side column */}
-        <div className="lg:col-span-4 space-y-3 flex flex-col">
+        <div className="lg:col-span-4 lg:row-span-2 space-y-3 flex flex-col">
           <div className="bg-white border border-[#E2E8F0] p-4 rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] flex flex-col justify-between shrink-0">
           
           {/* Identity details and workstation label */}
@@ -887,42 +887,20 @@ export default function ControlRoomView({
             </div>
           )}
 
-          {/* HIGHLY OBVIOUS FORENSIC ACTION CTA */}
-          <div className="border-t border-[#F1F5F9] pt-3 shrink-0">
-            {selectedStation.status !== 'STABLE' && selectedStation.alertId ? (
-              <button
-                onClick={() => handleAlertClick(selectedStation.alertId!)}
-                className="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-[12px] font-sans font-bold uppercase rounded-lg shadow-sm transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <AlertTriangle className="w-4 h-4 text-white" />
-                Launch Full Auditing Review
-              </button>
-            ) : (
-                selectedStudent && (
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveTab(ActiveTab.INVESTIGATIONS);
-                }}
-                className="w-full py-2.5 bg-[#EFF6FF] hover:bg-[#DBEAFE] text-[#2563EB] text-[12px] font-sans font-bold uppercase rounded-lg border border-[#BFDBFE] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <Fingerprint className="w-4 h-4" />
-                Explore Forensic Desk
-              </button>
-            ))}
-          </div>
-          </div>
-
           {/* Student Device Connector Card */}
-          <div className="bg-white border border-[#E2E8F0] p-3.5 rounded-xl shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="text-[11px] font-black text-[#0F172A] font-sans tracking-wide uppercase flex items-center gap-1.5">
-                <Laptop className="w-3.5 h-3.5 text-[#2563EB]" />
+          <div className="bg-white border-2 border-slate-200/80 p-3.5 rounded-xl shadow-sm mb-4 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-[#2563EB]"></div>
+            <div className="flex items-center justify-between mb-2 pl-2">
+              <h4 className="text-[12px] font-black text-[#0F172A] font-sans tracking-wide uppercase flex items-center gap-1.5">
+                <Laptop className="w-4 h-4 text-[#2563EB]" />
                 Connected Candidate Device
               </h4>
-              <span className="text-[11px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded font-bold">SDK LIVE</span>
+              <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded font-bold flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                SDK LIVE
+              </span>
             </div>
-            <div className="grid grid-cols-2 gap-1.5 text-[11px] font-mono mb-2">
+            <div className="grid grid-cols-2 gap-1.5 text-[11px] font-mono mb-2 pl-2">
               {[
                 { label: "Keyboard SDK", status: "Active", ok: true },
                 { label: "Mouse SDK", status: "Active", ok: true },
@@ -931,23 +909,49 @@ export default function ControlRoomView({
               ].map((item, i) => (
                 <div key={i} className="flex justify-between items-center bg-slate-50 px-2 py-1 rounded-lg border border-[#E2E8F0]">
                   <span className="text-slate-500">{item.label}</span>
-                  <span className={item.ok ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}>{item.status}</span>
+                  <span className={item.ok ? 'text-emerald-600 font-bold flex items-center gap-1' : 'text-red-600 font-bold'}>
+                    {item.ok && <CheckCircle className="w-3 h-3 text-emerald-500" />} {item.status}
+                  </span>
                 </div>
               ))}
             </div>
-            <div className="flex justify-between items-center text-[11px] font-mono bg-slate-50 px-2 py-1.5 rounded-lg border border-[#E2E8F0]">
+            <div className="flex justify-between items-center text-[11px] font-mono bg-slate-50 px-2 py-1.5 rounded-lg border border-[#E2E8F0] ml-2">
               <span className="text-slate-400">Events Processed</span>
               <span className="font-black text-[#0F172A]">{(seatFlags.keyboardEvents + seatFlags.mouseEvents).toLocaleString()}</span>
             </div>
          </div>
-         </div>
+
+            {/* HIGHLY OBVIOUS FORENSIC ACTION CTA */}
+            <div className="border-t border-[#F1F5F9] pt-3 shrink-0">
+              {selectedStation.status !== 'STABLE' && selectedStation.alertId ? (
+                <button
+                  onClick={() => handleAlertClick(selectedStation.alertId!)}
+                  className="w-full py-2 bg-red-50 border border-red-200 hover:bg-red-100 text-red-700 text-[11px] font-sans font-bold uppercase rounded-lg shadow-none transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <AlertTriangle className="w-3.5 h-3.5" />
+                  Launch Full Auditing Review
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveTab(ActiveTab.INVESTIGATIONS);
+                  }}
+                  className="w-full py-2 bg-[#EFF6FF] hover:bg-[#DBEAFE] text-[#2563EB] text-[11px] font-sans font-bold uppercase rounded-lg border border-[#BFDBFE] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <Fingerprint className="w-3.5 h-3.5" />
+                  Explore Forensic Desk
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
-      {/* 5. Supporting Data: Ongoing sessions & Critical Event Streams */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+        {/* Bottom Area (Left Column Stack) */}
+        <div className="lg:col-span-8 grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         
-        {/* Left Column Stack: Ongoing Rooms & Systems Actions */}
-        <div className="lg:col-span-7 space-y-4">
+          {/* Left Column Stack: Ongoing Rooms & Systems Actions */}
+          <div className="lg:col-span-7 space-y-4">
 
           {/* SYSTEM ACTIONS PANEL */}
           <div className="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-4">
@@ -1106,7 +1110,7 @@ export default function ControlRoomView({
             )}
           </div>
 
-          <div className="p-3 space-y-2.5 max-h-[220px] overflow-y-auto custom-scrollbar">
+          <div className="p-3 space-y-2.5 max-h-[145px] overflow-y-auto custom-scrollbar">
             {filteredAlarms.length === 0 ? (
               <div className="flex flex-col items-center justify-center p-6 text-[#64748B] text-center">
                 <CheckCircle className="w-8 h-8 text-emerald-500 mb-1.5" />
@@ -1156,6 +1160,7 @@ export default function ControlRoomView({
         </div>
 
       </div>
+    </div>
 
       {/* Limitations Modal Popup */}
       <AnimatePresence>

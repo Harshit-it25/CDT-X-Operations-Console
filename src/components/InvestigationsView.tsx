@@ -333,18 +333,18 @@ export default function InvestigationsView({
                 {currentCase.candidateName} <span className="text-slate-450 font-normal text-[11px]">({currentCase.centerName})</span>
               </h2>
             </div>
-            <div className="flex gap-2 shrink-0 w-full sm:w-auto">
+            <div className="flex gap-2 shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
               <button
                 onClick={() => onAdjudicate(currentCase.id, 'RESOLVED_FALSE_POSITIVE')}
                 disabled={currentCase.resolved}
-                className="flex-1 sm:flex-initial px-3 py-1.5 border border-[#E2E8F0] bg-white hover:border-[#CBD5E1] text-[#475569] hover:text-[#0F172A] font-bold text-xs rounded-lg disabled:opacity-40 transition-all cursor-pointer shadow-sm text-center leading-none"
+                className="flex-1 sm:flex-initial px-3 py-1 bg-white border border-[#E2E8F0] hover:bg-slate-50 text-[#475569] font-bold text-[11px] rounded-md disabled:opacity-40 transition-all cursor-pointer text-center leading-none"
               >
                 Clear (False Positive)
               </button>
               <button
                 onClick={() => onAdjudicate(currentCase.id, 'TERMINATED_INVALID')}
                 disabled={currentCase.resolved}
-                className="flex-1 sm:flex-initial px-3 py-1.5 bg-[#DC2626] hover:bg-red-700 text-white font-bold text-xs rounded-lg disabled:opacity-40 transition-all cursor-pointer shadow-md text-center leading-none"
+                className="flex-1 sm:flex-initial px-3 py-1 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 font-bold text-[11px] rounded-md disabled:opacity-40 transition-all cursor-pointer text-center leading-none"
               >
                 Invalidate Session
               </button>
@@ -404,41 +404,42 @@ export default function InvestigationsView({
 
           {/* EVIDENCE SECTION - VISUALLY OUTWEIGHS PIPELINE */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-stretch">
-            {/* Live Behavior Evidence Panel */}
-            <div className="bg-white border border-[#E2E8F0] rounded-xl p-3.5 shadow-sm space-y-2 flex flex-col justify-between">
-              <div className="flex justify-between items-center border-b border-[#F1F5F9] pb-1.5">
-                <span className="text-[11px] font-mono font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-1.5">
-                  <FileText className="w-3.5 h-3.5 text-[#2563EB]" />
-                  Live Behavior Evidence Panel
+            {/* Connected Candidate Device */}
+            <div className="bg-white border-2 border-slate-200/80 rounded-xl p-3.5 shadow-sm space-y-2 flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full bg-[#2563EB]"></div>
+              <div className="flex justify-between items-center border-b border-[#F1F5F9] pb-1.5 pl-2">
+                <span className="text-[12px] font-mono font-black text-[#0F172A] uppercase tracking-wider flex items-center gap-1.5">
+                  <Monitor className="w-4 h-4 text-[#2563EB]" />
+                  Connected Candidate Device
                 </span>
-                <span className="flex items-center gap-1 bg-red-50 text-red-705 border border-red-150 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold">
-                  <span className="w-1 h-1 rounded-full bg-red-500 animate-ping"></span>
-                  LIVE TELEMETRY
+                <span className="flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  ACTIVE
                 </span>
               </div>
-              <div className="grid grid-cols-2 gap-2 text-[11px] flex-grow mt-1.5">
+              <div className="grid grid-cols-2 gap-2 text-[11px] flex-grow mt-1.5 pl-2">
                 <div className="bg-slate-50 p-2 rounded-lg border border-[#E2E8F0] flex flex-col justify-between">
-                  <span className="text-[10px] font-sans text-slate-500 block leading-tight">Keyboard Events</span>
-                  <span className="text-[16px] font-bold text-[#0F172A] font-mono block mt-1">
-                    {evidenceCounts[currentCase.id]?.keyboardEvents.toLocaleString() ?? 0}
+                  <span className="text-[10px] font-sans text-slate-500 font-bold block leading-tight">Keyboard SDK</span>
+                  <span className="text-[14px] font-bold text-[#0F172A] font-mono block mt-1 flex items-center gap-1">
+                    <CheckCircle className="w-3 h-3 text-emerald-500" /> Receiving
                   </span>
                 </div>
                 <div className="bg-slate-50 p-2 rounded-lg border border-[#E2E8F0] flex flex-col justify-between">
-                  <span className="text-[10px] font-sans text-slate-500 block leading-tight">Mouse Coordinates</span>
-                  <span className="text-[16px] font-bold text-[#0F172A] font-mono block mt-1">
-                    {evidenceCounts[currentCase.id]?.mouseEvents.toLocaleString() ?? 0}
+                  <span className="text-[10px] font-sans text-slate-500 font-bold block leading-tight">Mouse SDK</span>
+                  <span className="text-[14px] font-bold text-[#0F172A] font-mono block mt-1 flex items-center gap-1">
+                    <CheckCircle className="w-3 h-3 text-emerald-500" /> Receiving
                   </span>
                 </div>
                 <div className="bg-slate-50 p-2 rounded-lg border border-[#E2E8F0] flex flex-col justify-between">
-                  <span className="text-[10px] font-sans text-slate-500 block leading-tight">Focus Anomalies</span>
-                  <span className="text-[16px] font-bold text-red-650 font-mono block mt-1">
-                    {evidenceCounts[currentCase.id]?.focusChanges.toLocaleString() ?? 0}
+                  <span className="text-[10px] font-sans text-slate-500 font-bold block leading-tight">Focus Monitor</span>
+                  <span className="text-[14px] font-bold text-[#0F172A] font-mono block mt-1 flex items-center gap-1">
+                    <CheckCircle className="w-3 h-3 text-emerald-500" /> Active
                   </span>
                 </div>
                 <div className="bg-slate-50 p-2 rounded-lg border border-[#E2E8F0] flex flex-col justify-between">
-                  <span className="text-[10px] font-sans text-slate-500 block leading-tight">Clipboard Activity</span>
-                  <span className="text-[16px] font-bold text-red-650 font-mono block mt-1">
-                    {evidenceCounts[currentCase.id]?.copyAttempts.toLocaleString() ?? 0}
+                  <span className="text-[10px] font-sans text-slate-500 font-bold block leading-tight">Clipboard Monitor</span>
+                  <span className="text-[14px] font-bold text-[#0F172A] font-mono block mt-1 flex items-center gap-1">
+                    <CheckCircle className="w-3 h-3 text-emerald-500" /> Active
                   </span>
                 </div>
               </div>
