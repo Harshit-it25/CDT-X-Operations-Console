@@ -19,6 +19,7 @@ USER 1000
 
 ENV PORT=7860
 ENV NODE_ENV=production
+ENV DATABASE_URL="postgresql://placeholder_user:placeholder_password@localhost:5432/placeholder_db"
 EXPOSE 7860
 
 CMD ["node", "dist/server.cjs"]
