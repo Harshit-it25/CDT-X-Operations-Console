@@ -7,23 +7,35 @@ sdk: docker
 app_port: 7860
 ---
 
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# CDT-X Operations Console
 
-# Run and deploy your AI Studio app
+**Continuous Digital Trust (CDT-X)** is an enterprise-grade examination integrity and behavioral forensics platform. 
+It continuously monitors candidate devices during high-stakes assessments, building behavioral profiles and detecting anomalies using advanced telemetry analysis without relying on traditional, privacy-invasive proctoring.
 
-This contains everything you need to run your app locally.
+## 🚀 Live Deployment
 
-View your app in AI Studio: https://ai.studio/apps/20fdb7a3-7d67-40b5-a541-68fc82dc7102
+The CDT-X Operations Console is actively deployed and running on Hugging Face Spaces. 
 
-## Run Locally
+**[View the Live Demo on Hugging Face](https://huggingface.co/spaces/Harshit18930/cdt-x-operations-console)**
 
-**Prerequisites:**  Node.js
+## 🛡️ Core Capabilities
 
+- **Behavioral Fingerprinting**: Captures keystroke dynamics, mouse spline consistency, and focus monitor adherence.
+- **Continuous Trust Monitoring**: Real-time evaluation of session integrity using algorithmic deviation bounds.
+- **Forensic Investigation Desk**: Provides immediate insights and behavioral evidence for flagged anomalies ("Why Flagged").
+- **Audit Ledger**: A robust accounting of system boundaries, ethical safeguards, and fully-enforced automation rules.
+- **Enterprise Dashboard**: A high-density control room aesthetic designed for operational readiness and instant situational awareness.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 💻 Run Locally
+
+**Prerequisites:** Node.js (v18+)
+
+1. Clone the repository and install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+3. Open `http://localhost:5173` in your browser to view the console.
