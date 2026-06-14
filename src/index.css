@@ -1,0 +1,524 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* ========================================================
+   PREMIUM LIGHT-ONLY DESIGN TOKENS
+   ======================================================== */
+:root {
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --surface-secondary: #f1f5f9;
+  --surface-tertiary: #e2e8f0;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --primary: #2563eb;
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --info: #2563eb;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  
+  --bg-track: #f1f5f9;
+  --bg-thumb: #cbd5e1;
+  --bg-thumb-hover: #94a3b8;
+}
+
+/* Custom scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--bg-track);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--bg-thumb);
+  border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-thumb-hover);
+}
+
+/* Transition Smoothing */
+*, *::before, *::after {
+  transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out, color 80ms ease-out;
+}
+
+/* ========================================================
+   GLOBAL LIGHT THEME LAYOUT STYLES
+   ======================================================== */
+
+body, #root, main {
+  background-color: var(--background) !important;
+  color: var(--text-primary) !important;
+}
+
+/* 1. Sidebar Refactored into a high-end Light Theme Navigation Rail */
+aside#nav-sidebar {
+  background-color: var(--surface) !important;
+  border-right: 1px solid var(--border) !important;
+  box-shadow: 1px 0 3px 0 rgba(0, 0, 0, 0.01) !important;
+}
+aside#nav-sidebar h1 {
+  color: var(--text-primary) !important;
+}
+aside#nav-sidebar p,
+aside#nav-sidebar span {
+  color: var(--text-muted) !important;
+}
+aside#nav-sidebar button {
+  color: var(--text-secondary) !important;
+  background-color: transparent !important;
+  border-left: 3px solid transparent !important;
+}
+aside#nav-sidebar button:hover {
+  background-color: var(--surface-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Premium active item style with clear blue bar (Stripe / Linear look) */
+aside#nav-sidebar button[class*="bg-[#3a4a5f]"] {
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
+  font-weight: 600 !important;
+  border-left: 3px solid #2563eb !important;
+}
+aside#nav-sidebar button[class*="bg-[#3a4a5f]"] svg {
+  color: #2563eb !important;
+}
+
+/* Sidebar Operator panel block */
+aside#nav-sidebar div[class*="bg-[#171f33]"] {
+  background-color: var(--surface-secondary) !important;
+  border: 1px solid var(--border) !important;
+}
+aside#nav-sidebar div[class*="bg-[#171f33]"] span {
+  color: var(--text-primary) !important;
+}
+aside#nav-sidebar div[class*="bg-[#171f33]"] div {
+  background-color: #e2e8f0 !important;
+  color: var(--text-primary) !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* 2. Command Center Header Bar */
+header {
+  background-color: var(--surface) !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.01) !important;
+}
+header span {
+  color: var(--text-primary) !important;
+}
+header div[class*="text-[#8c909f]"],
+header p[class*="text-[#8c909f]"] {
+  color: var(--text-secondary) !important;
+}
+
+/* Header buttons and query containers */
+header button[class*="bg-[#060e20]"],
+header button[class*="bg-[#0b1220]"],
+header button[class*="bg-[#131b2e]"],
+header div[class*="bg-[#0b1220]"],
+header div[class*="bg-[#131b2e]"] {
+  background-color: var(--surface-secondary) !important;
+  border-color: var(--border) !important;
+  color: var(--text-primary) !important;
+}
+header button[class*="bg-[#060e20]"]:hover,
+header button[class*="bg-[#0b1220]"]:hover {
+  background-color: var(--surface-tertiary) !important;
+  border-color: var(--border-strong) !important;
+}
+
+/* Active buttons selection inside scenario simulation tools */
+header button[class*="border-indigo-500/85"],
+header button[class*="border-[#adc6ff]"] {
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
+  border-color: #3b82f6 !important;
+}
+
+/* Notification stream & popovers */
+header div[class*="bg-[#0b1220]"][class*="absolute"],
+header div[class*="bg-[#171f33]"][class*="absolute"] {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+header div[class*="bg-[#0b1220]"][class*="absolute"] div[class*="bg-[#0b1220]"] {
+  background-color: var(--surface-secondary) !important;
+  border-color: var(--border) !important;
+}
+header div[class*="bg-[#0b1220]"][class*="absolute"] p {
+  color: var(--text-secondary) !important;
+}
+header div[class*="bg-[#0b1220]"][class*="absolute"] span {
+  color: var(--text-primary) !important;
+}
+
+/* Live Streaming Indicator label */
+div[class*="bg-[#131b2e]"][class*="rounded-lg"] {
+  background-color: var(--surface-secondary) !important;
+  border-color: var(--border) !important;
+}
+
+/* 3. Global Card & Module surfaces */
+main div[class*="bg-[#101726]"],
+main div[class*="bg-[#131b2e]"],
+main div[class*="bg-[#0a101d]"],
+main div[class*="bg-[#11192e]"],
+main div[class*="bg-slate-950/70"],
+main div[class*="bg-slate-950/40"],
+main div[class*="bg-[#101726]/80"],
+main div[class*="bg-[#101726]/90"],
+main div[class*="bg-slate-900"],
+main div[class*="bg-slate-950"],
+main div[class*="bg-[#060d1b]"],
+main div[class*="bg-[#010714]"],
+main div[class*="bg-[#050b18]"],
+main div[class*="bg-[#0b1220]"],
+main div[class*="bg-[#060b14]"],
+main div[class*="bg-[#1b253f]"],
+main div[class*="bg-slate-900/60"],
+main div[class*="bg-[#131b2e]/60"],
+main div[class*="bg-[#060c17]"],
+main div[class*="bg-[#060e20]/60"],
+main div[class*="bg-[#0c1527]"],
+main div[class*="bg-[#131b2e]/80"],
+main div[class*="bg-[#131b2e]/90"],
+main div[class*="bg-[#111827]"],
+main div[class*="bg-[#1f2937]"],
+main section[class*="bg-[#060e20]"],
+main section[class*="bg-[#0b1326]"] {
+  background-color: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--text-primary) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* Modernize cards titles and subtitles */
+main h2,
+main h3 {
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+}
+
+/* 4. Complete Text contrast & High-Visibility Readability overrides */
+main p,
+main li {
+  color: var(--text-secondary) !important;
+}
+main span,
+main h1,
+main h4 {
+  color: var(--text-primary) !important;
+}
+main .text-slate-300,
+main .text-slate-200,
+main .text-[#dae2fd],
+main .text-indigo-200,
+main .text-zinc-200,
+main .text-white,
+main .text-zinc-100 {
+  color: var(--text-primary) !important;
+}
+main .text-slate-400,
+main .text-[#8c909f],
+main .text-[#adc6ff],
+main .text-zinc-400 {
+  color: var(--text-secondary) !important;
+}
+main .text-slate-500,
+main .text-zinc-500 {
+  color: var(--text-muted) !important;
+}
+
+/* 5. Inputs, Fields and textareas */
+main input,
+main textarea,
+main select {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--text-primary) !important;
+}
+main input:focus,
+main textarea:focus,
+main select:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 1px var(--primary) !important;
+  outline: none !important;
+}
+
+/* Generic form background fields */
+main div[class*="bg-[#060d1b]"],
+main div[class*="bg-[#010714]"],
+main div[class*="bg-[#0a101d]"] {
+  background-color: var(--surface-secondary) !important;
+  border-color: var(--border) !important;
+}
+
+/* Form input descriptors */
+main label,
+main span[class*="text-slate-400"],
+main span[class*="text-slate-500"] {
+  color: var(--text-muted) !important;
+}
+
+/* 6. Buttons with clean borders */
+button[class*="bg-slate-800"],
+button[class*="bg-[#11192e]"],
+button[class*="bg-[#3a4a5f]"] {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-secondary) !important;
+}
+button[class*="bg-slate-800"]:hover,
+button[class*="bg-[#11192e]"]:hover,
+button[class*="bg-[#3a4a5f]"]:hover {
+  background-color: var(--surface-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Interactive primary callouts */
+button[class*="bg-indigo-600"],
+button[class*="bg-blue-600"],
+button[class*="bg-emerald-600"] {
+  color: #ffffff !important;
+}
+button[class*="bg-indigo-600"] {
+  background-color: var(--primary) !important;
+}
+button[class*="bg-indigo-600"]:hover {
+  background-color: #1d4ed8 !important;
+}
+button[class*="bg-emerald-600"] {
+  background-color: var(--success) !important;
+}
+button[class*="bg-emerald-600"]:hover {
+  background-color: #15803d !important;
+}
+
+/* Interactive simulated proctoring actions */
+main button[class*="bg-emerald-950"] {
+  background-color: #f0fdf4 !important;
+  color: #16a34a !important;
+  border-color: #bbf7d0 !important;
+  box-shadow: none !important;
+}
+main button[class*="bg-emerald-950"]:hover {
+  border-color: #15803d !important;
+  background-color: #dcfce7 !important;
+}
+main button[class*="bg-amber-950"] {
+  background-color: #fffbeb !important;
+  color: #d97706 !important;
+  border-color: #fde68a !important;
+  box-shadow: none !important;
+}
+main button[class*="bg-amber-950"]:hover {
+  border-color: #b45309 !important;
+  background-color: #fef3c7 !important;
+}
+main button[class*="bg-red-950"] {
+  background-color: #fef2f2 !important;
+  color: #dc2626 !important;
+  border-color: #fecaca !important;
+  box-shadow: none !important;
+}
+main button[class*="bg-red-950"]:hover {
+  border-color: #b91c1c !important;
+  background-color: #fee2e2 !important;
+}
+main button[class*="bg-[#131b2e]/30"] {
+  background-color: var(--surface-secondary) !important;
+  color: var(--text-secondary) !important;
+  border-color: var(--border) !important;
+}
+
+/* Selected active ring states */
+main button[class*="ring-2"] {
+  box-shadow: 0 0 0 3px #bfdbfe !important;
+  border-color: var(--primary) !important;
+}
+
+/* 7. Unified Executive Verdict & Risk Status Badges */
+main div[class*="bg-red-500/5"],
+main div[class*="bg-rose-950/30"] {
+  background-color: #fef2f2 !important;
+  border-color: #fecaca !important;
+  box-shadow: none !important;
+}
+main div[class*="bg-amber-500/5"],
+main div[class*="bg-amber-950/30"] {
+  background-color: #fffbeb !important;
+  border-color: #fde68a !important;
+  box-shadow: none !important;
+}
+main div[class*="bg-emerald-500/5"] {
+  background-color: #f0fdf4 !important;
+  border-color: #bbf7d0 !important;
+  box-shadow: none !important;
+}
+
+/* Soft colored status pills mapping */
+span[class*="text-red-400"][class*="bg-red-950"],
+span[class*="text-red-400"][class*="bg-red-500/10"],
+span[class*="text-red-450"],
+span[class*="text-red-400"][class*="bg-slate-900"],
+span[class*="bg-red-500/10"],
+span[class*="bg-rose-500/10"] {
+  background-color: #fee2e2 !important;
+  color: var(--danger) !important;
+  border: 1px solid #fecaca !important;
+}
+span[class*="text-amber-400"][class*="bg-amber-950"],
+span[class*="text-amber-400"][class*="bg-amber-500/10"],
+span[class*="text-amber-400"][class*="bg-slate-900"],
+span[class*="bg-amber-500/10"] {
+  background-color: #fef3c7 !important;
+  color: var(--warning) !important;
+  border: 1px solid #fde68a !important;
+}
+span[class*="text-emerald-400"][class*="bg-emerald-950"],
+span[class*="text-emerald-400"][class*="bg-[#10b981]/15"],
+span[class*="text-emerald-400"][class*="bg-slate-900"],
+span[class*="bg-[#10b981]/15"] {
+  background-color: #dcfce7 !important;
+  color: var(--success) !important;
+  border: 1px solid #bbf7d0 !important;
+}
+span[class*="bg-blue-500/10"][class*="text-indigo-300"] {
+  background-color: #eff6ff !important;
+  color: var(--info) !important;
+  border: 1px solid #bfdbfe !important;
+}
+
+/* 8. Modern Stripe / Datadog Data Tables */
+table {
+  border-collapse: collapse !important;
+}
+thead th, 
+thead tr,
+table th {
+  background-color: var(--surface-secondary) !important;
+  color: var(--text-secondary) !important;
+  border-bottom: 2px solid var(--border) !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+tbody tr,
+table td {
+  background-color: var(--surface) !important;
+  border-bottom: 1px solid var(--surface-secondary) !important;
+  color: var(--text-primary) !important;
+  font-size: 12px !important;
+}
+tbody tr:hover {
+  background-color: var(--surface-secondary) !important;
+}
+
+/* Table sorting indicators */
+table svg {
+  color: var(--text-secondary) !important;
+}
+
+/* 9. Progress bars & analytics charts elements */
+div[class*="bg-[#060e20]"][class*="h-1.5"],
+div[class*="bg-slate-900"][class*="h-1"],
+div[class*="bg-slate-950"][class*="h-2"] {
+  background-color: var(--surface-secondary) !important;
+  border-color: var(--border) !important;
+}
+
+/* 10. Enrollment Flow roadmap bars */
+div[class*="bg-gradient-to-r"][class*="border-indigo-500"] {
+  background-color: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.08) !important;
+  font-weight: bold !important;
+}
+div[class*="bg-[#10b981]/10"][class*="border-emerald-500"] {
+  background-color: #f0fdf4 !important;
+  border-color: #bbf7d0 !important;
+  color: #16a34a !important;
+}
+div[class*="bg-[#060b14]/50"] {
+  background-color: var(--surface-secondary) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Heatmap semantic colors */
+.text-emerald-400 { color: var(--success) !important; }
+.text-amber-400 { color: var(--warning) !important; }
+.text-red-400 { color: var(--danger) !important; }
+
+/* 11. Recharts responsive canvas tooltips overrides */
+div.recharts-default-tooltip {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+  box-shadow: var(--shadow-md) !important;
+  border-radius: 8px !important;
+}
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: var(--surface-secondary) !important;
+}
+
+/* 12. Miscellaneous borders and layouts */
+.border-slate-800,
+.border-zinc-800,
+.border-[#2b354a],
+.border-[#424754]/30,
+.border-[#2b354a]/60,
+.border-[#2a364f]/30,
+.border-[#2a364f]/20,
+.border-indigo-500/20,
+.border-indigo-500/30 {
+  border-color: var(--border) !important;
+}
+
+/* Inline code segment snippets styling */
+code {
+  background-color: var(--surface-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border) !important;
+  font-family: var(--font-mono) !important;
+}
+
+/* Command Palette dialog popover drawer overlay */
+div[class*="bg-[#111827]"],
+div[class*="bg-[#101725]"] {
+  background-color: var(--surface) !important;
+  border-color: var(--border) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* Clean up shadows & neon glows */
+[class*="shadow-[0_0_"],
+[class*="shadow-emerald-500"],
+[class*="shadow-indigo-500"],
+[class*="shadow-red-500"] {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Unify Footer elements background */
+footer {
+  background-color: var(--surface) !important;
+}

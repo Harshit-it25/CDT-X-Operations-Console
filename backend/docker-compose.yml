@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # 1. Primary Cognitive FastAPI Authentication Backend
+  cdtx-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cdtx-api-service
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://cdtx_admin:cdtx_secure_pass@postgres-db:5432/cdtx_integrity_db
+      - REDIS_URL=redis://redis-cache:6379/0
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      redis-cache:
+        condition: service_started
+    restart: always
+
+  # 2. Secure Persistent Relational Datastore (PostgreSQL)
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: cdtx-postgres-db
+    environment:
+      - POSTGRES_USER=cdtx_admin
+      - POSTGRES_PASSWORD=cdtx_secure_pass
+      - POSTGRES_DB=cdtx_integrity_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cdtx_admin -d cdtx_integrity_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  # 3. High-throughput temporary cache for streaming telemetry coordinates (Redis)
+  redis-cache:
+    image: redis:7-alpine
+    container_name: cdtx-redis-cache
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: always
+
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local

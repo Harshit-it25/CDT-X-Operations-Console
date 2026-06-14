@@ -1,0 +1,6 @@
+{
+  "name": "CDT-X Operations Console",
+  "description": "The Behavioral Identity Layer for Digital Examinations. A Universal Behavioral Embedding (UBE) framework powered by continuous behavioral trust intelligence, forensic investigation, and decentralized compliance audit ledgers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
